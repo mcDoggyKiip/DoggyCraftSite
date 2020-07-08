@@ -17,6 +17,7 @@ class CreateGamemodesTable extends Migration
             $table->id();
             $table->string('gamemode');
             $table->integer('port');
+            $table->string('description');
             $table->timestamps();
         });
     }

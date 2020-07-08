@@ -7,7 +7,7 @@
                 <div class="card-header">Gamemode: {{$gamemode->gamemode}}</div>
 
                 <div class="card-body">
-                  This gamemode has no info to display yet!
+                  {{$gamemode->description}}
                 </div>
             </div>
         </div>
