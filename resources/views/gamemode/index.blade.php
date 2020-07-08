@@ -10,15 +10,15 @@
                     <div class="row">
                         @foreach($gamemodes as $gamemode)
                             <div class="col-md-4">
-                                <a href="{{route('gamemode.show', ['gamemode' => $gamemode["id"]])}}"> {{-- #TODO: make a button instead to view info --}}
-                                    @if($gamemode['status']['online'])
-                                        <div class="card card-green">
-                                    @else
-                                        <div class="card card-red">
-                                    @endif
-                                            <div class="card-header">{{$gamemode["name"]}}</div>
+                                @if($gamemode['status']['online'])
+                                    <div class="card card-green">
+                                @else
+                                    <div class="card card-red">
+                                @endif
+                                        <div class="card-header">{{$gamemode["name"]}}</div>
 
-                                            <div class="card-body">
+                                        <div class="card-body">
+                                            <div class="row">
                                                 @if($gamemode['status']['online'])
                                                     Status : Online
                                                     <br />
@@ -27,8 +27,17 @@
                                                     Status : Offline
                                                 @endif
                                             </div>
+                                            <br />
+                                            <div class="row">
+                                                <a class="btn btn-app bg-green" href="{{route('gamemode.show', ['gamemode' => $gamemode["id"]])}}">
+                                                    <i class="fa fa-eye"></i> More Info
+                                                </a>
+                                                <a class="btn btn-app bg-primary" href="{{route('gamemode.edit', ['gamemode' => $gamemode["id"]])}}">
+                                                    <i class="fa fa-edit"></i> Edit
+                                                </a>
+                                            </div>
                                         </div>
-                                </a>
+                                    </div>
                             </div>
 
                         @endforeach

@@ -69,7 +69,12 @@ class GamemodeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $gamemode = Gamemode::all()->where('id', '==', $id)->first();
+        if(isset($gamemode)){
+            return view('gamemode.edit')->with(["gamemode" => $gamemode]);
+        }else{
+            return redirect(route('gamemode.index')); // #TODO: make an error message appear on index page to state gamemode not found!
+        }
     }
 
     /**
