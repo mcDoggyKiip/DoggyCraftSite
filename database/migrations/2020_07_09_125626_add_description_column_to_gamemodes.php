@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGamemodesTable extends Migration
+class AddDescriptionColumnToGamemodes extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateGamemodesTable extends Migration
      */
     public function up()
     {
-        Schema::create('gamemodes', function (Blueprint $table) {
-            $table->id();
-            $table->string('gamemode');
-            $table->integer('port');
-            $table->timestamps();
+        Schema::table('gamemodes', function (Blueprint $table) {
+            $table->string('description');
+
         });
     }
 
@@ -28,6 +26,8 @@ class CreateGamemodesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('gamemodes');
+        Schema::table('gamemodes', function (Blueprint $table) {
+            $table->dropColumn('description');
+        });
     }
 }
