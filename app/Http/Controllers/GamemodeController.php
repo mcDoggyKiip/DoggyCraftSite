@@ -30,7 +30,7 @@ class GamemodeController extends Controller
      */
     public function create()
     {
-        //
+        return view('gamemode.create');
     }
 
     /**
@@ -41,7 +41,17 @@ class GamemodeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $name = $request->input('name');
+        $port = $request->input('port');
+        $desription = $request->input('description');
+
+        Gamemode::create([
+            "gamemode" => $name,
+            "port" => $port,
+            "description" => $desription
+        ]);
+
+        return redirect(route('gamemode.index')); // #TODO: make an success message appear on index page to state gamemode is created!
     }
 
     /**

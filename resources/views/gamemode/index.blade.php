@@ -4,7 +4,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">{{ __("Gamemodes") }}</div>
+                <div class="card-header">{{ __("Gamemodes") }} <a class="btn bg-blue float-right" href="{{route('gamemode.create')}}"><i class="fa fa-plus"></i> Add Gamemode</a></div>
 
                 <div class="card-body">
                     <div class="row">
