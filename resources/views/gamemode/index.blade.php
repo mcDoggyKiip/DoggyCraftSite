@@ -27,7 +27,7 @@
                                                     Status : Offline
                                                 @endif
                                             </div>
-                                            <br />
+                                            <hr />
                                             <div class="row">
                                                 <a class="btn btn-app bg-green" href="{{route('gamemode.show', ['gamemode' => $gamemode["id"]])}}">
                                                     <i class="fa fa-info"></i> More Info
