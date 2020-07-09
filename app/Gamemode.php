@@ -6,6 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Gamemode extends Model
 {
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'gamemode', 'port', 'description',
+    ];
+
     function getStatus(){
 
         try{

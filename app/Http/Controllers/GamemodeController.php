@@ -70,6 +70,7 @@ class GamemodeController extends Controller
     public function edit($id)
     {
         $gamemode = Gamemode::all()->where('id', '==', $id)->first();
+
         if(isset($gamemode)){
             return view('gamemode.edit')->with(["gamemode" => $gamemode]);
         }else{
@@ -86,7 +87,23 @@ class GamemodeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $gamemode = Gamemode::findOrFail($id);
+
+        $name = $request->input('name');
+        $port = $request->input('port');
+        $desription = $request->input('description');
+
+        $gamemode->update([
+            "gamemode" => $name,
+            "port" => $port,
+            "description" => $desription
+        ]);
+
+        if(isset($gamemode)){
+            return view('gamemode.view')->with(["gamemode" => $gamemode]); // #TODO: make success messafe appear on view page
+        }else{
+            return redirect(route('gamemode.index')); // #TODO: make an error message appear on index page to state gamemode not found!
+        }
     }
 
     /**

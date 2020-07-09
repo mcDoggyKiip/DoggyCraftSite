@@ -30,7 +30,7 @@
                                             <br />
                                             <div class="row">
                                                 <a class="btn btn-app bg-green" href="{{route('gamemode.show', ['gamemode' => $gamemode["id"]])}}">
-                                                    <i class="fa fa-eye"></i> More Info
+                                                    <i class="fa fa-info"></i> More Info
                                                 </a>
                                                 <a class="btn btn-app bg-primary" href="{{route('gamemode.edit', ['gamemode' => $gamemode["id"]])}}">
                                                     <i class="fa fa-edit"></i> Edit
