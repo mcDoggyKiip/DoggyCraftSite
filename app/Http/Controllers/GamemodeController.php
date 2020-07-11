@@ -124,6 +124,8 @@ class GamemodeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $gamemode = Gamemode::findOrFail($id);
+        $gamemode->delete();
+        return redirect(route('gamemode.index')); // #TODO: make an success message appear on index page to state gamemode got deleted!
     }
 }

@@ -29,14 +29,25 @@
                                             </div>
                                             <hr />
                                             <div class="row">
-                                                <a class="btn btn-app bg-green" href="{{route('gamemode.show', ['gamemode' => $gamemode["id"]])}}">
-                                                    <i class="fa fa-info"></i> More Info
-                                                </a>
-                                                <a class="btn btn-app bg-primary" href="{{route('gamemode.edit', ['gamemode' => $gamemode["id"]])}}">
-                                                    <i class="fa fa-edit"></i> Edit
-                                                </a>
+                                                <form action="{{route('gamemode.show', ['gamemode' => $gamemode["id"]])}}" method="POST">
+                                                    @csrf()
+                                                    <button type="submit" class="btn btn-app bg-info"><i class="fa fa-info"></i> More Info</button>
+                                                </form>
+                                                <form action="{{route('gamemode.edit', ['gamemode' => $gamemode["id"]])}}" method="POST">
+                                                    @csrf()
+                                                    <button type="submit" class="btn btn-app bg-primary"><i class="fa fa-edit"></i> Edit</button>
+                                                </form>
+                                                <form action="{{route('gamemode.destroy', ['gamemode' => $gamemode["id"]])}}" method="POST">
+                                                    @csrf()
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-app bg-danger"><i class="fa fa-trash"></i> Delete</button>
+                                                </form>
                                             </div>
                                         </div>
+                                    </div>
+                                    {{-- #TODO: make ribbon only appear when the gamemode is newe than a month --}}
+                                    <div class="ribbon-wrapper ribbon-xl" style="right: 2px; top: -2px; width: 192px; height: 190px;">
+                                        <div class="ribbon bg-warning text-lg" style="right: 3px;">NEW GAME</div>
                                     </div>
                             </div>
 
