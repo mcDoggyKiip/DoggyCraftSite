@@ -13,7 +13,7 @@
                                 @if($gamemode['status']['online'])
                                     <div class="card card-green">
                                 @else
-                                    <div class="card card-red">
+                                    <div class="card card-red" style="min-height: 165px">
                                 @endif
                                         <div class="card-header">{{$gamemode["name"]}}</div>
 
