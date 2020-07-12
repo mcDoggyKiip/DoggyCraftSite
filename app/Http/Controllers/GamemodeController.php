@@ -43,11 +43,13 @@ class GamemodeController extends Controller
     {
         $name = $request->input('name');
         $port = $request->input('port');
+        $added_to_server = $request->input('added_to_server');
         $desription = $request->input('description');
 
         Gamemode::create([
             "gamemode" => $name,
             "port" => $port,
+            "added_to_server" => $added_to_server,
             "description" => $desription
         ]);
 
@@ -101,11 +103,13 @@ class GamemodeController extends Controller
 
         $name = $request->input('name');
         $port = $request->input('port');
+        $added_to_server = $request->input('added_to_server');
         $desription = $request->input('description');
 
         $gamemode->update([
             "gamemode" => $name,
             "port" => $port,
+            "added_to_server" => $added_to_server,
             "description" => $desription
         ]);
 

@@ -7,7 +7,7 @@
                 <div class="card-header">Gamemode: {{$gamemode->gamemode}}</div>
 
                 <div class="card-body">
-                  {{$gamemode->description}}
+                    {{$gamemode->description}}
                 </div>
             </div>
         </div>

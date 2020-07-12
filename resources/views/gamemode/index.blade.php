@@ -31,10 +31,12 @@
                                             <div class="row">
                                                 <form action="{{route('gamemode.show', ['gamemode' => $gamemode["id"]])}}" method="POST">
                                                     @csrf()
+                                                    @method('GET')
                                                     <button type="submit" class="btn btn-app bg-info"><i class="fa fa-info"></i> More Info</button>
                                                 </form>
                                                 <form action="{{route('gamemode.edit', ['gamemode' => $gamemode["id"]])}}" method="POST">
                                                     @csrf()
+                                                    @method('GET')
                                                     <button type="submit" class="btn btn-app bg-primary"><i class="fa fa-edit"></i> Edit</button>
                                                 </form>
                                                 <form action="{{route('gamemode.destroy', ['gamemode' => $gamemode["id"]])}}" method="POST">
