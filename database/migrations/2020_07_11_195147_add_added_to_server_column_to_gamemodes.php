@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDescriptionColumnToGamemodes extends Migration
+class AddAddedToServerColumnToGamemodes extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddDescriptionColumnToGamemodes extends Migration
     public function up()
     {
         Schema::table('gamemodes', function (Blueprint $table) {
-            $table->string('description');
+            $table->dateTime('added_to_server');
         });
     }
 
@@ -26,7 +26,7 @@ class AddDescriptionColumnToGamemodes extends Migration
     public function down()
     {
         Schema::table('gamemodes', function (Blueprint $table) {
-            $table->dropColumn('description');
+            $table->dropColumn('added_to_server');
         });
     }
 }

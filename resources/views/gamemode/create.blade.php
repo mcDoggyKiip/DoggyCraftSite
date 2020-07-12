@@ -4,7 +4,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Aad Gamemode</div>
+                <div class="card-header">Add Gamemode</div>
 
                 <div class="card-body">
                     <form method='POST' class="form-horizontal" action="{{route('gamemode.store')}}">

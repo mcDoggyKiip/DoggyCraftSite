@@ -13,7 +13,7 @@ class Gamemode extends Model
      * @var array
      */
     protected $fillable = [
-        'gamemode', 'port', 'description',
+        'gamemode', 'port', 'description', 'added_to_server'
     ];
 
     function getStatus(){

@@ -17,7 +17,7 @@ class GamemodeController extends Controller
         $gamemodes = [];
 
         foreach (Gamemode::all() as $gamemode){
-            array_push($gamemodes,["id" => $gamemode->id,"name" => $gamemode->gamemode, "status" => $gamemode->getStatus()]);
+            array_push($gamemodes,["id" => $gamemode->id, "added_to_server" => $gamemode->added_to_server, "name" => $gamemode->gamemode, "status" => $gamemode->getStatus()]);
         }
 
         return view('gamemode.index')->with(["gamemodes" => $gamemodes]);
