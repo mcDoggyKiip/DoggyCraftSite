@@ -6,4 +6,9 @@
     email: {{$user->email}}
     <br/>
     mc username: {{$user->mc_username}}
+    <br/>
+    permission group(s):
+    @foreach($user->LpPlayer->groups() as $group)
+        {{$group}}
+    @endforeach
 @endsection
