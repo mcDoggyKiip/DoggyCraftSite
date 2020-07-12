@@ -47,7 +47,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- #TODO: make ribbon only appear when the gamemode is newe than a month --}}
                                     @if(strtotime($gamemode['added_to_server']) >= strtotime('-1 month'))
                                         <div class="ribbon-wrapper ribbon-xl" style="right: 2px; top: -2px; width: 192px; height: 190px;">
                                             <div class="ribbon bg-warning text-lg" style="right: 3px;">NEW GAME</div>
