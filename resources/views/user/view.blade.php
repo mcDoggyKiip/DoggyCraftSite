@@ -2,6 +2,8 @@
 
 @section('content')
     name: {{$user->name}}
-    <br>
+    <br/>
     email: {{$user->email}}
+    <br/>
+    mc username: {{$user->mc_username}}
 @endsection
