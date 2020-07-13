@@ -16,11 +16,10 @@ Auth::routes();
 Route::middleware(['auth'])->group( function () {
     Route::get('/', 'HomeController@index')->name('index');
     Route::resource('gamemode','GamemodeController');
+    Route::resource('user', 'UserController');
 });
 
 Route::fallback(function () {
     return Redirect::to('/');
 });
-Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
