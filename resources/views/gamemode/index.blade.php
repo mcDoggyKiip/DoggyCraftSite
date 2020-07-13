@@ -4,7 +4,13 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">{{ __("Gamemodes") }} <a class="btn bg-blue float-right" href="{{route('gamemode.create')}}"><i class="fa fa-plus"></i> Add Gamemode</a></div>
+                <div class="card-header">{{ __("Gamemodes") }}
+                    @if(isset(Auth::user()->mc_username))
+                        @if(in_array("owner", Auth::user()->LpPlayer->groups()))
+                            <a class="btn bg-blue float-right" href="{{route('gamemode.create')}}"><i class="fa fa-plus"></i> Add Gamemode</a>
+                        @endif
+                    @endif
+                </div>
 
                 <div class="card-body">
                     <div class="row">
@@ -34,16 +40,20 @@
                                                     @method('GET')
                                                     <button type="submit" class="btn btn-app bg-info"><i class="fa fa-info"></i> More Info</button>
                                                 </form>
-                                                <form action="{{route('gamemode.edit', ['gamemode' => $gamemode["id"]])}}" method="POST">
-                                                    @csrf()
-                                                    @method('GET')
-                                                    <button type="submit" class="btn btn-app bg-primary"><i class="fa fa-edit"></i> Edit</button>
-                                                </form>
-                                                <form action="{{route('gamemode.destroy', ['gamemode' => $gamemode["id"]])}}" method="POST">
-                                                    @csrf()
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-app bg-danger"><i class="fa fa-trash"></i> Delete</button>
-                                                </form>
+                                                @if(isset(Auth::user()->mc_username))
+                                                    @if(in_array("owner", Auth::user()->LpPlayer->groups()))
+                                                        <form action="{{route('gamemode.edit', ['gamemode' => $gamemode["id"]])}}" method="POST">
+                                                            @csrf()
+                                                            @method('GET')
+                                                            <button type="submit" class="btn btn-app bg-primary"><i class="fa fa-edit"></i> Edit</button>
+                                                        </form>
+                                                        <form action="{{route('gamemode.destroy', ['gamemode' => $gamemode["id"]])}}" method="POST">
+                                                            @csrf()
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-app bg-danger"><i class="fa fa-trash"></i> Delete</button>
+                                                        </form>
+                                                    @endif
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
