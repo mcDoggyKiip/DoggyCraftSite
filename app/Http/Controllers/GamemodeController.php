@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Gamemode;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GamemodeController extends Controller
 {
@@ -30,7 +31,12 @@ class GamemodeController extends Controller
      */
     public function create()
     {
-        return view('gamemode.create');
+        if(isset(Auth::user()->mc_username)){
+            if(in_array("owner", Auth::user()->LpPlayer->groups())){
+                return view('gamemode.create');
+            }
+        }
+        return redirect(route('gamemode.index'));
     }
 
     /**
@@ -41,19 +47,24 @@ class GamemodeController extends Controller
      */
     public function store(Request $request)
     {
-        $name = $request->input('name');
-        $port = $request->input('port');
-        $added_to_server = $request->input('added_to_server');
-        $desription = $request->input('description');
+        if(isset(Auth::user()->mc_username)){
+            if(in_array("owner", Auth::user()->LpPlayer->groups())){
+                $name = $request->input('name');
+                $port = $request->input('port');
+                $added_to_server = $request->input('added_to_server');
+                $desription = $request->input('description');
 
-        Gamemode::create([
-            "gamemode" => $name,
-            "port" => $port,
-            "added_to_server" => $added_to_server,
-            "description" => $desription
-        ]);
+                Gamemode::create([
+                    "gamemode" => $name,
+                    "port" => $port,
+                    "added_to_server" => $added_to_server,
+                    "description" => $desription
+                ]);
+                return redirect(route('gamemode.index')); // #TODO: make an success message appear on index page to state gamemode is created!
+            }
+        }
+        return redirect(route('gamemode.index'));
 
-        return redirect(route('gamemode.index')); // #TODO: make an success message appear on index page to state gamemode is created!
     }
 
     /**
@@ -70,7 +81,6 @@ class GamemodeController extends Controller
         }else{
             return redirect(route('gamemode.index')); // #TODO: make an error message appear on index page to state gamemode not found!
         }
-
     }
 
     /**
@@ -81,13 +91,18 @@ class GamemodeController extends Controller
      */
     public function edit($id)
     {
-        $gamemode = Gamemode::all()->where('id', '==', $id)->first();
+        if(isset(Auth::user()->mc_username)){
+            if(in_array("owner", Auth::user()->LpPlayer->groups())){
+                $gamemode = Gamemode::all()->where('id', '==', $id)->first();
 
-        if(isset($gamemode)){
-            return view('gamemode.edit')->with(["gamemode" => $gamemode]);
-        }else{
-            return redirect(route('gamemode.index')); // #TODO: make an error message appear on index page to state gamemode not found!
+                if(isset($gamemode)){
+                    return view('gamemode.edit')->with(["gamemode" => $gamemode]);
+                }else{
+                    return redirect(route('gamemode.index')); // #TODO: make an error message appear on index page to state gamemode not found!
+                }
+            }
         }
+        return redirect(route('gamemode.index'));
     }
 
     /**
@@ -99,25 +114,31 @@ class GamemodeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $gamemode = Gamemode::findOrFail($id);
+        if(isset(Auth::user()->mc_username)){
+            if(in_array("owner", Auth::user()->LpPlayer->groups())){
 
-        $name = $request->input('name');
-        $port = $request->input('port');
-        $added_to_server = $request->input('added_to_server');
-        $desription = $request->input('description');
+                $gamemode = Gamemode::findOrFail($id);
 
-        $gamemode->update([
-            "gamemode" => $name,
-            "port" => $port,
-            "added_to_server" => $added_to_server,
-            "description" => $desription
-        ]);
+                $name = $request->input('name');
+                $port = $request->input('port');
+                $added_to_server = $request->input('added_to_server');
+                $desription = $request->input('description');
 
-        if(isset($gamemode)){
-            return view('gamemode.view')->with(["gamemode" => $gamemode]); // #TODO: make success messafe appear on view page
-        }else{
-            return redirect(route('gamemode.index')); // #TODO: make an error message appear on index page to state gamemode not found!
+                $gamemode->update([
+                    "gamemode" => $name,
+                    "port" => $port,
+                    "added_to_server" => $added_to_server,
+                    "description" => $desription
+                ]);
+
+                if(isset($gamemode)){
+                    return view('gamemode.view')->with(["gamemode" => $gamemode]); // #TODO: make success messafe appear on view page
+                }else{
+                    return redirect(route('gamemode.index')); // #TODO: make an error message appear on index page to state gamemode not found!
+                }
+            }
         }
+        return redirect(route('gamemode.index'));
     }
 
     /**
@@ -128,8 +149,13 @@ class GamemodeController extends Controller
      */
     public function destroy($id)
     {
-        $gamemode = Gamemode::findOrFail($id);
-        $gamemode->delete();
-        return redirect(route('gamemode.index')); // #TODO: make an success message appear on index page to state gamemode got deleted!
+        if(isset(Auth::user()->mc_username)){
+            if(in_array("owner", Auth::user()->LpPlayer->groups())){
+                $gamemode = Gamemode::findOrFail($id);
+                $gamemode->delete();
+                return redirect(route('gamemode.index')); // #TODO: make an success message appear on index page to state gamemode got deleted!
+            }
+        }
+        return redirect(route('gamemode.index'));
     }
 }
