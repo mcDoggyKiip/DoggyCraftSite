@@ -9,6 +9,11 @@
     <br/>
     permission group(s):
     @foreach($user->LpPlayer->groups() as $group)
-        {{$group}}
+        @if(!$loop->last)
+            {{$group}},
+        @else
+            {{$group}}
+        @endif
     @endforeach
+
 @endsection
