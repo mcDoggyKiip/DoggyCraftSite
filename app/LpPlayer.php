@@ -20,4 +20,14 @@ class LpPlayer extends Model
         }
         return $groups;
     }
+
+    public function LpGroupPermission(){
+        $groupperms = [];
+        $groups = $this->groups();
+        foreach ($groups as $group){
+            $theseperms = LpGroupPermission::all()->where('name', '==', $group);
+            array_push($groupperms, $theseperms);
+        }
+        return $groupperms;
+    }
 }

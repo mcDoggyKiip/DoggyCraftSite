@@ -15,5 +15,22 @@
             {{$group}}
         @endif
     @endforeach
-
+    <br/>
+    user permissions:
+    <br/>
+    @foreach($user->LpPlayer->LpUserPermission as $perm)
+        - {{$perm = $perm->permission}}
+    @endforeach
+    <br/>
+    group permissions:
+    <br/>
+    @foreach($user->LpPlayer->LpGroupPermission() as $permgroup)
+        @foreach($permgroup as $perm)
+            @if(!$loop->last)
+                - {{$perm = $perm->permission}}<br>
+            @else
+                - {{$perm = $perm->permission}}
+            @endif
+        @endforeach
+    @endforeach
 @endsection
