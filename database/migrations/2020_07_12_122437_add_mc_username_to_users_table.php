@@ -14,7 +14,7 @@ class AddMcUsernameToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('mc_username');
+            $table->string('mc_username')->nullable();
         });
     }
 
