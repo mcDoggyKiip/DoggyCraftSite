@@ -37,6 +37,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+
+    /**
+     * Get the player as know by the minecraft plugin
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function LpPlayer(){
         return $this->hasOne('App\LpPlayer', 'username', 'mc_username');
     }

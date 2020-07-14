@@ -6,10 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class LpPlayer extends Model
 {
+
+    /**
+     * Get a list off all user permissions.
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function LpUserPermission(){
        return $this->hasMany('App\LpUserPermission', 'uuid', 'uuid');
     }
 
+    /**
+     * Get a list off all the groups the user is in.
+     * @return array
+     */
     public function groups(){
         $groups = [];
         foreach ($this->LpUserPermission as $perm){
@@ -21,11 +30,15 @@ class LpPlayer extends Model
         return $groups;
     }
 
+    /**
+     * Get a list of all the permissions based on the groups the player has
+     * @return array
+     */
     public function LpGroupPermission(){
         $groupperms = [];
         $groups = $this->groups();
         foreach ($groups as $group){
-            $theseperms = LpGroupPermission::all()->where('name', '==', $group);
+            $theseperms = LpGroupPermission::where('name', $group)->get();
             array_push($groupperms, $theseperms);
         }
         return $groupperms;
