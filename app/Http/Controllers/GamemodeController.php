@@ -70,12 +70,11 @@ class GamemodeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param Gamemode $gamemode
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Gamemode $gamemode)
     {
-        $gamemode = Gamemode::all()->where('id', '==', $id)->first();
         if(isset($gamemode)){
             return view('gamemode.view')->with(["gamemode" => $gamemode]);
         }else{
@@ -86,15 +85,13 @@ class GamemodeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param Gamemode $gamemode
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Gamemode $gamemode)
     {
         if(isset(Auth::user()->mc_username)){
             if(in_array("owner", Auth::user()->LpPlayer->groups())){
-                $gamemode = Gamemode::all()->where('id', '==', $id)->first();
-
                 if(isset($gamemode)){
                     return view('gamemode.edit')->with(["gamemode" => $gamemode]);
                 }else{
@@ -108,31 +105,28 @@ class GamemodeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param Gamemode $gamemode
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Gamemode $gamemode)
     {
         if(isset(Auth::user()->mc_username)){
             if(in_array("owner", Auth::user()->LpPlayer->groups())){
-
-                $gamemode = Gamemode::findOrFail($id);
-
                 $name = $request->input('name');
                 $port = $request->input('port');
                 $added_to_server = $request->input('added_to_server');
-                $desription = $request->input('description');
+                $description = $request->input('description');
 
                 $gamemode->update([
                     "gamemode" => $name,
                     "port" => $port,
                     "added_to_server" => $added_to_server,
-                    "description" => $desription
+                    "description" => $description
                 ]);
 
                 if(isset($gamemode)){
-                    return view('gamemode.view')->with(["gamemode" => $gamemode]); // #TODO: make success messafe appear on view page
+                    return view('gamemode.view')->with(["gamemode" => $gamemode]); // #TODO: make success message appear on view page
                 }else{
                     return redirect(route('gamemode.index')); // #TODO: make an error message appear on index page to state gamemode not found!
                 }
@@ -144,15 +138,17 @@ class GamemodeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param Gamemode $gamemode
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Gamemode $gamemode)
     {
         if(isset(Auth::user()->mc_username)){
             if(in_array("owner", Auth::user()->LpPlayer->groups())){
-                $gamemode = Gamemode::findOrFail($id);
-                $gamemode->delete();
+                try {
+                    $gamemode->delete();
+                } catch (\Exception $e) {
+                }
                 return redirect(route('gamemode.index')); // #TODO: make an success message appear on index page to state gamemode got deleted!
             }
         }
