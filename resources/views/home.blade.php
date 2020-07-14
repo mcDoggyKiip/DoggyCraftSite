@@ -4,32 +4,20 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">{{ __('Server Status') }}</div>
+                <div class="card-header">{{ __('Dashboard') }}</div>
 
                 <div class="card-body">
-                    <div class="row">
-                        @foreach($gamemodes as $gamemode)
-                            <div class="col-md-4">
-                                @if($gamemode['status']['online'])
-                                    <div class="card card-green">
-                                @else
-                                    <div class="card card-red">
-                                @endif
-                                    <div class="card-header">{{$gamemode["name"]}}</div>
-
-                                    <div class="card-body">
-                                        @if($gamemode['status']['online'])
-                                            Status : Online
-                                            <br />
-                                            Playing: {{$gamemode['status']['players']."/".$gamemode['status']['max_players']}}
-                                        @else
-                                            Status : Offline
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
+                    @if(isset(Auth::user()->mc_username))
+                        @if(in_array("owner", Auth::user()->LpPlayer->groups()))
+                            Congrats, you are the owner of the best server ever!
+                        @endif
+                        @if(in_array("builder", Auth::user()->LpPlayer->groups()))
+                            Building one hack of a server!
+                        @endif
+                        @if(in_array("default", Auth::user()->LpPlayer->groups()))
+                            Thank you for playing on the server !
+                        @endif
+                    @endif
                 </div>
             </div>
         </div>

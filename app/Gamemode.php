@@ -6,8 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Gamemode extends Model
 {
-    function getStatus(){
 
+    /**
+     * Gat a list with the status of the gamemode
+     * @return array
+     */
+    function getStatus(){
         try{
             $socket = fsockopen('127.0.0.1', $this->port, $errno, $errstr, 0.5);
         }catch(\Exception $e){
