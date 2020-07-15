@@ -20,7 +20,7 @@ class Gamemode extends Model
      * Gat a list with the status of the gamemode
      * @return array
      */
-    function getStatus(){
+    function status(){
         try{
             $socket = fsockopen('127.0.0.1', $this->port, $errno, $errstr, 0.5);
         }catch(\Exception $e){

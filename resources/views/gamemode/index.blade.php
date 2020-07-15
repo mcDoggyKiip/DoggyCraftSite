@@ -16,19 +16,19 @@
                     <div class="row">
                         @foreach($gamemodes as $gamemode)
                             <div class="col-md-4">
-                                @if($gamemode['status']['online'])
+                                @if($gamemode->status()['online'])
                                     <div class="card card-green">
                                 @else
                                     <div class="card card-red" style="min-height: 165px">
                                 @endif
-                                        <div class="card-header">{{$gamemode["name"]}}</div>
+                                        <div class="card-header">{{$gamemode->gamemode}}</div> {{-- #TODO: rename gamemode to name --}}
 
                                         <div class="card-body">
                                             <div class="row">
-                                                @if($gamemode['status']['online'])
+                                                @if($gamemode->status()['online'])
                                                     Status : Online
                                                     <br />
-                                                    Playing: {{$gamemode['status']['players']."/".$gamemode['status']['max_players']}}
+                                                    Playing: {{$gamemode->status()['players']."/".$gamemode->status()['max_players']}}
                                                 @else
                                                     Status : Offline
                                                 @endif
