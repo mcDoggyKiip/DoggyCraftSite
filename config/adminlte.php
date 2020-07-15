@@ -232,6 +232,12 @@ return [
 
     'menu' => [
         ['header' => 'Main Navigation'],
+        [
+            'text' => 'Gamemodes',
+            'route' => 'gamemode.index',
+            'icon' => 'fas fa-fw fa-server',
+            'active' => ['gamemode/*']
+        ],
     ],
 
     /*
