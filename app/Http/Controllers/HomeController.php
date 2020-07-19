@@ -23,10 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $gamemodes = [];
-        foreach (Gamemode::all() as $gamemode){
-            array_push($gamemodes,["name" => $gamemode->gamemode, "status" => $gamemode->getStatus()]);
-        }
+        $gamemodes = Gamemode::all();
         return view('home')->with(["gamemodes" => $gamemodes]);
     }
 }
