@@ -14,7 +14,7 @@ class AddAddedToServerColumnToGamemodes extends Migration
     public function up()
     {
         Schema::table('gamemodes', function (Blueprint $table) {
-            $table->dateTime('added_to_server');
+            $table->dateTime('added_to_server')->default('1970-01-02 00:00:00');
         });
     }
 
