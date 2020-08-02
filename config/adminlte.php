@@ -238,6 +238,12 @@ return [
             'icon' => 'fas fa-fw fa-server',
             'active' => ['gamemode/*']
         ],
+        [
+            'text' => 'Permissions',
+            'route' => 'permission.index',
+            'icon' => 'fas fa-fs fa-shield-alt',
+            'active' => ['permission/*']
+        ],
     ],
 
     /*
