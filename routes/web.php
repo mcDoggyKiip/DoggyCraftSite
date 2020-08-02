@@ -16,6 +16,7 @@ Auth::routes();
 Route::middleware(['auth'])->group( function () {
     Route::get('/', 'HomeController@index')->name('index');
     Route::resource('gamemode','GamemodeController');
+    Route::resource('permission','PermissionController');
     Route::resource('user', 'UserController');
 });
 
