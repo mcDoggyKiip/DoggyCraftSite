@@ -25,7 +25,11 @@
                                     @foreach($LpGroupPermissions as $LpGroupPermission)
                                         {{-- filter all permissions on group name --}}
                                         @if($LpGroupPermission->name == ($group->name))
-                                            - {{$LpGroupPermission->permission}}<br/>
+                                            @if($LpGroupPermission->value)
+                                                + {{$LpGroupPermission->permission}}<br/>
+                                            @else
+                                                - {{$LpGroupPermission->permission}}<br/>
+                                            @endif
                                         @endif
                                     @endforeach
                                 </div>
