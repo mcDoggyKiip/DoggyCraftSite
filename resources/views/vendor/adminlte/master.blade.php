@@ -65,27 +65,26 @@
 </head>
 
 <body class="@yield('classes_body')" @yield('body_data')>
+        {{-- Body Content --}}
+        @yield('body')
 
-    {{-- Body Content --}}
-    @yield('body')
+        {{-- Base Scripts --}}
+        @if(!config('adminlte.enabled_laravel_mix'))
+            <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+            <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+            <script src="{{ asset('vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+            <script src="{{ asset('js/app.js') }}"></script>
 
-    {{-- Base Scripts --}}
-    @if(!config('adminlte.enabled_laravel_mix'))
-        <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
-        <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-        <script src="{{ asset('vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+            {{-- Configured Scripts --}}
+            @include('adminlte::plugins', ['type' => 'js'])
 
-        {{-- Configured Scripts --}}
-        @include('adminlte::plugins', ['type' => 'js'])
+            <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
+        @else
+            <script src="{{ mix(config('adminlte.laravel_mix_js_path', 'js/app.js')) }}"></script>
+        @endif
 
-        <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
-    @else
-        <script src="{{ mix(config('adminlte.laravel_mix_js_path', 'js/app.js')) }}"></script>
-    @endif
-
-    {{-- Custom Scripts --}}
-    @yield('adminlte_js')
-
+        {{-- Custom Scripts --}}
+        @yield('adminlte_js')
 </body>
 
 </html>

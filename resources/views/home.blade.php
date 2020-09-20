@@ -18,6 +18,7 @@
                             Thank you for playing on the server !
                         @endif
                     @endif
+                    <example-component></example-component>
                 </div>
             </div>
         </div>

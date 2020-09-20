@@ -65,6 +65,13 @@
                             </div>
                         @endforeach
                     </div>
+                    <div class="row">
+                        <gamemode-component online="false" name="Hub"></gamemode-component>
+                        <gamemode-component online="true" online_player_count="20" max_player_count="100" name="Factions"></gamemode-component>
+                    </div>
+                    <div class="row">
+                        <gamemode-component v-for="gamemode in {{$gamemodes}}" :key="gamemode.id" :name="gamemode.gamemode" :max_player_count="gamemode"></gamemode-component>
+                    </div>
                 </div>
             </div>
         </div>
