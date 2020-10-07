@@ -7,14 +7,15 @@
     "require": {
         "php": "^7.3",
         "fideloper/proxy": "^4.0",
+        "illuminate/support": "^7.6.1",
         "jeroennoten/laravel-adminlte": "^3.1",
         "laravel/framework": "^7.6.1",
         "laravel/helpers": "^1.2",
+        "laravel/passport": "^8.4",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
-        "laravel/passport": "^8.4",
-        "symfony/symfony": "^5.0",
-        "illuminate/support": "^7.6.1"
+        "pusher/pusher-php-server": "~3.0",
+        "symfony/symfony": "^5.0"
     },
     "require-dev": {
         "filp/whoops": "^2.0",

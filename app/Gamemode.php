@@ -46,6 +46,8 @@ class Gamemode extends Model
         }else{
             return array(
                 'online' => false,
+                'players' => 0,
+                'max_players' => 100,
             );
         }
     }

@@ -14,56 +14,15 @@
 
                 <div class="card-body">
                     <div class="row">
-                        @foreach($gamemodes as $gamemode)
-                            <div class="col-md-4">
-                                @if($gamemode->status()['online'])
-                                    <div class="card card-green">
-                                @else
-                                    <div class="card card-red" style="min-height: 165px">
-                                @endif
-                                        <div class="card-header">{{$gamemode->gamemode}}</div> {{-- #TODO: rename gamemode to name --}}
-
-                                        <div class="card-body">
-                                            <div class="row">
-                                                @if($gamemode->status()['online'])
-                                                    Status : Online
-                                                    <br />
-                                                    Playing: {{$gamemode->status()['players']."/".$gamemode->status()['max_players']}}
-                                                @else
-                                                    Status : Offline
-                                                @endif
-                                            </div>
-                                            <hr />
-                                            <div class="row">
-                                                <form action="{{route('gamemode.show', ['gamemode' => $gamemode["id"]])}}" method="POST">
-                                                    @csrf()
-                                                    @method('GET')
-                                                    <button type="submit" class="btn btn-app bg-info"><i class="fa fa-info"></i> More Info</button>
-                                                </form>
-                                                @if(isset(Auth::user()->mc_username))
-                                                    @if(in_array("owner", Auth::user()->LpPlayer->groups()))
-                                                        <form action="{{route('gamemode.edit', ['gamemode' => $gamemode["id"]])}}" method="POST">
-                                                            @csrf()
-                                                            @method('GET')
-                                                            <button type="submit" class="btn btn-app bg-primary"><i class="fa fa-edit"></i> Edit</button>
-                                                        </form>
-                                                        <form action="{{route('gamemode.destroy', ['gamemode' => $gamemode["id"]])}}" method="POST">
-                                                            @csrf()
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-app bg-danger"><i class="fa fa-trash"></i> Delete</button>
-                                                        </form>
-                                                    @endif
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @if(strtotime($gamemode['added_to_server']) >= strtotime('-1 month'))
-                                        <div class="ribbon-wrapper ribbon-xl" style="right: 2px; top: -2px; width: 192px; height: 190px;">
-                                            <div class="ribbon bg-warning text-lg" style="right: 3px;">NEW GAME</div>
-                                        </div>
-                                    @endif
-                            </div>
-                        @endforeach
+                        @if(isset(Auth::user()->mc_username))
+                            @if(in_array("owner", Auth::user()->LpPlayer->groups()))
+                                <gamemode-component v-for="gamemode in {{$gamemodes}}" :key="gamemode.id" :name="gamemode.gamemode" :gamemode_id="gamemode.id" :added_to_server="gamemode.added_to_server" status="Offline" players="0" max_players="100" csrf="{{csrf_token()}}" :can_edit="true" :can_trash="true"></gamemode-component>
+                            @else
+                                <gamemode-component v-for="gamemode in {{$gamemodes}}" :key="gamemode.id" :name="gamemode.gamemode" :gamemode_id="gamemode.id" :added_to_server="gamemode.added_to_server" status="Offline" players="0" max_players="100" csrf="{{csrf_token()}}" :can_edit="false" :can_trash="false"></gamemode-component>
+                            @endif
+                        @else
+                            <gamemode-component v-for="gamemode in {{$gamemodes}}" :key="gamemode.id" :name="gamemode.gamemode" :gamemode_id="gamemode.id" :added_to_server="gamemode.added_to_server" status="Offline" players="0" max_players="100" csrf="{{csrf_token()}}" :can_edit="false" :can_trash="false"></gamemode-component>
+                        @endif
                     </div>
                 </div>
             </div>
