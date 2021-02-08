@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\GamemodeStatusChanged;
 use App\Gamemode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -120,6 +121,8 @@ class GamemodeController extends Controller
                     "added_to_server" => $added_to_server,
                     "description" => $description
                 ]);
+
+                event(new GamemodeStatusChanged($gamemode));
 
                 if(isset($gamemode)){
                     return view('gamemode.view')->with(["gamemode" => $gamemode]); // #TODO: make success message appear on view page

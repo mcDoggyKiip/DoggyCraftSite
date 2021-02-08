@@ -1899,10 +1899,10 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js&":
-/*!***************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js& ***!
-  \***************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/GamemodeComponent.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/GamemodeComponent.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1924,10 +1924,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
-    console.log('Component mounted.');
-  }
+    var _this = this;
+
+    Echo.channel('gamemode-change.' + this.gamemode_id).listen('GamemodeStatusChanged', function (data) {
+      _this.name = data.gamemode;
+      _this.status = data.status;
+      _this.players = data.players;
+      _this.max_players = data.max_players;
+      _this.added_to_server = data.added_to_server;
+    });
+  },
+  props: ['gamemode_id', 'name', 'status', 'players', 'max_players', 'added_to_server', 'csrf', 'can_edit', 'can_trash']
 });
 
 /***/ }),
@@ -17242,6 +17271,1504 @@ if ( typeof noGlobal === "undefined" ) {
 
 return jQuery;
 } );
+
+
+/***/ }),
+
+/***/ "./node_modules/laravel-echo/dist/echo.js":
+/*!************************************************!*\
+  !*** ./node_modules/laravel-echo/dist/echo.js ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) _setPrototypeOf(subClass, superClass);
+}
+
+function _getPrototypeOf(o) {
+  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return _getPrototypeOf(o);
+}
+
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+
+function _isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
+
+  try {
+    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return self;
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (call && (typeof call === "object" || typeof call === "function")) {
+    return call;
+  }
+
+  return _assertThisInitialized(self);
+}
+
+function _createSuper(Derived) {
+  var hasNativeReflectConstruct = _isNativeReflectConstruct();
+
+  return function () {
+    var Super = _getPrototypeOf(Derived),
+        result;
+
+    if (hasNativeReflectConstruct) {
+      var NewTarget = _getPrototypeOf(this).constructor;
+
+      result = Reflect.construct(Super, arguments, NewTarget);
+    } else {
+      result = Super.apply(this, arguments);
+    }
+
+    return _possibleConstructorReturn(this, result);
+  };
+}
+
+var Connector = /*#__PURE__*/function () {
+  /**
+   * Create a new class instance.
+   */
+  function Connector(options) {
+    _classCallCheck(this, Connector);
+
+    /**
+     * Default connector options.
+     */
+    this._defaultOptions = {
+      auth: {
+        headers: {}
+      },
+      authEndpoint: '/broadcasting/auth',
+      broadcaster: 'pusher',
+      csrfToken: null,
+      host: null,
+      key: null,
+      namespace: 'App.Events'
+    };
+    this.setOptions(options);
+    this.connect();
+  }
+  /**
+   * Merge the custom options with the defaults.
+   */
+
+
+  _createClass(Connector, [{
+    key: "setOptions",
+    value: function setOptions(options) {
+      this.options = _extends(this._defaultOptions, options);
+
+      if (this.csrfToken()) {
+        this.options.auth.headers['X-CSRF-TOKEN'] = this.csrfToken();
+      }
+
+      return options;
+    }
+    /**
+     * Extract the CSRF token from the page.
+     */
+
+  }, {
+    key: "csrfToken",
+    value: function csrfToken() {
+      var selector;
+
+      if (typeof window !== 'undefined' && window['Laravel'] && window['Laravel'].csrfToken) {
+        return window['Laravel'].csrfToken;
+      } else if (this.options.csrfToken) {
+        return this.options.csrfToken;
+      } else if (typeof document !== 'undefined' && typeof document.querySelector === 'function' && (selector = document.querySelector('meta[name="csrf-token"]'))) {
+        return selector.getAttribute('content');
+      }
+
+      return null;
+    }
+  }]);
+
+  return Connector;
+}();
+
+/**
+ * This class represents a basic channel.
+ */
+var Channel = /*#__PURE__*/function () {
+  function Channel() {
+    _classCallCheck(this, Channel);
+  }
+
+  _createClass(Channel, [{
+    key: "listenForWhisper",
+
+    /**
+     * Listen for a whisper event on the channel instance.
+     */
+    value: function listenForWhisper(event, callback) {
+      return this.listen('.client-' + event, callback);
+    }
+    /**
+     * Listen for an event on the channel instance.
+     */
+
+  }, {
+    key: "notification",
+    value: function notification(callback) {
+      return this.listen('.Illuminate\\Notifications\\Events\\BroadcastNotificationCreated', callback);
+    }
+    /**
+     * Stop listening for a whisper event on the channel instance.
+     */
+
+  }, {
+    key: "stopListeningForWhisper",
+    value: function stopListeningForWhisper(event) {
+      return this.stopListening('.client-' + event);
+    }
+  }]);
+
+  return Channel;
+}();
+
+/**
+ * Event name formatter
+ */
+var EventFormatter = /*#__PURE__*/function () {
+  /**
+   * Create a new class instance.
+   */
+  function EventFormatter(namespace) {
+    _classCallCheck(this, EventFormatter);
+
+    this.setNamespace(namespace);
+  }
+  /**
+   * Format the given event name.
+   */
+
+
+  _createClass(EventFormatter, [{
+    key: "format",
+    value: function format(event) {
+      if (event.charAt(0) === '.' || event.charAt(0) === '\\') {
+        return event.substr(1);
+      } else if (this.namespace) {
+        event = this.namespace + '.' + event;
+      }
+
+      return event.replace(/\./g, '\\');
+    }
+    /**
+     * Set the event namespace.
+     */
+
+  }, {
+    key: "setNamespace",
+    value: function setNamespace(value) {
+      this.namespace = value;
+    }
+  }]);
+
+  return EventFormatter;
+}();
+
+/**
+ * This class represents a Pusher channel.
+ */
+
+var PusherChannel = /*#__PURE__*/function (_Channel) {
+  _inherits(PusherChannel, _Channel);
+
+  var _super = _createSuper(PusherChannel);
+
+  /**
+   * Create a new class instance.
+   */
+  function PusherChannel(pusher, name, options) {
+    var _this;
+
+    _classCallCheck(this, PusherChannel);
+
+    _this = _super.call(this);
+    _this.name = name;
+    _this.pusher = pusher;
+    _this.options = options;
+    _this.eventFormatter = new EventFormatter(_this.options.namespace);
+
+    _this.subscribe();
+
+    return _this;
+  }
+  /**
+   * Subscribe to a Pusher channel.
+   */
+
+
+  _createClass(PusherChannel, [{
+    key: "subscribe",
+    value: function subscribe() {
+      this.subscription = this.pusher.subscribe(this.name);
+    }
+    /**
+     * Unsubscribe from a Pusher channel.
+     */
+
+  }, {
+    key: "unsubscribe",
+    value: function unsubscribe() {
+      this.pusher.unsubscribe(this.name);
+    }
+    /**
+     * Listen for an event on the channel instance.
+     */
+
+  }, {
+    key: "listen",
+    value: function listen(event, callback) {
+      this.on(this.eventFormatter.format(event), callback);
+      return this;
+    }
+    /**
+     * Stop listening for an event on the channel instance.
+     */
+
+  }, {
+    key: "stopListening",
+    value: function stopListening(event) {
+      this.subscription.unbind(this.eventFormatter.format(event));
+      return this;
+    }
+    /**
+     * Register a callback to be called anytime a subscription error occurs.
+     */
+
+  }, {
+    key: "error",
+    value: function error(callback) {
+      this.on('pusher:subscription_error', function (status) {
+        callback(status);
+      });
+      return this;
+    }
+    /**
+     * Bind a channel to an event.
+     */
+
+  }, {
+    key: "on",
+    value: function on(event, callback) {
+      this.subscription.bind(event, callback);
+      return this;
+    }
+  }]);
+
+  return PusherChannel;
+}(Channel);
+
+/**
+ * This class represents a Pusher private channel.
+ */
+
+var PusherPrivateChannel = /*#__PURE__*/function (_PusherChannel) {
+  _inherits(PusherPrivateChannel, _PusherChannel);
+
+  var _super = _createSuper(PusherPrivateChannel);
+
+  function PusherPrivateChannel() {
+    _classCallCheck(this, PusherPrivateChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(PusherPrivateChannel, [{
+    key: "whisper",
+
+    /**
+     * Trigger client event on the channel.
+     */
+    value: function whisper(eventName, data) {
+      this.pusher.channels.channels[this.name].trigger("client-".concat(eventName), data);
+      return this;
+    }
+  }]);
+
+  return PusherPrivateChannel;
+}(PusherChannel);
+
+/**
+ * This class represents a Pusher private channel.
+ */
+
+var PusherEncryptedPrivateChannel = /*#__PURE__*/function (_PusherChannel) {
+  _inherits(PusherEncryptedPrivateChannel, _PusherChannel);
+
+  var _super = _createSuper(PusherEncryptedPrivateChannel);
+
+  function PusherEncryptedPrivateChannel() {
+    _classCallCheck(this, PusherEncryptedPrivateChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(PusherEncryptedPrivateChannel, [{
+    key: "whisper",
+
+    /**
+     * Trigger client event on the channel.
+     */
+    value: function whisper(eventName, data) {
+      this.pusher.channels.channels[this.name].trigger("client-".concat(eventName), data);
+      return this;
+    }
+  }]);
+
+  return PusherEncryptedPrivateChannel;
+}(PusherChannel);
+
+/**
+ * This class represents a Pusher presence channel.
+ */
+
+var PusherPresenceChannel = /*#__PURE__*/function (_PusherChannel) {
+  _inherits(PusherPresenceChannel, _PusherChannel);
+
+  var _super = _createSuper(PusherPresenceChannel);
+
+  function PusherPresenceChannel() {
+    _classCallCheck(this, PusherPresenceChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(PusherPresenceChannel, [{
+    key: "here",
+
+    /**
+     * Register a callback to be called anytime the member list changes.
+     */
+    value: function here(callback) {
+      this.on('pusher:subscription_succeeded', function (data) {
+        callback(Object.keys(data.members).map(function (k) {
+          return data.members[k];
+        }));
+      });
+      return this;
+    }
+    /**
+     * Listen for someone joining the channel.
+     */
+
+  }, {
+    key: "joining",
+    value: function joining(callback) {
+      this.on('pusher:member_added', function (member) {
+        callback(member.info);
+      });
+      return this;
+    }
+    /**
+     * Listen for someone leaving the channel.
+     */
+
+  }, {
+    key: "leaving",
+    value: function leaving(callback) {
+      this.on('pusher:member_removed', function (member) {
+        callback(member.info);
+      });
+      return this;
+    }
+    /**
+     * Trigger client event on the channel.
+     */
+
+  }, {
+    key: "whisper",
+    value: function whisper(eventName, data) {
+      this.pusher.channels.channels[this.name].trigger("client-".concat(eventName), data);
+      return this;
+    }
+  }]);
+
+  return PusherPresenceChannel;
+}(PusherChannel);
+
+/**
+ * This class represents a Socket.io channel.
+ */
+
+var SocketIoChannel = /*#__PURE__*/function (_Channel) {
+  _inherits(SocketIoChannel, _Channel);
+
+  var _super = _createSuper(SocketIoChannel);
+
+  /**
+   * Create a new class instance.
+   */
+  function SocketIoChannel(socket, name, options) {
+    var _this;
+
+    _classCallCheck(this, SocketIoChannel);
+
+    _this = _super.call(this);
+    /**
+     * The event callbacks applied to the channel.
+     */
+
+    _this.events = {};
+    _this.name = name;
+    _this.socket = socket;
+    _this.options = options;
+    _this.eventFormatter = new EventFormatter(_this.options.namespace);
+
+    _this.subscribe();
+
+    _this.configureReconnector();
+
+    return _this;
+  }
+  /**
+   * Subscribe to a Socket.io channel.
+   */
+
+
+  _createClass(SocketIoChannel, [{
+    key: "subscribe",
+    value: function subscribe() {
+      this.socket.emit('subscribe', {
+        channel: this.name,
+        auth: this.options.auth || {}
+      });
+    }
+    /**
+     * Unsubscribe from channel and ubind event callbacks.
+     */
+
+  }, {
+    key: "unsubscribe",
+    value: function unsubscribe() {
+      this.unbind();
+      this.socket.emit('unsubscribe', {
+        channel: this.name,
+        auth: this.options.auth || {}
+      });
+    }
+    /**
+     * Listen for an event on the channel instance.
+     */
+
+  }, {
+    key: "listen",
+    value: function listen(event, callback) {
+      this.on(this.eventFormatter.format(event), callback);
+      return this;
+    }
+    /**
+     * Stop listening for an event on the channel instance.
+     */
+
+  }, {
+    key: "stopListening",
+    value: function stopListening(event) {
+      var name = this.eventFormatter.format(event);
+      this.socket.removeListener(name);
+      delete this.events[name];
+      return this;
+    }
+    /**
+     * Register a callback to be called anytime an error occurs.
+     */
+
+  }, {
+    key: "error",
+    value: function error(callback) {
+      return this;
+    }
+    /**
+     * Bind the channel's socket to an event and store the callback.
+     */
+
+  }, {
+    key: "on",
+    value: function on(event, callback) {
+      var _this2 = this;
+
+      var listener = function listener(channel, data) {
+        if (_this2.name == channel) {
+          callback(data);
+        }
+      };
+
+      this.socket.on(event, listener);
+      this.bind(event, listener);
+    }
+    /**
+     * Attach a 'reconnect' listener and bind the event.
+     */
+
+  }, {
+    key: "configureReconnector",
+    value: function configureReconnector() {
+      var _this3 = this;
+
+      var listener = function listener() {
+        _this3.subscribe();
+      };
+
+      this.socket.on('reconnect', listener);
+      this.bind('reconnect', listener);
+    }
+    /**
+     * Bind the channel's socket to an event and store the callback.
+     */
+
+  }, {
+    key: "bind",
+    value: function bind(event, callback) {
+      this.events[event] = this.events[event] || [];
+      this.events[event].push(callback);
+    }
+    /**
+     * Unbind the channel's socket from all stored event callbacks.
+     */
+
+  }, {
+    key: "unbind",
+    value: function unbind() {
+      var _this4 = this;
+
+      Object.keys(this.events).forEach(function (event) {
+        _this4.events[event].forEach(function (callback) {
+          _this4.socket.removeListener(event, callback);
+        });
+
+        delete _this4.events[event];
+      });
+    }
+  }]);
+
+  return SocketIoChannel;
+}(Channel);
+
+/**
+ * This class represents a Socket.io presence channel.
+ */
+
+var SocketIoPrivateChannel = /*#__PURE__*/function (_SocketIoChannel) {
+  _inherits(SocketIoPrivateChannel, _SocketIoChannel);
+
+  var _super = _createSuper(SocketIoPrivateChannel);
+
+  function SocketIoPrivateChannel() {
+    _classCallCheck(this, SocketIoPrivateChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(SocketIoPrivateChannel, [{
+    key: "whisper",
+
+    /**
+     * Trigger client event on the channel.
+     */
+    value: function whisper(eventName, data) {
+      this.socket.emit('client event', {
+        channel: this.name,
+        event: "client-".concat(eventName),
+        data: data
+      });
+      return this;
+    }
+  }]);
+
+  return SocketIoPrivateChannel;
+}(SocketIoChannel);
+
+/**
+ * This class represents a Socket.io presence channel.
+ */
+
+var SocketIoPresenceChannel = /*#__PURE__*/function (_SocketIoPrivateChann) {
+  _inherits(SocketIoPresenceChannel, _SocketIoPrivateChann);
+
+  var _super = _createSuper(SocketIoPresenceChannel);
+
+  function SocketIoPresenceChannel() {
+    _classCallCheck(this, SocketIoPresenceChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(SocketIoPresenceChannel, [{
+    key: "here",
+
+    /**
+     * Register a callback to be called anytime the member list changes.
+     */
+    value: function here(callback) {
+      this.on('presence:subscribed', function (members) {
+        callback(members.map(function (m) {
+          return m.user_info;
+        }));
+      });
+      return this;
+    }
+    /**
+     * Listen for someone joining the channel.
+     */
+
+  }, {
+    key: "joining",
+    value: function joining(callback) {
+      this.on('presence:joining', function (member) {
+        return callback(member.user_info);
+      });
+      return this;
+    }
+    /**
+     * Listen for someone leaving the channel.
+     */
+
+  }, {
+    key: "leaving",
+    value: function leaving(callback) {
+      this.on('presence:leaving', function (member) {
+        return callback(member.user_info);
+      });
+      return this;
+    }
+  }]);
+
+  return SocketIoPresenceChannel;
+}(SocketIoPrivateChannel);
+
+/**
+ * This class represents a null channel.
+ */
+
+var NullChannel = /*#__PURE__*/function (_Channel) {
+  _inherits(NullChannel, _Channel);
+
+  var _super = _createSuper(NullChannel);
+
+  function NullChannel() {
+    _classCallCheck(this, NullChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(NullChannel, [{
+    key: "subscribe",
+
+    /**
+     * Subscribe to a channel.
+     */
+    value: function subscribe() {} //
+
+    /**
+     * Unsubscribe from a channel.
+     */
+
+  }, {
+    key: "unsubscribe",
+    value: function unsubscribe() {} //
+
+    /**
+     * Listen for an event on the channel instance.
+     */
+
+  }, {
+    key: "listen",
+    value: function listen(event, callback) {
+      return this;
+    }
+    /**
+     * Stop listening for an event on the channel instance.
+     */
+
+  }, {
+    key: "stopListening",
+    value: function stopListening(event) {
+      return this;
+    }
+    /**
+     * Register a callback to be called anytime an error occurs.
+     */
+
+  }, {
+    key: "error",
+    value: function error(callback) {
+      return this;
+    }
+    /**
+     * Bind a channel to an event.
+     */
+
+  }, {
+    key: "on",
+    value: function on(event, callback) {
+      return this;
+    }
+  }]);
+
+  return NullChannel;
+}(Channel);
+
+/**
+ * This class represents a null private channel.
+ */
+
+var NullPrivateChannel = /*#__PURE__*/function (_NullChannel) {
+  _inherits(NullPrivateChannel, _NullChannel);
+
+  var _super = _createSuper(NullPrivateChannel);
+
+  function NullPrivateChannel() {
+    _classCallCheck(this, NullPrivateChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(NullPrivateChannel, [{
+    key: "whisper",
+
+    /**
+     * Trigger client event on the channel.
+     */
+    value: function whisper(eventName, data) {
+      return this;
+    }
+  }]);
+
+  return NullPrivateChannel;
+}(NullChannel);
+
+/**
+ * This class represents a null presence channel.
+ */
+
+var NullPresenceChannel = /*#__PURE__*/function (_NullChannel) {
+  _inherits(NullPresenceChannel, _NullChannel);
+
+  var _super = _createSuper(NullPresenceChannel);
+
+  function NullPresenceChannel() {
+    _classCallCheck(this, NullPresenceChannel);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(NullPresenceChannel, [{
+    key: "here",
+
+    /**
+     * Register a callback to be called anytime the member list changes.
+     */
+    value: function here(callback) {
+      return this;
+    }
+    /**
+     * Listen for someone joining the channel.
+     */
+
+  }, {
+    key: "joining",
+    value: function joining(callback) {
+      return this;
+    }
+    /**
+     * Listen for someone leaving the channel.
+     */
+
+  }, {
+    key: "leaving",
+    value: function leaving(callback) {
+      return this;
+    }
+    /**
+     * Trigger client event on the channel.
+     */
+
+  }, {
+    key: "whisper",
+    value: function whisper(eventName, data) {
+      return this;
+    }
+  }]);
+
+  return NullPresenceChannel;
+}(NullChannel);
+
+/**
+ * This class creates a connector to Pusher.
+ */
+
+var PusherConnector = /*#__PURE__*/function (_Connector) {
+  _inherits(PusherConnector, _Connector);
+
+  var _super = _createSuper(PusherConnector);
+
+  function PusherConnector() {
+    var _this;
+
+    _classCallCheck(this, PusherConnector);
+
+    _this = _super.apply(this, arguments);
+    /**
+     * All of the subscribed channel names.
+     */
+
+    _this.channels = {};
+    return _this;
+  }
+  /**
+   * Create a fresh Pusher connection.
+   */
+
+
+  _createClass(PusherConnector, [{
+    key: "connect",
+    value: function connect() {
+      if (typeof this.options.client !== 'undefined') {
+        this.pusher = this.options.client;
+      } else {
+        this.pusher = new Pusher(this.options.key, this.options);
+      }
+    }
+    /**
+     * Listen for an event on a channel instance.
+     */
+
+  }, {
+    key: "listen",
+    value: function listen(name, event, callback) {
+      return this.channel(name).listen(event, callback);
+    }
+    /**
+     * Get a channel instance by name.
+     */
+
+  }, {
+    key: "channel",
+    value: function channel(name) {
+      if (!this.channels[name]) {
+        this.channels[name] = new PusherChannel(this.pusher, name, this.options);
+      }
+
+      return this.channels[name];
+    }
+    /**
+     * Get a private channel instance by name.
+     */
+
+  }, {
+    key: "privateChannel",
+    value: function privateChannel(name) {
+      if (!this.channels['private-' + name]) {
+        this.channels['private-' + name] = new PusherPrivateChannel(this.pusher, 'private-' + name, this.options);
+      }
+
+      return this.channels['private-' + name];
+    }
+    /**
+     * Get a private encrypted channel instance by name.
+     */
+
+  }, {
+    key: "encryptedPrivateChannel",
+    value: function encryptedPrivateChannel(name) {
+      if (!this.channels['private-encrypted-' + name]) {
+        this.channels['private-encrypted-' + name] = new PusherEncryptedPrivateChannel(this.pusher, 'private-encrypted-' + name, this.options);
+      }
+
+      return this.channels['private-encrypted-' + name];
+    }
+    /**
+     * Get a presence channel instance by name.
+     */
+
+  }, {
+    key: "presenceChannel",
+    value: function presenceChannel(name) {
+      if (!this.channels['presence-' + name]) {
+        this.channels['presence-' + name] = new PusherPresenceChannel(this.pusher, 'presence-' + name, this.options);
+      }
+
+      return this.channels['presence-' + name];
+    }
+    /**
+     * Leave the given channel, as well as its private and presence variants.
+     */
+
+  }, {
+    key: "leave",
+    value: function leave(name) {
+      var _this2 = this;
+
+      var channels = [name, 'private-' + name, 'presence-' + name];
+      channels.forEach(function (name, index) {
+        _this2.leaveChannel(name);
+      });
+    }
+    /**
+     * Leave the given channel.
+     */
+
+  }, {
+    key: "leaveChannel",
+    value: function leaveChannel(name) {
+      if (this.channels[name]) {
+        this.channels[name].unsubscribe();
+        delete this.channels[name];
+      }
+    }
+    /**
+     * Get the socket ID for the connection.
+     */
+
+  }, {
+    key: "socketId",
+    value: function socketId() {
+      return this.pusher.connection.socket_id;
+    }
+    /**
+     * Disconnect Pusher connection.
+     */
+
+  }, {
+    key: "disconnect",
+    value: function disconnect() {
+      this.pusher.disconnect();
+    }
+  }]);
+
+  return PusherConnector;
+}(Connector);
+
+/**
+ * This class creates a connnector to a Socket.io server.
+ */
+
+var SocketIoConnector = /*#__PURE__*/function (_Connector) {
+  _inherits(SocketIoConnector, _Connector);
+
+  var _super = _createSuper(SocketIoConnector);
+
+  function SocketIoConnector() {
+    var _this;
+
+    _classCallCheck(this, SocketIoConnector);
+
+    _this = _super.apply(this, arguments);
+    /**
+     * All of the subscribed channel names.
+     */
+
+    _this.channels = {};
+    return _this;
+  }
+  /**
+   * Create a fresh Socket.io connection.
+   */
+
+
+  _createClass(SocketIoConnector, [{
+    key: "connect",
+    value: function connect() {
+      var io = this.getSocketIO();
+      this.socket = io(this.options.host, this.options);
+      return this.socket;
+    }
+    /**
+     * Get socket.io module from global scope or options.
+     */
+
+  }, {
+    key: "getSocketIO",
+    value: function getSocketIO() {
+      if (typeof this.options.client !== 'undefined') {
+        return this.options.client;
+      }
+
+      if (typeof io !== 'undefined') {
+        return io;
+      }
+
+      throw new Error('Socket.io client not found. Should be globally available or passed via options.client');
+    }
+    /**
+     * Listen for an event on a channel instance.
+     */
+
+  }, {
+    key: "listen",
+    value: function listen(name, event, callback) {
+      return this.channel(name).listen(event, callback);
+    }
+    /**
+     * Get a channel instance by name.
+     */
+
+  }, {
+    key: "channel",
+    value: function channel(name) {
+      if (!this.channels[name]) {
+        this.channels[name] = new SocketIoChannel(this.socket, name, this.options);
+      }
+
+      return this.channels[name];
+    }
+    /**
+     * Get a private channel instance by name.
+     */
+
+  }, {
+    key: "privateChannel",
+    value: function privateChannel(name) {
+      if (!this.channels['private-' + name]) {
+        this.channels['private-' + name] = new SocketIoPrivateChannel(this.socket, 'private-' + name, this.options);
+      }
+
+      return this.channels['private-' + name];
+    }
+    /**
+     * Get a presence channel instance by name.
+     */
+
+  }, {
+    key: "presenceChannel",
+    value: function presenceChannel(name) {
+      if (!this.channels['presence-' + name]) {
+        this.channels['presence-' + name] = new SocketIoPresenceChannel(this.socket, 'presence-' + name, this.options);
+      }
+
+      return this.channels['presence-' + name];
+    }
+    /**
+     * Leave the given channel, as well as its private and presence variants.
+     */
+
+  }, {
+    key: "leave",
+    value: function leave(name) {
+      var _this2 = this;
+
+      var channels = [name, 'private-' + name, 'presence-' + name];
+      channels.forEach(function (name) {
+        _this2.leaveChannel(name);
+      });
+    }
+    /**
+     * Leave the given channel.
+     */
+
+  }, {
+    key: "leaveChannel",
+    value: function leaveChannel(name) {
+      if (this.channels[name]) {
+        this.channels[name].unsubscribe();
+        delete this.channels[name];
+      }
+    }
+    /**
+     * Get the socket ID for the connection.
+     */
+
+  }, {
+    key: "socketId",
+    value: function socketId() {
+      return this.socket.id;
+    }
+    /**
+     * Disconnect Socketio connection.
+     */
+
+  }, {
+    key: "disconnect",
+    value: function disconnect() {
+      this.socket.disconnect();
+    }
+  }]);
+
+  return SocketIoConnector;
+}(Connector);
+
+/**
+ * This class creates a null connector.
+ */
+
+var NullConnector = /*#__PURE__*/function (_Connector) {
+  _inherits(NullConnector, _Connector);
+
+  var _super = _createSuper(NullConnector);
+
+  function NullConnector() {
+    var _this;
+
+    _classCallCheck(this, NullConnector);
+
+    _this = _super.apply(this, arguments);
+    /**
+     * All of the subscribed channel names.
+     */
+
+    _this.channels = {};
+    return _this;
+  }
+  /**
+   * Create a fresh connection.
+   */
+
+
+  _createClass(NullConnector, [{
+    key: "connect",
+    value: function connect() {} //
+
+    /**
+     * Listen for an event on a channel instance.
+     */
+
+  }, {
+    key: "listen",
+    value: function listen(name, event, callback) {
+      return new NullChannel();
+    }
+    /**
+     * Get a channel instance by name.
+     */
+
+  }, {
+    key: "channel",
+    value: function channel(name) {
+      return new NullChannel();
+    }
+    /**
+     * Get a private channel instance by name.
+     */
+
+  }, {
+    key: "privateChannel",
+    value: function privateChannel(name) {
+      return new NullPrivateChannel();
+    }
+    /**
+     * Get a presence channel instance by name.
+     */
+
+  }, {
+    key: "presenceChannel",
+    value: function presenceChannel(name) {
+      return new NullPresenceChannel();
+    }
+    /**
+     * Leave the given channel, as well as its private and presence variants.
+     */
+
+  }, {
+    key: "leave",
+    value: function leave(name) {} //
+
+    /**
+     * Leave the given channel.
+     */
+
+  }, {
+    key: "leaveChannel",
+    value: function leaveChannel(name) {} //
+
+    /**
+     * Get the socket ID for the connection.
+     */
+
+  }, {
+    key: "socketId",
+    value: function socketId() {
+      return 'fake-socket-id';
+    }
+    /**
+     * Disconnect the connection.
+     */
+
+  }, {
+    key: "disconnect",
+    value: function disconnect() {//
+    }
+  }]);
+
+  return NullConnector;
+}(Connector);
+
+/**
+ * This class is the primary API for interacting with broadcasting.
+ */
+
+var Echo = /*#__PURE__*/function () {
+  /**
+   * Create a new class instance.
+   */
+  function Echo(options) {
+    _classCallCheck(this, Echo);
+
+    this.options = options;
+    this.connect();
+
+    if (!this.options.withoutInterceptors) {
+      this.registerInterceptors();
+    }
+  }
+  /**
+   * Get a channel instance by name.
+   */
+
+
+  _createClass(Echo, [{
+    key: "channel",
+    value: function channel(_channel) {
+      return this.connector.channel(_channel);
+    }
+    /**
+     * Create a new connection.
+     */
+
+  }, {
+    key: "connect",
+    value: function connect() {
+      if (this.options.broadcaster == 'pusher') {
+        this.connector = new PusherConnector(this.options);
+      } else if (this.options.broadcaster == 'socket.io') {
+        this.connector = new SocketIoConnector(this.options);
+      } else if (this.options.broadcaster == 'null') {
+        this.connector = new NullConnector(this.options);
+      } else if (typeof this.options.broadcaster == 'function') {
+        this.connector = new this.options.broadcaster(this.options);
+      }
+    }
+    /**
+     * Disconnect from the Echo server.
+     */
+
+  }, {
+    key: "disconnect",
+    value: function disconnect() {
+      this.connector.disconnect();
+    }
+    /**
+     * Get a presence channel instance by name.
+     */
+
+  }, {
+    key: "join",
+    value: function join(channel) {
+      return this.connector.presenceChannel(channel);
+    }
+    /**
+     * Leave the given channel, as well as its private and presence variants.
+     */
+
+  }, {
+    key: "leave",
+    value: function leave(channel) {
+      this.connector.leave(channel);
+    }
+    /**
+     * Leave the given channel.
+     */
+
+  }, {
+    key: "leaveChannel",
+    value: function leaveChannel(channel) {
+      this.connector.leaveChannel(channel);
+    }
+    /**
+     * Listen for an event on a channel instance.
+     */
+
+  }, {
+    key: "listen",
+    value: function listen(channel, event, callback) {
+      return this.connector.listen(channel, event, callback);
+    }
+    /**
+     * Get a private channel instance by name.
+     */
+
+  }, {
+    key: "private",
+    value: function _private(channel) {
+      return this.connector.privateChannel(channel);
+    }
+    /**
+     * Get a private encrypted channel instance by name.
+     */
+
+  }, {
+    key: "encryptedPrivate",
+    value: function encryptedPrivate(channel) {
+      return this.connector.encryptedPrivateChannel(channel);
+    }
+    /**
+     * Get the Socket ID for the connection.
+     */
+
+  }, {
+    key: "socketId",
+    value: function socketId() {
+      return this.connector.socketId();
+    }
+    /**
+     * Register 3rd party request interceptiors. These are used to automatically
+     * send a connections socket id to a Laravel app with a X-Socket-Id header.
+     */
+
+  }, {
+    key: "registerInterceptors",
+    value: function registerInterceptors() {
+      if (typeof Vue === 'function' && Vue.http) {
+        this.registerVueRequestInterceptor();
+      }
+
+      if (typeof axios === 'function') {
+        this.registerAxiosRequestInterceptor();
+      }
+
+      if (typeof jQuery === 'function') {
+        this.registerjQueryAjaxSetup();
+      }
+    }
+    /**
+     * Register a Vue HTTP interceptor to add the X-Socket-ID header.
+     */
+
+  }, {
+    key: "registerVueRequestInterceptor",
+    value: function registerVueRequestInterceptor() {
+      var _this = this;
+
+      Vue.http.interceptors.push(function (request, next) {
+        if (_this.socketId()) {
+          request.headers.set('X-Socket-ID', _this.socketId());
+        }
+
+        next();
+      });
+    }
+    /**
+     * Register an Axios HTTP interceptor to add the X-Socket-ID header.
+     */
+
+  }, {
+    key: "registerAxiosRequestInterceptor",
+    value: function registerAxiosRequestInterceptor() {
+      var _this2 = this;
+
+      axios.interceptors.request.use(function (config) {
+        if (_this2.socketId()) {
+          config.headers['X-Socket-Id'] = _this2.socketId();
+        }
+
+        return config;
+      });
+    }
+    /**
+     * Register jQuery AjaxPrefilter to add the X-Socket-ID header.
+     */
+
+  }, {
+    key: "registerjQueryAjaxSetup",
+    value: function registerjQueryAjaxSetup() {
+      var _this3 = this;
+
+      if (typeof jQuery.ajax != 'undefined') {
+        jQuery.ajaxPrefilter(function (options, originalOptions, xhr) {
+          if (_this3.socketId()) {
+            xhr.setRequestHeader('X-Socket-Id', _this3.socketId());
+          }
+        });
+      }
+    }
+  }]);
+
+  return Echo;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (Echo);
 
 
 /***/ }),
@@ -34411,6 +35938,6676 @@ return jQuery;
 
 /***/ }),
 
+/***/ "./node_modules/overlayscrollbars/js/OverlayScrollbars.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/overlayscrollbars/js/OverlayScrollbars.js ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_RESULT__;/*!
+ * OverlayScrollbars
+ * https://github.com/KingSora/OverlayScrollbars
+ *
+ * Version: 1.13.0
+ *
+ * Copyright KingSora | Rene Haas.
+ * https://github.com/KingSora
+ *
+ * Released under the MIT license.
+ * Date: 02.08.2020
+ */
+
+(function (global, factory) {
+    if (true)
+        !(__WEBPACK_AMD_DEFINE_RESULT__ = (function () { return factory(global, global.document, undefined); }).call(exports, __webpack_require__, exports, module),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+    else {}
+}(typeof window !== 'undefined' ? window : this,
+    function (window, document, undefined) {
+        'use strict';
+        var PLUGINNAME = 'OverlayScrollbars';
+        var TYPES = {
+            o: 'object',
+            f: 'function',
+            a: 'array',
+            s: 'string',
+            b: 'boolean',
+            n: 'number',
+            u: 'undefined',
+            z: 'null'
+            //d : 'date',
+            //e : 'error',
+            //r : 'regexp',
+            //y : 'symbol'
+        };
+        var LEXICON = {
+            c: 'class',
+            s: 'style',
+            i: 'id',
+            l: 'length',
+            p: 'prototype',
+            ti: 'tabindex',
+            oH: 'offsetHeight',
+            cH: 'clientHeight',
+            sH: 'scrollHeight',
+            oW: 'offsetWidth',
+            cW: 'clientWidth',
+            sW: 'scrollWidth',
+            hOP: 'hasOwnProperty',
+            bCR: 'getBoundingClientRect'
+        };
+        var VENDORS = (function () {
+            //https://developer.mozilla.org/en-US/docs/Glossary/Vendor_Prefix
+            var jsCache = {};
+            var cssCache = {};
+            var cssPrefixes = ['-webkit-', '-moz-', '-o-', '-ms-'];
+            var jsPrefixes = ['WebKit', 'Moz', 'O', 'MS'];
+            function firstLetterToUpper(str) {
+                return str.charAt(0).toUpperCase() + str.slice(1);
+            }
+
+            return {
+                _cssPrefixes: cssPrefixes,
+                _jsPrefixes: jsPrefixes,
+                _cssProperty: function (name) {
+                    var result = cssCache[name];
+
+                    if (cssCache[LEXICON.hOP](name))
+                        return result;
+
+                    var uppercasedName = firstLetterToUpper(name);
+                    var elmStyle = document.createElement('div')[LEXICON.s];
+                    var resultPossibilities;
+                    var i = 0;
+                    var v;
+                    var currVendorWithoutDashes;
+
+                    for (; i < cssPrefixes.length; i++) {
+                        currVendorWithoutDashes = cssPrefixes[i].replace(/-/g, '');
+                        resultPossibilities = [
+                            name, //transition
+                            cssPrefixes[i] + name, //-webkit-transition
+                            currVendorWithoutDashes + uppercasedName, //webkitTransition
+                            firstLetterToUpper(currVendorWithoutDashes) + uppercasedName //WebkitTransition
+                        ];
+                        for (v = 0; v < resultPossibilities[LEXICON.l]; v++) {
+                            if (elmStyle[resultPossibilities[v]] !== undefined) {
+                                result = resultPossibilities[v];
+                                break;
+                            }
+                        }
+                    }
+
+                    cssCache[name] = result;
+                    return result;
+                },
+                _cssPropertyValue: function (property, values, suffix) {
+                    var name = property + ' ' + values;
+                    var result = cssCache[name];
+
+                    if (cssCache[LEXICON.hOP](name))
+                        return result;
+
+                    var dummyStyle = document.createElement('div')[LEXICON.s];
+                    var possbleValues = values.split(' ');
+                    var preparedSuffix = suffix || '';
+                    var i = 0;
+                    var v = -1;
+                    var prop;
+
+                    for (; i < possbleValues[LEXICON.l]; i++) {
+                        for (; v < VENDORS._cssPrefixes[LEXICON.l]; v++) {
+                            prop = v < 0 ? possbleValues[i] : VENDORS._cssPrefixes[v] + possbleValues[i];
+                            dummyStyle.cssText = property + ':' + prop + preparedSuffix;
+                            if (dummyStyle[LEXICON.l]) {
+                                result = prop;
+                                break;
+                            }
+                        }
+                    }
+
+                    cssCache[name] = result;
+                    return result;
+                },
+                _jsAPI: function (name, isInterface, fallback) {
+                    var i = 0;
+                    var result = jsCache[name];
+
+                    if (!jsCache[LEXICON.hOP](name)) {
+                        result = window[name];
+                        for (; i < jsPrefixes[LEXICON.l]; i++)
+                            result = result || window[(isInterface ? jsPrefixes[i] : jsPrefixes[i].toLowerCase()) + firstLetterToUpper(name)];
+                        jsCache[name] = result;
+                    }
+                    return result || fallback;
+                }
+            }
+        })();
+        var COMPATIBILITY = (function () {
+            function windowSize(x) {
+                return x ? window.innerWidth || document.documentElement[LEXICON.cW] || document.body[LEXICON.cW] : window.innerHeight || document.documentElement[LEXICON.cH] || document.body[LEXICON.cH];
+            }
+            function bind(func, thisObj) {
+                if (typeof func != TYPES.f) {
+                    throw "Can't bind function!";
+                    // closest thing possible to the ECMAScript 5
+                    // internal IsCallable function
+                    //throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
+                }
+                var proto = LEXICON.p;
+                var aArgs = Array[proto].slice.call(arguments, 2);
+                var fNOP = function () { };
+                var fBound = function () { return func.apply(this instanceof fNOP ? this : thisObj, aArgs.concat(Array[proto].slice.call(arguments))); };
+
+                if (func[proto])
+                    fNOP[proto] = func[proto]; // Function.prototype doesn't have a prototype property
+                fBound[proto] = new fNOP();
+
+                return fBound;
+            }
+
+            return {
+                /**
+                 * Gets the current window width.
+                 * @returns {Number|number} The current window width in pixel.
+                 */
+                wW: bind(windowSize, 0, true),
+
+                /**
+                 * Gets the current window height.
+                 * @returns {Number|number} The current window height in pixel.
+                 */
+                wH: bind(windowSize, 0),
+
+                /**
+                 * Gets the MutationObserver Object or undefined if not supported.
+                 * @returns {MutationObserver|*|undefined} The MutationsObserver Object or undefined.
+                 */
+                mO: bind(VENDORS._jsAPI, 0, 'MutationObserver', true),
+
+                /**
+                 * Gets the ResizeObserver Object or undefined if not supported.
+                 * @returns {MutationObserver|*|undefined} The ResizeObserver Object or undefined.
+                 */
+                rO: bind(VENDORS._jsAPI, 0, 'ResizeObserver', true),
+
+                /**
+                 * Gets the RequestAnimationFrame method or it's corresponding polyfill.
+                 * @returns {*|Function} The RequestAnimationFrame method or it's corresponding polyfill.
+                 */
+                rAF: bind(VENDORS._jsAPI, 0, 'requestAnimationFrame', false, function (func) { return window.setTimeout(func, 1000 / 60); }),
+
+                /**
+                 * Gets the CancelAnimationFrame method or it's corresponding polyfill.
+                 * @returns {*|Function} The CancelAnimationFrame method or it's corresponding polyfill.
+                 */
+                cAF: bind(VENDORS._jsAPI, 0, 'cancelAnimationFrame', false, function (id) { return window.clearTimeout(id); }),
+
+                /**
+                 * Gets the current time.
+                 * @returns {number} The current time.
+                 */
+                now: function () {
+                    return Date.now && Date.now() || new Date().getTime();
+                },
+
+                /**
+                 * Stops the propagation of the given event.
+                 * @param event The event of which the propagation shall be stoped.
+                 */
+                stpP: function (event) {
+                    if (event.stopPropagation)
+                        event.stopPropagation();
+                    else
+                        event.cancelBubble = true;
+                },
+
+                /**
+                 * Prevents the default action of the given event.
+                 * @param event The event of which the default action shall be prevented.
+                 */
+                prvD: function (event) {
+                    if (event.preventDefault && event.cancelable)
+                        event.preventDefault();
+                    else
+                        event.returnValue = false;
+                },
+
+                /**
+                 * Gets the pageX and pageY values of the given mouse event.
+                 * @param event The mouse event of which the pageX and pageX shall be got.
+                 * @returns {{x: number, y: number}} x = pageX value, y = pageY value.
+                 */
+                page: function (event) {
+                    event = event.originalEvent || event;
+
+                    var strPage = 'page';
+                    var strClient = 'client';
+                    var strX = 'X';
+                    var strY = 'Y';
+                    var target = event.target || event.srcElement || document;
+                    var eventDoc = target.ownerDocument || document;
+                    var doc = eventDoc.documentElement;
+                    var body = eventDoc.body;
+
+                    //if touch event return return pageX/Y of it
+                    if (event.touches !== undefined) {
+                        var touch = event.touches[0];
+                        return {
+                            x: touch[strPage + strX],
+                            y: touch[strPage + strY]
+                        }
+                    }
+
+                    // Calculate pageX/Y if not native supported
+                    if (!event[strPage + strX] && event[strClient + strX] && event[strClient + strX] != null) {
+
+                        return {
+                            x: event[strClient + strX] +
+                                (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
+                                (doc && doc.clientLeft || body && body.clientLeft || 0),
+                            y: event[strClient + strY] +
+                                (doc && doc.scrollTop || body && body.scrollTop || 0) -
+                                (doc && doc.clientTop || body && body.clientTop || 0)
+                        }
+                    }
+                    return {
+                        x: event[strPage + strX],
+                        y: event[strPage + strY]
+                    };
+                },
+
+                /**
+                 * Gets the clicked mouse button of the given mouse event.
+                 * @param event The mouse event of which the clicked button shal be got.
+                 * @returns {number} The number of the clicked mouse button. (0 : none | 1 : leftButton | 2 : middleButton | 3 : rightButton)
+                 */
+                mBtn: function (event) {
+                    var button = event.button;
+                    if (!event.which && button !== undefined)
+                        return (button & 1 ? 1 : (button & 2 ? 3 : (button & 4 ? 2 : 0)));
+                    else
+                        return event.which;
+                },
+
+                /**
+                 * Checks whether a item is in the given array and returns its index.
+                 * @param item The item of which the position in the array shall be determined.
+                 * @param arr The array.
+                 * @returns {number} The zero based index of the item or -1 if the item isn't in the array.
+                 */
+                inA: function (item, arr) {
+                    for (var i = 0; i < arr[LEXICON.l]; i++)
+                        //Sometiems in IE a "SCRIPT70" Permission denied error occurs if HTML elements in a iFrame are compared
+                        try {
+                            if (arr[i] === item)
+                                return i;
+                        }
+                        catch (e) { }
+                    return -1;
+                },
+
+                /**
+                 * Returns true if the given value is a array.
+                 * @param arr The potential array.
+                 * @returns {boolean} True if the given value is a array, false otherwise.
+                 */
+                isA: function (arr) {
+                    var def = Array.isArray;
+                    return def ? def(arr) : this.type(arr) == TYPES.a;
+                },
+
+                /**
+                 * Determine the internal JavaScript [[Class]] of the given object.
+                 * @param obj The object of which the type shall be determined.
+                 * @returns {string} The type of the given object.
+                 */
+                type: function (obj) {
+                    if (obj === undefined)
+                        return obj + '';
+                    if (obj === null)
+                        return obj + '';
+                    return Object[LEXICON.p].toString.call(obj).replace(/^\[object (.+)\]$/, '$1').toLowerCase();
+                },
+
+
+                bind: bind
+
+                /**
+                 * Gets the vendor-prefixed CSS property by the given name.
+                 * For example the given name is "transform" and you're using a old Firefox browser then the returned value would be "-moz-transform".
+                 * If the browser doesn't need a vendor-prefix, then the returned string is the given name.
+                 * If the browser doesn't support the given property name at all (not even with a vendor-prefix) the returned value is null.
+                 * @param propName The unprefixed CSS property name.
+                 * @returns {string|null} The vendor-prefixed CSS property or null if the browser doesn't support the given CSS property.
+
+                cssProp: function(propName) {
+                    return VENDORS._cssProperty(propName);
+                }
+                */
+            }
+        })();
+
+
+        var MATH = Math;
+        var JQUERY = window.jQuery;
+        var EASING = (function () {
+            var _easingsMath = {
+                p: MATH.PI,
+                c: MATH.cos,
+                s: MATH.sin,
+                w: MATH.pow,
+                t: MATH.sqrt,
+                n: MATH.asin,
+                a: MATH.abs,
+                o: 1.70158
+            };
+
+            /*
+             x : current percent (0 - 1),
+             t : current time (duration * percent),
+             b : start value (from),
+             c : end value (to),
+             d : duration
+
+             easingName : function(x, t, b, c, d) { return easedValue; }
+             */
+
+            return {
+                swing: function (x, t, b, c, d) {
+                    return 0.5 - _easingsMath.c(x * _easingsMath.p) / 2;
+                },
+                linear: function (x, t, b, c, d) {
+                    return x;
+                },
+                easeInQuad: function (x, t, b, c, d) {
+                    return c * (t /= d) * t + b;
+                },
+                easeOutQuad: function (x, t, b, c, d) {
+                    return -c * (t /= d) * (t - 2) + b;
+                },
+                easeInOutQuad: function (x, t, b, c, d) {
+                    return ((t /= d / 2) < 1) ? c / 2 * t * t + b : -c / 2 * ((--t) * (t - 2) - 1) + b;
+                },
+                easeInCubic: function (x, t, b, c, d) {
+                    return c * (t /= d) * t * t + b;
+                },
+                easeOutCubic: function (x, t, b, c, d) {
+                    return c * ((t = t / d - 1) * t * t + 1) + b;
+                },
+                easeInOutCubic: function (x, t, b, c, d) {
+                    return ((t /= d / 2) < 1) ? c / 2 * t * t * t + b : c / 2 * ((t -= 2) * t * t + 2) + b;
+                },
+                easeInQuart: function (x, t, b, c, d) {
+                    return c * (t /= d) * t * t * t + b;
+                },
+                easeOutQuart: function (x, t, b, c, d) {
+                    return -c * ((t = t / d - 1) * t * t * t - 1) + b;
+                },
+                easeInOutQuart: function (x, t, b, c, d) {
+                    return ((t /= d / 2) < 1) ? c / 2 * t * t * t * t + b : -c / 2 * ((t -= 2) * t * t * t - 2) + b;
+                },
+                easeInQuint: function (x, t, b, c, d) {
+                    return c * (t /= d) * t * t * t * t + b;
+                },
+                easeOutQuint: function (x, t, b, c, d) {
+                    return c * ((t = t / d - 1) * t * t * t * t + 1) + b;
+                },
+                easeInOutQuint: function (x, t, b, c, d) {
+                    return ((t /= d / 2) < 1) ? c / 2 * t * t * t * t * t + b : c / 2 * ((t -= 2) * t * t * t * t + 2) + b;
+                },
+                easeInSine: function (x, t, b, c, d) {
+                    return -c * _easingsMath.c(t / d * (_easingsMath.p / 2)) + c + b;
+                },
+                easeOutSine: function (x, t, b, c, d) {
+                    return c * _easingsMath.s(t / d * (_easingsMath.p / 2)) + b;
+                },
+                easeInOutSine: function (x, t, b, c, d) {
+                    return -c / 2 * (_easingsMath.c(_easingsMath.p * t / d) - 1) + b;
+                },
+                easeInExpo: function (x, t, b, c, d) {
+                    return (t == 0) ? b : c * _easingsMath.w(2, 10 * (t / d - 1)) + b;
+                },
+                easeOutExpo: function (x, t, b, c, d) {
+                    return (t == d) ? b + c : c * (-_easingsMath.w(2, -10 * t / d) + 1) + b;
+                },
+                easeInOutExpo: function (x, t, b, c, d) {
+                    if (t == 0) return b;
+                    if (t == d) return b + c;
+                    if ((t /= d / 2) < 1) return c / 2 * _easingsMath.w(2, 10 * (t - 1)) + b;
+                    return c / 2 * (-_easingsMath.w(2, -10 * --t) + 2) + b;
+                },
+                easeInCirc: function (x, t, b, c, d) {
+                    return -c * (_easingsMath.t(1 - (t /= d) * t) - 1) + b;
+                },
+                easeOutCirc: function (x, t, b, c, d) {
+                    return c * _easingsMath.t(1 - (t = t / d - 1) * t) + b;
+                },
+                easeInOutCirc: function (x, t, b, c, d) {
+                    return ((t /= d / 2) < 1) ? -c / 2 * (_easingsMath.t(1 - t * t) - 1) + b : c / 2 * (_easingsMath.t(1 - (t -= 2) * t) + 1) + b;
+                },
+                easeInElastic: function (x, t, b, c, d) {
+                    var s = _easingsMath.o; var p = 0; var a = c;
+                    if (t == 0) return b; if ((t /= d) == 1) return b + c; if (!p) p = d * .3;
+                    if (a < _easingsMath.a(c)) { a = c; s = p / 4; }
+                    else s = p / (2 * _easingsMath.p) * _easingsMath.n(c / a);
+                    return -(a * _easingsMath.w(2, 10 * (t -= 1)) * _easingsMath.s((t * d - s) * (2 * _easingsMath.p) / p)) + b;
+                },
+                easeOutElastic: function (x, t, b, c, d) {
+                    var s = _easingsMath.o; var p = 0; var a = c;
+                    if (t == 0) return b;
+                    if ((t /= d) == 1) return b + c;
+                    if (!p) p = d * .3;
+                    if (a < _easingsMath.a(c)) { a = c; s = p / 4; }
+                    else s = p / (2 * _easingsMath.p) * _easingsMath.n(c / a);
+                    return a * _easingsMath.w(2, -10 * t) * _easingsMath.s((t * d - s) * (2 * _easingsMath.p) / p) + c + b;
+                },
+                easeInOutElastic: function (x, t, b, c, d) {
+                    var s = _easingsMath.o; var p = 0; var a = c;
+                    if (t == 0) return b;
+                    if ((t /= d / 2) == 2) return b + c;
+                    if (!p) p = d * (.3 * 1.5);
+                    if (a < _easingsMath.a(c)) { a = c; s = p / 4; }
+                    else s = p / (2 * _easingsMath.p) * _easingsMath.n(c / a);
+                    if (t < 1) return -.5 * (a * _easingsMath.w(2, 10 * (t -= 1)) * _easingsMath.s((t * d - s) * (2 * _easingsMath.p) / p)) + b;
+                    return a * _easingsMath.w(2, -10 * (t -= 1)) * _easingsMath.s((t * d - s) * (2 * _easingsMath.p) / p) * .5 + c + b;
+                },
+                easeInBack: function (x, t, b, c, d, s) {
+                    s = s || _easingsMath.o;
+                    return c * (t /= d) * t * ((s + 1) * t - s) + b;
+                },
+                easeOutBack: function (x, t, b, c, d, s) {
+                    s = s || _easingsMath.o;
+                    return c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
+                },
+                easeInOutBack: function (x, t, b, c, d, s) {
+                    s = s || _easingsMath.o;
+                    return ((t /= d / 2) < 1) ? c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b : c / 2 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) + b;
+                },
+                easeInBounce: function (x, t, b, c, d) {
+                    return c - this.easeOutBounce(x, d - t, 0, c, d) + b;
+                },
+                easeOutBounce: function (x, t, b, c, d) {
+                    var o = 7.5625;
+                    if ((t /= d) < (1 / 2.75)) {
+                        return c * (o * t * t) + b;
+                    } else if (t < (2 / 2.75)) {
+                        return c * (o * (t -= (1.5 / 2.75)) * t + .75) + b;
+                    } else if (t < (2.5 / 2.75)) {
+                        return c * (o * (t -= (2.25 / 2.75)) * t + .9375) + b;
+                    } else {
+                        return c * (o * (t -= (2.625 / 2.75)) * t + .984375) + b;
+                    }
+                },
+                easeInOutBounce: function (x, t, b, c, d) {
+                    return (t < d / 2) ? this.easeInBounce(x, t * 2, 0, c, d) * .5 + b : this.easeOutBounce(x, t * 2 - d, 0, c, d) * .5 + c * .5 + b;
+                }
+            };
+            /*
+             *
+             * TERMS OF USE - EASING EQUATIONS
+             * 
+             * Open source under the BSD License. 
+             * 
+             * Copyright Â© 2001 Robert Penner
+             * All rights reserved.
+             * 
+             * Redistribution and use in source and binary forms, with or without modification, 
+             * are permitted provided that the following conditions are met:
+             * 
+             * Redistributions of source code must retain the above copyright notice, this list of 
+             * conditions and the following disclaimer.
+             * Redistributions in binary form must reproduce the above copyright notice, this list 
+             * of conditions and the following disclaimer in the documentation and/or other materials 
+             * provided with the distribution.
+             * 
+             * Neither the name of the author nor the names of contributors may be used to endorse 
+             * or promote products derived from this software without specific prior written permission.
+             * 
+             * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY 
+             * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+             * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+             *  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+             *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+             *  GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED 
+             * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+             *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED 
+             * OF THE POSSIBILITY OF SUCH DAMAGE. 
+             *
+             */
+        })();
+        var FRAMEWORK = (function () {
+            var _rnothtmlwhite = (/[^\x20\t\r\n\f]+/g);
+            var _strSpace = ' ';
+            var _strEmpty = '';
+            var _strScrollLeft = 'scrollLeft';
+            var _strScrollTop = 'scrollTop';
+            var _animations = [];
+            var _type = COMPATIBILITY.type;
+            var _cssNumber = {
+                animationIterationCount: true,
+                columnCount: true,
+                fillOpacity: true,
+                flexGrow: true,
+                flexShrink: true,
+                fontWeight: true,
+                lineHeight: true,
+                opacity: true,
+                order: true,
+                orphans: true,
+                widows: true,
+                zIndex: true,
+                zoom: true
+            };
+
+            function extend() {
+                var src, copyIsArray, copy, name, options, clone, target = arguments[0] || {},
+                    i = 1,
+                    length = arguments[LEXICON.l],
+                    deep = false;
+
+                // Handle a deep copy situation
+                if (_type(target) == TYPES.b) {
+                    deep = target;
+                    target = arguments[1] || {};
+                    // skip the boolean and the target
+                    i = 2;
+                }
+
+                // Handle case when target is a string or something (possible in deep copy)
+                if (_type(target) != TYPES.o && !_type(target) == TYPES.f) {
+                    target = {};
+                }
+
+                // extend jQuery itself if only one argument is passed
+                if (length === i) {
+                    target = FakejQuery;
+                    --i;
+                }
+
+                for (; i < length; i++) {
+                    // Only deal with non-null/undefined values
+                    if ((options = arguments[i]) != null) {
+                        // Extend the base object
+                        for (name in options) {
+                            src = target[name];
+                            copy = options[name];
+
+                            // Prevent never-ending loop
+                            if (target === copy) {
+                                continue;
+                            }
+
+                            // Recurse if we're merging plain objects or arrays
+                            if (deep && copy && (isPlainObject(copy) || (copyIsArray = COMPATIBILITY.isA(copy)))) {
+                                if (copyIsArray) {
+                                    copyIsArray = false;
+                                    clone = src && COMPATIBILITY.isA(src) ? src : [];
+
+                                } else {
+                                    clone = src && isPlainObject(src) ? src : {};
+                                }
+
+                                // Never move original objects, clone them
+                                target[name] = extend(deep, clone, copy);
+
+                                // Don't bring in undefined values
+                            } else if (copy !== undefined) {
+                                target[name] = copy;
+                            }
+                        }
+                    }
+                }
+
+                // Return the modified object
+                return target;
+            };
+
+            function inArray(item, arr, fromIndex) {
+                for (var i = fromIndex || 0; i < arr[LEXICON.l]; i++)
+                    if (arr[i] === item)
+                        return i;
+                return -1;
+            }
+
+            function isFunction(obj) {
+                return _type(obj) == TYPES.f;
+            };
+
+            function isEmptyObject(obj) {
+                for (var name in obj)
+                    return false;
+                return true;
+            };
+
+            function isPlainObject(obj) {
+                if (!obj || _type(obj) != TYPES.o)
+                    return false;
+
+                var key;
+                var proto = LEXICON.p;
+                var hasOwnProperty = Object[proto].hasOwnProperty;
+                var hasOwnConstructor = hasOwnProperty.call(obj, 'constructor');
+                var hasIsPrototypeOf = obj.constructor && obj.constructor[proto] && hasOwnProperty.call(obj.constructor[proto], 'isPrototypeOf');
+
+                if (obj.constructor && !hasOwnConstructor && !hasIsPrototypeOf) {
+                    return false;
+                }
+
+
+                for (key in obj) { /**/ }
+
+                return _type(key) == TYPES.u || hasOwnProperty.call(obj, key);
+            };
+
+            function each(obj, callback) {
+                var i = 0;
+
+                if (isArrayLike(obj)) {
+                    for (; i < obj[LEXICON.l]; i++) {
+                        if (callback.call(obj[i], i, obj[i]) === false)
+                            break;
+                    }
+                }
+                else {
+                    for (i in obj) {
+                        if (callback.call(obj[i], i, obj[i]) === false)
+                            break;
+                    }
+                }
+
+                return obj;
+            };
+
+            function isArrayLike(obj) {
+                var length = !!obj && [LEXICON.l] in obj && obj[LEXICON.l];
+                var t = _type(obj);
+                return isFunction(t) ? false : (t == TYPES.a || length === 0 || _type(length) == TYPES.n && length > 0 && (length - 1) in obj);
+            }
+
+            function stripAndCollapse(value) {
+                var tokens = value.match(_rnothtmlwhite) || [];
+                return tokens.join(_strSpace);
+            }
+
+            function matches(elem, selector) {
+                var nodeList = (elem.parentNode || document).querySelectorAll(selector) || [];
+                var i = nodeList[LEXICON.l];
+
+                while (i--)
+                    if (nodeList[i] == elem)
+                        return true;
+
+                return false;
+            }
+
+            function insertAdjacentElement(el, strategy, child) {
+                if (COMPATIBILITY.isA(child)) {
+                    for (var i = 0; i < child[LEXICON.l]; i++)
+                        insertAdjacentElement(el, strategy, child[i]);
+                }
+                else if (_type(child) == TYPES.s)
+                    el.insertAdjacentHTML(strategy, child);
+                else
+                    el.insertAdjacentElement(strategy, child.nodeType ? child : child[0]);
+            }
+
+            function setCSSVal(el, prop, val) {
+                try {
+                    if (el[LEXICON.s][prop] !== undefined)
+                        el[LEXICON.s][prop] = parseCSSVal(prop, val);
+                } catch (e) { }
+            }
+
+            function parseCSSVal(prop, val) {
+                if (!_cssNumber[prop.toLowerCase()] && _type(val) == TYPES.n)
+                    val += 'px';
+                return val;
+            }
+
+            function startNextAnimationInQ(animObj, removeFromQ) {
+                var index;
+                var nextAnim;
+                if (removeFromQ !== false)
+                    animObj.q.splice(0, 1);
+                if (animObj.q[LEXICON.l] > 0) {
+                    nextAnim = animObj.q[0];
+                    animate(animObj.el, nextAnim.props, nextAnim.duration, nextAnim.easing, nextAnim.complete, true);
+                }
+                else {
+                    index = inArray(animObj, _animations);
+                    if (index > -1)
+                        _animations.splice(index, 1);
+                }
+            }
+
+            function setAnimationValue(el, prop, value) {
+                if (prop === _strScrollLeft || prop === _strScrollTop)
+                    el[prop] = value;
+                else
+                    setCSSVal(el, prop, value);
+            }
+
+            function animate(el, props, options, easing, complete, guaranteedNext) {
+                var hasOptions = isPlainObject(options);
+                var from = {};
+                var to = {};
+                var i = 0;
+                var key;
+                var animObj;
+                var start;
+                var progress;
+                var step;
+                var specialEasing;
+                var duration;
+                if (hasOptions) {
+                    easing = options.easing;
+                    start = options.start;
+                    progress = options.progress;
+                    step = options.step;
+                    specialEasing = options.specialEasing;
+                    complete = options.complete;
+                    duration = options.duration;
+                }
+                else
+                    duration = options;
+                specialEasing = specialEasing || {};
+                duration = duration || 400;
+                easing = easing || 'swing';
+                guaranteedNext = guaranteedNext || false;
+
+                for (; i < _animations[LEXICON.l]; i++) {
+                    if (_animations[i].el === el) {
+                        animObj = _animations[i];
+                        break;
+                    }
+                }
+
+                if (!animObj) {
+                    animObj = {
+                        el: el,
+                        q: []
+                    };
+                    _animations.push(animObj);
+                }
+
+                for (key in props) {
+                    if (key === _strScrollLeft || key === _strScrollTop)
+                        from[key] = el[key];
+                    else
+                        from[key] = FakejQuery(el).css(key);
+                }
+
+                for (key in from) {
+                    if (from[key] !== props[key] && props[key] !== undefined)
+                        to[key] = props[key];
+                }
+
+                if (!isEmptyObject(to)) {
+                    var timeNow;
+                    var end;
+                    var percent;
+                    var fromVal;
+                    var toVal;
+                    var easedVal;
+                    var timeStart;
+                    var frame;
+                    var elapsed;
+                    var qPos = guaranteedNext ? 0 : inArray(qObj, animObj.q);
+                    var qObj = {
+                        props: to,
+                        duration: hasOptions ? options : duration,
+                        easing: easing,
+                        complete: complete
+                    };
+                    if (qPos === -1) {
+                        qPos = animObj.q[LEXICON.l];
+                        animObj.q.push(qObj);
+                    }
+
+                    if (qPos === 0) {
+                        if (duration > 0) {
+                            timeStart = COMPATIBILITY.now();
+                            frame = function () {
+                                timeNow = COMPATIBILITY.now();
+                                elapsed = (timeNow - timeStart);
+                                end = qObj.stop || elapsed >= duration;
+                                percent = 1 - ((MATH.max(0, timeStart + duration - timeNow) / duration) || 0);
+
+                                for (key in to) {
+                                    fromVal = parseFloat(from[key]);
+                                    toVal = parseFloat(to[key]);
+                                    easedVal = (toVal - fromVal) * EASING[specialEasing[key] || easing](percent, percent * duration, 0, 1, duration) + fromVal;
+                                    setAnimationValue(el, key, easedVal);
+                                    if (isFunction(step)) {
+                                        step(easedVal, {
+                                            elem: el,
+                                            prop: key,
+                                            start: fromVal,
+                                            now: easedVal,
+                                            end: toVal,
+                                            pos: percent,
+                                            options: {
+                                                easing: easing,
+                                                speacialEasing: specialEasing,
+                                                duration: duration,
+                                                complete: complete,
+                                                step: step
+                                            },
+                                            startTime: timeStart
+                                        });
+                                    }
+                                }
+
+                                if (isFunction(progress))
+                                    progress({}, percent, MATH.max(0, duration - elapsed));
+
+                                if (end) {
+                                    startNextAnimationInQ(animObj);
+                                    if (isFunction(complete))
+                                        complete();
+                                }
+                                else
+                                    qObj.frame = COMPATIBILITY.rAF()(frame);
+                            };
+                            qObj.frame = COMPATIBILITY.rAF()(frame);
+                        }
+                        else {
+                            for (key in to)
+                                setAnimationValue(el, key, to[key]);
+                            startNextAnimationInQ(animObj);
+                        }
+                    }
+                }
+                else if (guaranteedNext)
+                    startNextAnimationInQ(animObj);
+            }
+
+            function stop(el, clearQ, jumpToEnd) {
+                var animObj;
+                var qObj;
+                var key;
+                var i = 0;
+                for (; i < _animations[LEXICON.l]; i++) {
+                    animObj = _animations[i];
+                    if (animObj.el === el) {
+                        if (animObj.q[LEXICON.l] > 0) {
+                            qObj = animObj.q[0];
+                            qObj.stop = true;
+                            COMPATIBILITY.cAF()(qObj.frame);
+                            animObj.q.splice(0, 1);
+
+                            if (jumpToEnd)
+                                for (key in qObj.props)
+                                    setAnimationValue(el, key, qObj.props[key]);
+
+                            if (clearQ)
+                                animObj.q = [];
+                            else
+                                startNextAnimationInQ(animObj, false);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            function elementIsVisible(el) {
+                return !!(el[LEXICON.oW] || el[LEXICON.oH] || el.getClientRects()[LEXICON.l]);
+            }
+
+            function FakejQuery(selector) {
+                if (arguments[LEXICON.l] === 0)
+                    return this;
+
+                var base = new FakejQuery();
+                var elements = selector;
+                var i = 0;
+                var elms;
+                var el;
+
+                if (_type(selector) == TYPES.s) {
+                    elements = [];
+                    if (selector.charAt(0) === '<') {
+                        el = document.createElement('div');
+                        el.innerHTML = selector;
+                        elms = el.children;
+                    }
+                    else {
+                        elms = document.querySelectorAll(selector);
+                    }
+
+                    for (; i < elms[LEXICON.l]; i++)
+                        elements.push(elms[i]);
+                }
+
+                if (elements) {
+                    if (_type(elements) != TYPES.s && (!isArrayLike(elements) || elements === window || elements === elements.self))
+                        elements = [elements];
+
+                    for (i = 0; i < elements[LEXICON.l]; i++)
+                        base[i] = elements[i];
+
+                    base[LEXICON.l] = elements[LEXICON.l];
+                }
+
+                return base;
+            };
+
+            FakejQuery[LEXICON.p] = {
+
+                //EVENTS:
+
+                on: function (eventName, handler) {
+                    eventName = (eventName || _strEmpty).match(_rnothtmlwhite) || [_strEmpty];
+
+                    var eventNameLength = eventName[LEXICON.l];
+                    var i = 0;
+                    var el;
+                    return this.each(function () {
+                        el = this;
+                        try {
+                            if (el.addEventListener) {
+                                for (; i < eventNameLength; i++)
+                                    el.addEventListener(eventName[i], handler);
+                            }
+                            else if (el.detachEvent) {
+                                for (; i < eventNameLength; i++)
+                                    el.attachEvent('on' + eventName[i], handler);
+                            }
+                        } catch (e) { }
+                    });
+                },
+
+                off: function (eventName, handler) {
+                    eventName = (eventName || _strEmpty).match(_rnothtmlwhite) || [_strEmpty];
+
+                    var eventNameLength = eventName[LEXICON.l];
+                    var i = 0;
+                    var el;
+                    return this.each(function () {
+                        el = this;
+                        try {
+                            if (el.removeEventListener) {
+                                for (; i < eventNameLength; i++)
+                                    el.removeEventListener(eventName[i], handler);
+                            }
+                            else if (el.detachEvent) {
+                                for (; i < eventNameLength; i++)
+                                    el.detachEvent('on' + eventName[i], handler);
+                            }
+                        } catch (e) { }
+                    });
+                },
+
+                one: function (eventName, handler) {
+                    eventName = (eventName || _strEmpty).match(_rnothtmlwhite) || [_strEmpty];
+                    return this.each(function () {
+                        var el = FakejQuery(this);
+                        FakejQuery.each(eventName, function (i, oneEventName) {
+                            var oneHandler = function (e) {
+                                handler.call(this, e);
+                                el.off(oneEventName, oneHandler);
+                            };
+                            el.on(oneEventName, oneHandler);
+                        });
+                    });
+                },
+
+                trigger: function (eventName) {
+                    var el;
+                    var event;
+                    return this.each(function () {
+                        el = this;
+                        if (document.createEvent) {
+                            event = document.createEvent('HTMLEvents');
+                            event.initEvent(eventName, true, false);
+                            el.dispatchEvent(event);
+                        }
+                        else {
+                            el.fireEvent('on' + eventName);
+                        }
+                    });
+                },
+
+                //DOM NODE INSERTING / REMOVING:
+
+                append: function (child) {
+                    return this.each(function () { insertAdjacentElement(this, 'beforeend', child); });
+                },
+
+                prepend: function (child) {
+                    return this.each(function () { insertAdjacentElement(this, 'afterbegin', child); });
+                },
+
+                before: function (child) {
+                    return this.each(function () { insertAdjacentElement(this, 'beforebegin', child); });
+                },
+
+                after: function (child) {
+                    return this.each(function () { insertAdjacentElement(this, 'afterend', child); });
+                },
+
+                remove: function () {
+                    return this.each(function () {
+                        var el = this;
+                        var parentNode = el.parentNode;
+                        if (parentNode != null)
+                            parentNode.removeChild(el);
+                    });
+                },
+
+                unwrap: function () {
+                    var parents = [];
+                    var i;
+                    var el;
+                    var parent;
+
+                    this.each(function () {
+                        parent = this.parentNode;
+                        if (inArray(parent, parents) === - 1)
+                            parents.push(parent);
+                    });
+
+                    for (i = 0; i < parents[LEXICON.l]; i++) {
+                        el = parents[i];
+                        parent = el.parentNode;
+                        while (el.firstChild)
+                            parent.insertBefore(el.firstChild, el);
+                        parent.removeChild(el);
+                    }
+
+                    return this;
+                },
+
+                wrapAll: function (wrapperHTML) {
+                    var i;
+                    var nodes = this;
+                    var wrapper = FakejQuery(wrapperHTML)[0];
+                    var deepest = wrapper;
+                    var parent = nodes[0].parentNode;
+                    var previousSibling = nodes[0].previousSibling;
+                    while (deepest.childNodes[LEXICON.l] > 0)
+                        deepest = deepest.childNodes[0];
+
+                    for (i = 0; nodes[LEXICON.l] - i; deepest.firstChild === nodes[0] && i++)
+                        deepest.appendChild(nodes[i]);
+
+                    var nextSibling = previousSibling ? previousSibling.nextSibling : parent.firstChild;
+                    parent.insertBefore(wrapper, nextSibling);
+
+                    return this;
+                },
+
+                wrapInner: function (wrapperHTML) {
+                    return this.each(function () {
+                        var el = FakejQuery(this);
+                        var contents = el.contents();
+
+                        if (contents[LEXICON.l])
+                            contents.wrapAll(wrapperHTML);
+                        else
+                            el.append(wrapperHTML);
+                    });
+                },
+
+                wrap: function (wrapperHTML) {
+                    return this.each(function () { FakejQuery(this).wrapAll(wrapperHTML); });
+                },
+
+
+                //DOM NODE MANIPULATION / INFORMATION:
+
+                css: function (styles, val) {
+                    var el;
+                    var key;
+                    var cptStyle;
+                    var getCptStyle = window.getComputedStyle;
+                    if (_type(styles) == TYPES.s) {
+                        if (val === undefined) {
+                            el = this[0];
+                            cptStyle = getCptStyle ? getCptStyle(el, null) : el.currentStyle[styles];
+
+                            //https://bugzilla.mozilla.org/show_bug.cgi?id=548397 can be null sometimes if iframe with display: none (firefox only!)
+                            return getCptStyle ? cptStyle != null ? cptStyle.getPropertyValue(styles) : el[LEXICON.s][styles] : cptStyle;
+                        }
+                        else {
+                            return this.each(function () {
+                                setCSSVal(this, styles, val);
+                            });
+                        }
+                    }
+                    else {
+                        return this.each(function () {
+                            for (key in styles)
+                                setCSSVal(this, key, styles[key]);
+                        });
+                    }
+                },
+
+                hasClass: function (className) {
+                    var elem, i = 0;
+                    var classNamePrepared = _strSpace + className + _strSpace;
+                    var classList;
+
+                    while ((elem = this[i++])) {
+                        classList = elem.classList;
+                        if (classList && classList.contains(className))
+                            return true;
+                        else if (elem.nodeType === 1 && (_strSpace + stripAndCollapse(elem.className + _strEmpty) + _strSpace).indexOf(classNamePrepared) > -1)
+                            return true;
+                    }
+
+                    return false;
+                },
+
+                addClass: function (className) {
+                    var classes;
+                    var elem;
+                    var cur;
+                    var curValue;
+                    var clazz;
+                    var finalValue;
+                    var supportClassList;
+                    var elmClassList;
+                    var i = 0;
+                    var v = 0;
+
+                    if (className) {
+                        classes = className.match(_rnothtmlwhite) || [];
+
+                        while ((elem = this[i++])) {
+                            elmClassList = elem.classList;
+                            if (supportClassList === undefined)
+                                supportClassList = elmClassList !== undefined;
+
+                            if (supportClassList) {
+                                while ((clazz = classes[v++]))
+                                    elmClassList.add(clazz);
+                            }
+                            else {
+                                curValue = elem.className + _strEmpty;
+                                cur = elem.nodeType === 1 && (_strSpace + stripAndCollapse(curValue) + _strSpace);
+
+                                if (cur) {
+                                    while ((clazz = classes[v++]))
+                                        if (cur.indexOf(_strSpace + clazz + _strSpace) < 0)
+                                            cur += clazz + _strSpace;
+
+                                    finalValue = stripAndCollapse(cur);
+                                    if (curValue !== finalValue)
+                                        elem.className = finalValue;
+                                }
+                            }
+                        }
+                    }
+
+                    return this;
+                },
+
+                removeClass: function (className) {
+                    var classes;
+                    var elem;
+                    var cur;
+                    var curValue;
+                    var clazz;
+                    var finalValue;
+                    var supportClassList;
+                    var elmClassList;
+                    var i = 0;
+                    var v = 0;
+
+                    if (className) {
+                        classes = className.match(_rnothtmlwhite) || [];
+
+                        while ((elem = this[i++])) {
+                            elmClassList = elem.classList;
+                            if (supportClassList === undefined)
+                                supportClassList = elmClassList !== undefined;
+
+                            if (supportClassList) {
+                                while ((clazz = classes[v++]))
+                                    elmClassList.remove(clazz);
+                            }
+                            else {
+                                curValue = elem.className + _strEmpty;
+                                cur = elem.nodeType === 1 && (_strSpace + stripAndCollapse(curValue) + _strSpace);
+
+                                if (cur) {
+                                    while ((clazz = classes[v++]))
+                                        while (cur.indexOf(_strSpace + clazz + _strSpace) > -1)
+                                            cur = cur.replace(_strSpace + clazz + _strSpace, _strSpace);
+
+                                    finalValue = stripAndCollapse(cur);
+                                    if (curValue !== finalValue)
+                                        elem.className = finalValue;
+                                }
+                            }
+                        }
+                    }
+
+                    return this;
+                },
+
+                hide: function () {
+                    return this.each(function () { this[LEXICON.s].display = 'none'; });
+                },
+
+                show: function () {
+                    return this.each(function () { this[LEXICON.s].display = 'block'; });
+                },
+
+                attr: function (attrName, value) {
+                    var i = 0;
+                    var el;
+                    while (el = this[i++]) {
+                        if (value === undefined)
+                            return el.getAttribute(attrName);
+                        el.setAttribute(attrName, value);
+                    }
+                    return this;
+                },
+
+                removeAttr: function (attrName) {
+                    return this.each(function () { this.removeAttribute(attrName); });
+                },
+
+                offset: function () {
+                    var el = this[0];
+                    var rect = el[LEXICON.bCR]();
+                    var scrollLeft = window.pageXOffset || document.documentElement[_strScrollLeft];
+                    var scrollTop = window.pageYOffset || document.documentElement[_strScrollTop];
+                    return {
+                        top: rect.top + scrollTop,
+                        left: rect.left + scrollLeft
+                    };
+                },
+
+                position: function () {
+                    var el = this[0];
+                    return {
+                        top: el.offsetTop,
+                        left: el.offsetLeft
+                    };
+                },
+
+                scrollLeft: function (value) {
+                    var i = 0;
+                    var el;
+                    while (el = this[i++]) {
+                        if (value === undefined)
+                            return el[_strScrollLeft];
+                        el[_strScrollLeft] = value;
+                    }
+                    return this;
+                },
+
+                scrollTop: function (value) {
+                    var i = 0;
+                    var el;
+                    while (el = this[i++]) {
+                        if (value === undefined)
+                            return el[_strScrollTop];
+                        el[_strScrollTop] = value;
+                    }
+                    return this;
+                },
+
+                val: function (value) {
+                    var el = this[0];
+                    if (!value)
+                        return el.value;
+                    el.value = value;
+                    return this;
+                },
+
+
+                //DOM TRAVERSAL / FILTERING:
+
+                first: function () {
+                    return this.eq(0);
+                },
+
+                last: function () {
+                    return this.eq(-1);
+                },
+
+                eq: function (index) {
+                    return FakejQuery(this[index >= 0 ? index : this[LEXICON.l] + index]);
+                },
+
+                find: function (selector) {
+                    var children = [];
+                    var i;
+                    this.each(function () {
+                        var el = this;
+                        var ch = el.querySelectorAll(selector);
+                        for (i = 0; i < ch[LEXICON.l]; i++)
+                            children.push(ch[i]);
+                    });
+                    return FakejQuery(children);
+                },
+
+                children: function (selector) {
+                    var children = [];
+                    var el;
+                    var ch;
+                    var i;
+
+                    this.each(function () {
+                        ch = this.children;
+                        for (i = 0; i < ch[LEXICON.l]; i++) {
+                            el = ch[i];
+                            if (selector) {
+                                if ((el.matches && el.matches(selector)) || matches(el, selector))
+                                    children.push(el);
+                            }
+                            else
+                                children.push(el);
+                        }
+                    });
+                    return FakejQuery(children);
+                },
+
+                parent: function (selector) {
+                    var parents = [];
+                    var parent;
+                    this.each(function () {
+                        parent = this.parentNode;
+                        if (selector ? FakejQuery(parent).is(selector) : true)
+                            parents.push(parent);
+                    });
+                    return FakejQuery(parents);
+                },
+
+                is: function (selector) {
+
+                    var el;
+                    var i;
+                    for (i = 0; i < this[LEXICON.l]; i++) {
+                        el = this[i];
+                        if (selector === ':visible')
+                            return elementIsVisible(el);
+                        if (selector === ':hidden')
+                            return !elementIsVisible(el);
+                        if ((el.matches && el.matches(selector)) || matches(el, selector))
+                            return true;
+                    }
+                    return false;
+                },
+
+                contents: function () {
+                    var contents = [];
+                    var childs;
+                    var i;
+
+                    this.each(function () {
+                        childs = this.childNodes;
+                        for (i = 0; i < childs[LEXICON.l]; i++)
+                            contents.push(childs[i]);
+                    });
+
+                    return FakejQuery(contents);
+                },
+
+                each: function (callback) {
+                    return each(this, callback);
+                },
+
+
+                //ANIMATION:
+
+                animate: function (props, duration, easing, complete) {
+                    return this.each(function () { animate(this, props, duration, easing, complete); });
+                },
+
+                stop: function (clearQ, jump) {
+                    return this.each(function () { stop(this, clearQ, jump); });
+                }
+            };
+
+            extend(FakejQuery, {
+                extend: extend,
+                inArray: inArray,
+                isEmptyObject: isEmptyObject,
+                isPlainObject: isPlainObject,
+                each: each
+            });
+
+            return FakejQuery;
+        })();
+        var INSTANCES = (function () {
+            var _targets = [];
+            var _instancePropertyString = '__overlayScrollbars__';
+
+            /**
+             * Register, unregister or get a certain (or all) instances.
+             * Register: Pass the target and the instance.
+             * Unregister: Pass the target and null.
+             * Get Instance: Pass the target from which the instance shall be got.
+             * Get Targets: Pass no arguments.
+             * @param target The target to which the instance shall be registered / from which the instance shall be unregistered / the instance shall be got
+             * @param instance The instance.
+             * @returns {*|void} Returns the instance from the given target.
+             */
+            return function (target, instance) {
+                var argLen = arguments[LEXICON.l];
+                if (argLen < 1) {
+                    //return all targets
+                    return _targets;
+                }
+                else {
+                    if (instance) {
+                        //register instance
+                        target[_instancePropertyString] = instance;
+                        _targets.push(target);
+                    }
+                    else {
+                        var index = COMPATIBILITY.inA(target, _targets);
+                        if (index > -1) {
+                            if (argLen > 1) {
+                                //unregister instance
+                                delete target[_instancePropertyString];
+                                _targets.splice(index, 1);
+                            }
+                            else {
+                                //get instance from target
+                                return _targets[index][_instancePropertyString];
+                            }
+                        }
+                    }
+                }
+            }
+        })();
+        var PLUGIN = (function () {
+            var _plugin;
+            var _pluginsGlobals;
+            var _pluginsAutoUpdateLoop;
+            var _pluginsExtensions = [];
+            var _pluginsOptions = (function () {
+                var type = COMPATIBILITY.type;
+                var possibleTemplateTypes = [
+                    TYPES.b, //boolean
+                    TYPES.n, //number
+                    TYPES.s, //string
+                    TYPES.a, //array
+                    TYPES.o, //object
+                    TYPES.f, //function
+                    TYPES.z  //null
+                ];
+                var restrictedStringsSplit = ' ';
+                var restrictedStringsPossibilitiesSplit = ':';
+                var classNameAllowedValues = [TYPES.z, TYPES.s];
+                var numberAllowedValues = TYPES.n;
+                var booleanNullAllowedValues = [TYPES.z, TYPES.b];
+                var booleanTrueTemplate = [true, TYPES.b];
+                var booleanFalseTemplate = [false, TYPES.b];
+                var callbackTemplate = [null, [TYPES.z, TYPES.f]];
+                var updateOnLoadTemplate = [['img'], [TYPES.s, TYPES.a, TYPES.z]];
+                var inheritedAttrsTemplate = [['style', 'class'], [TYPES.s, TYPES.a, TYPES.z]];
+                var resizeAllowedValues = 'n:none b:both h:horizontal v:vertical';
+                var overflowBehaviorAllowedValues = 'v-h:visible-hidden v-s:visible-scroll s:scroll h:hidden';
+                var scrollbarsVisibilityAllowedValues = 'v:visible h:hidden a:auto';
+                var scrollbarsAutoHideAllowedValues = 'n:never s:scroll l:leave m:move';
+                var optionsDefaultsAndTemplate = {
+                    className: ['os-theme-dark', classNameAllowedValues],                //null || string
+                    resize: ['none', resizeAllowedValues],                               //none || both  || horizontal || vertical || n || b || h || v
+                    sizeAutoCapable: booleanTrueTemplate,                                //true || false
+                    clipAlways: booleanTrueTemplate,                                     //true || false
+                    normalizeRTL: booleanTrueTemplate,                                   //true || false
+                    paddingAbsolute: booleanFalseTemplate,                               //true || false
+                    autoUpdate: [null, booleanNullAllowedValues],                        //true || false || null
+                    autoUpdateInterval: [33, numberAllowedValues],                       //number
+                    updateOnLoad: updateOnLoadTemplate,                                  //string || array || null
+                    nativeScrollbarsOverlaid: {
+                        showNativeScrollbars: booleanFalseTemplate,                      //true || false
+                        initialize: booleanTrueTemplate                                  //true || false
+                    },
+                    overflowBehavior: {
+                        x: ['scroll', overflowBehaviorAllowedValues],                    //visible-hidden  || visible-scroll || hidden || scroll || v-h || v-s || h || s
+                        y: ['scroll', overflowBehaviorAllowedValues]                     //visible-hidden  || visible-scroll || hidden || scroll || v-h || v-s || h || s
+                    },
+                    scrollbars: {
+                        visibility: ['auto', scrollbarsVisibilityAllowedValues],         //visible || hidden || auto || v || h || a
+                        autoHide: ['never', scrollbarsAutoHideAllowedValues],            //never || scroll || leave || move || n || s || l || m
+                        autoHideDelay: [800, numberAllowedValues],                       //number
+                        dragScrolling: booleanTrueTemplate,                              //true || false
+                        clickScrolling: booleanFalseTemplate,                            //true || false
+                        touchSupport: booleanTrueTemplate,                               //true || false
+                        snapHandle: booleanFalseTemplate                                 //true || false
+                    },
+                    textarea: {
+                        dynWidth: booleanFalseTemplate,                                  //true || false
+                        dynHeight: booleanFalseTemplate,                                 //true || false
+                        inheritedAttrs: inheritedAttrsTemplate                           //string || array || null
+                    },
+                    callbacks: {
+                        onInitialized: callbackTemplate,                                 //null || function
+                        onInitializationWithdrawn: callbackTemplate,                     //null || function
+                        onDestroyed: callbackTemplate,                                   //null || function
+                        onScrollStart: callbackTemplate,                                 //null || function
+                        onScroll: callbackTemplate,                                      //null || function
+                        onScrollStop: callbackTemplate,                                  //null || function
+                        onOverflowChanged: callbackTemplate,                             //null || function
+                        onOverflowAmountChanged: callbackTemplate,                       //null || function
+                        onDirectionChanged: callbackTemplate,                            //null || function
+                        onContentSizeChanged: callbackTemplate,                          //null || function
+                        onHostSizeChanged: callbackTemplate,                             //null || function
+                        onUpdated: callbackTemplate                                      //null || function
+                    }
+                };
+                var convert = function (template) {
+                    var recursive = function (obj) {
+                        var key;
+                        var val;
+                        var valType;
+                        for (key in obj) {
+                            if (!obj[LEXICON.hOP](key))
+                                continue;
+                            val = obj[key];
+                            valType = type(val);
+                            if (valType == TYPES.a)
+                                obj[key] = val[template ? 1 : 0];
+                            else if (valType == TYPES.o)
+                                obj[key] = recursive(val);
+                        }
+                        return obj;
+                    };
+                    return recursive(FRAMEWORK.extend(true, {}, optionsDefaultsAndTemplate));
+                };
+
+                return {
+                    _defaults: convert(),
+
+                    _template: convert(true),
+
+                    /**
+                     * Validates the passed object by the passed template.
+                     * @param obj The object which shall be validated.
+                     * @param template The template which defines the allowed values and types.
+                     * @param writeErrors True if errors shall be logged to the console.
+                     * @param diffObj If a object is passed then only valid differences to this object will be returned.
+                     * @returns {{}} A object which contains two objects called "default" and "prepared" which contains only the valid properties of the passed original object and discards not different values compared to the passed diffObj.
+                     */
+                    _validate: function (obj, template, writeErrors, diffObj) {
+                        var validatedOptions = {};
+                        var validatedOptionsPrepared = {};
+                        var objectCopy = FRAMEWORK.extend(true, {}, obj);
+                        var inArray = FRAMEWORK.inArray;
+                        var isEmptyObj = FRAMEWORK.isEmptyObject;
+                        var checkObjectProps = function (data, template, diffData, validatedOptions, validatedOptionsPrepared, prevPropName) {
+                            for (var prop in template) {
+                                if (template[LEXICON.hOP](prop) && data[LEXICON.hOP](prop)) {
+                                    var isValid = false;
+                                    var isDiff = false;
+                                    var templateValue = template[prop];
+                                    var templateValueType = type(templateValue);
+                                    var templateIsComplex = templateValueType == TYPES.o;
+                                    var templateTypes = !COMPATIBILITY.isA(templateValue) ? [templateValue] : templateValue;
+                                    var dataDiffValue = diffData[prop];
+                                    var dataValue = data[prop];
+                                    var dataValueType = type(dataValue);
+                                    var propPrefix = prevPropName ? prevPropName + '.' : '';
+                                    var error = "The option \"" + propPrefix + prop + "\" wasn't set, because";
+                                    var errorPossibleTypes = [];
+                                    var errorRestrictedStrings = [];
+                                    var restrictedStringValuesSplit;
+                                    var restrictedStringValuesPossibilitiesSplit;
+                                    var isRestrictedValue;
+                                    var mainPossibility;
+                                    var currType;
+                                    var i;
+                                    var v;
+                                    var j;
+
+                                    dataDiffValue = dataDiffValue === undefined ? {} : dataDiffValue;
+
+                                    //if the template has a object as value, it means that the options are complex (verschachtelt)
+                                    if (templateIsComplex && dataValueType == TYPES.o) {
+                                        validatedOptions[prop] = {};
+                                        validatedOptionsPrepared[prop] = {};
+                                        checkObjectProps(dataValue, templateValue, dataDiffValue, validatedOptions[prop], validatedOptionsPrepared[prop], propPrefix + prop);
+                                        FRAMEWORK.each([data, validatedOptions, validatedOptionsPrepared], function (index, value) {
+                                            if (isEmptyObj(value[prop])) {
+                                                delete value[prop];
+                                            }
+                                        });
+                                    }
+                                    else if (!templateIsComplex) {
+                                        for (i = 0; i < templateTypes[LEXICON.l]; i++) {
+                                            currType = templateTypes[i];
+                                            templateValueType = type(currType);
+                                            //if currtype is string and starts with restrictedStringPrefix and end with restrictedStringSuffix
+                                            isRestrictedValue = templateValueType == TYPES.s && inArray(currType, possibleTemplateTypes) === -1;
+                                            if (isRestrictedValue) {
+                                                errorPossibleTypes.push(TYPES.s);
+
+                                                //split it into a array which contains all possible values for example: ["y:yes", "n:no", "m:maybe"]
+                                                restrictedStringValuesSplit = currType.split(restrictedStringsSplit);
+                                                errorRestrictedStrings = errorRestrictedStrings.concat(restrictedStringValuesSplit);
+                                                for (v = 0; v < restrictedStringValuesSplit[LEXICON.l]; v++) {
+                                                    //split the possible values into their possibiliteis for example: ["y", "yes"] -> the first is always the mainPossibility
+                                                    restrictedStringValuesPossibilitiesSplit = restrictedStringValuesSplit[v].split(restrictedStringsPossibilitiesSplit);
+                                                    mainPossibility = restrictedStringValuesPossibilitiesSplit[0];
+                                                    for (j = 0; j < restrictedStringValuesPossibilitiesSplit[LEXICON.l]; j++) {
+                                                        //if any possibility matches with the dataValue, its valid
+                                                        if (dataValue === restrictedStringValuesPossibilitiesSplit[j]) {
+                                                            isValid = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                    if (isValid)
+                                                        break;
+                                                }
+                                            }
+                                            else {
+                                                errorPossibleTypes.push(currType);
+
+                                                if (dataValueType === currType) {
+                                                    isValid = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        if (isValid) {
+                                            isDiff = dataValue !== dataDiffValue;
+
+                                            if (isDiff)
+                                                validatedOptions[prop] = dataValue;
+
+                                            if (isRestrictedValue ? inArray(dataDiffValue, restrictedStringValuesPossibilitiesSplit) < 0 : isDiff)
+                                                validatedOptionsPrepared[prop] = isRestrictedValue ? mainPossibility : dataValue;
+                                        }
+                                        else if (writeErrors) {
+                                            console.warn(error + " it doesn't accept the type [ " + dataValueType.toUpperCase() + " ] with the value of \"" + dataValue + "\".\r\n" +
+                                                "Accepted types are: [ " + errorPossibleTypes.join(', ').toUpperCase() + " ]." +
+                                                (errorRestrictedStrings[length] > 0 ? "\r\nValid strings are: [ " + errorRestrictedStrings.join(', ').split(restrictedStringsPossibilitiesSplit).join(', ') + " ]." : ''));
+                                        }
+                                        delete data[prop];
+                                    }
+                                }
+                            }
+                        };
+                        checkObjectProps(objectCopy, template, diffObj || {}, validatedOptions, validatedOptionsPrepared);
+
+                        //add values which aren't specified in the template to the finished validated object to prevent them from being discarded
+                        /*
+                        if(keepForeignProps) {
+                            FRAMEWORK.extend(true, validatedOptions, objectCopy);
+                            FRAMEWORK.extend(true, validatedOptionsPrepared, objectCopy);
+                        }
+                        */
+
+                        if (!isEmptyObj(objectCopy) && writeErrors)
+                            console.warn('The following options are discarded due to invalidity:\r\n' + window.JSON.stringify(objectCopy, null, 2));
+
+                        return {
+                            _default: validatedOptions,
+                            _prepared: validatedOptionsPrepared
+                        };
+                    }
+                }
+            }());
+
+            /**
+             * Initializes the object which contains global information about the plugin and each instance of it.
+             */
+            function initOverlayScrollbarsStatics() {
+                if (!_pluginsGlobals)
+                    _pluginsGlobals = new OverlayScrollbarsGlobals(_pluginsOptions._defaults);
+                if (!_pluginsAutoUpdateLoop)
+                    _pluginsAutoUpdateLoop = new OverlayScrollbarsAutoUpdateLoop(_pluginsGlobals);
+            }
+
+            /**
+             * The global object for the OverlayScrollbars objects. It contains resources which every OverlayScrollbars object needs. This object is initialized only once: if the first OverlayScrollbars object gets initialized.
+             * @param defaultOptions
+             * @constructor
+             */
+            function OverlayScrollbarsGlobals(defaultOptions) {
+                var _base = this;
+                var strOverflow = 'overflow';
+                var strHidden = 'hidden';
+                var strScroll = 'scroll';
+                var bodyElement = FRAMEWORK('body');
+                var scrollbarDummyElement = FRAMEWORK('<div id="os-dummy-scrollbar-size"><div></div></div>');
+                var scrollbarDummyElement0 = scrollbarDummyElement[0];
+                var dummyContainerChild = FRAMEWORK(scrollbarDummyElement.children('div').eq(0));
+
+                bodyElement.append(scrollbarDummyElement);
+                scrollbarDummyElement.hide().show(); //fix IE8 bug (incorrect measuring)
+
+                var nativeScrollbarSize = calcNativeScrollbarSize(scrollbarDummyElement0);
+                var nativeScrollbarIsOverlaid = {
+                    x: nativeScrollbarSize.x === 0,
+                    y: nativeScrollbarSize.y === 0
+                };
+                var msie = (function () {
+                    var ua = window.navigator.userAgent;
+                    var strIndexOf = 'indexOf';
+                    var strSubString = 'substring';
+                    var msie = ua[strIndexOf]('MSIE ');
+                    var trident = ua[strIndexOf]('Trident/');
+                    var edge = ua[strIndexOf]('Edge/');
+                    var rv = ua[strIndexOf]('rv:');
+                    var result;
+                    var parseIntFunc = parseInt;
+
+                    // IE 10 or older => return version number
+                    if (msie > 0)
+                        result = parseIntFunc(ua[strSubString](msie + 5, ua[strIndexOf]('.', msie)), 10);
+
+                    // IE 11 => return version number
+                    else if (trident > 0)
+                        result = parseIntFunc(ua[strSubString](rv + 3, ua[strIndexOf]('.', rv)), 10);
+
+                    // Edge (IE 12+) => return version number
+                    else if (edge > 0)
+                        result = parseIntFunc(ua[strSubString](edge + 5, ua[strIndexOf]('.', edge)), 10);
+
+                    // other browser
+                    return result;
+                })();
+
+                FRAMEWORK.extend(_base, {
+                    defaultOptions: defaultOptions,
+                    msie: msie,
+                    autoUpdateLoop: false,
+                    autoUpdateRecommended: !COMPATIBILITY.mO(),
+                    nativeScrollbarSize: nativeScrollbarSize,
+                    nativeScrollbarIsOverlaid: nativeScrollbarIsOverlaid,
+                    nativeScrollbarStyling: (function () {
+                        var result = false;
+                        scrollbarDummyElement.addClass('os-viewport-native-scrollbars-invisible');
+                        try {
+                            result = (scrollbarDummyElement.css('scrollbar-width') === 'none' && (msie > 9 || !msie)) || window.getComputedStyle(scrollbarDummyElement0, '::-webkit-scrollbar').getPropertyValue('display') === 'none';
+                        } catch (ex) { }
+
+                        //fix opera bug: scrollbar styles will only appear if overflow value is scroll or auto during the activation of the style.
+                        //and set overflow to scroll
+                        //scrollbarDummyElement.css(strOverflow, strHidden).hide().css(strOverflow, strScroll).show();
+                        //return (scrollbarDummyElement0[LEXICON.oH] - scrollbarDummyElement0[LEXICON.cH]) === 0 && (scrollbarDummyElement0[LEXICON.oW] - scrollbarDummyElement0[LEXICON.cW]) === 0;
+
+                        return result;
+                    })(),
+                    overlayScrollbarDummySize: { x: 30, y: 30 },
+                    cssCalc: VENDORS._cssPropertyValue('width', 'calc', '(1px)') || null,
+                    restrictedMeasuring: (function () {
+                        //https://bugzilla.mozilla.org/show_bug.cgi?id=1439305
+                        //since 1.11.0 always false -> fixed via CSS (hopefully)
+                        scrollbarDummyElement.css(strOverflow, strHidden);
+                        var scrollSize = {
+                            w: scrollbarDummyElement0[LEXICON.sW],
+                            h: scrollbarDummyElement0[LEXICON.sH]
+                        };
+                        scrollbarDummyElement.css(strOverflow, 'visible');
+                        var scrollSize2 = {
+                            w: scrollbarDummyElement0[LEXICON.sW],
+                            h: scrollbarDummyElement0[LEXICON.sH]
+                        };
+                        return (scrollSize.w - scrollSize2.w) !== 0 || (scrollSize.h - scrollSize2.h) !== 0;
+                    })(),
+                    rtlScrollBehavior: (function () {
+                        scrollbarDummyElement.css({ 'overflow-y': strHidden, 'overflow-x': strScroll, 'direction': 'rtl' }).scrollLeft(0);
+                        var dummyContainerOffset = scrollbarDummyElement.offset();
+                        var dummyContainerChildOffset = dummyContainerChild.offset();
+                        //https://github.com/KingSora/OverlayScrollbars/issues/187
+                        scrollbarDummyElement.scrollLeft(-999);
+                        var dummyContainerChildOffsetAfterScroll = dummyContainerChild.offset();
+                        return {
+                            //origin direction = determines if the zero scroll position is on the left or right side
+                            //'i' means 'invert' (i === true means that the axis must be inverted to be correct)
+                            //true = on the left side
+                            //false = on the right side
+                            i: dummyContainerOffset.left === dummyContainerChildOffset.left,
+                            //negative = determines if the maximum scroll is positive or negative
+                            //'n' means 'negate' (n === true means that the axis must be negated to be correct)
+                            //true = negative
+                            //false = positive
+                            n: dummyContainerChildOffset.left !== dummyContainerChildOffsetAfterScroll.left
+                        };
+                    })(),
+                    supportTransform: !!VENDORS._cssProperty('transform'),
+                    supportTransition: !!VENDORS._cssProperty('transition'),
+                    supportPassiveEvents: (function () {
+                        var supportsPassive = false;
+                        try {
+                            window.addEventListener('test', null, Object.defineProperty({}, 'passive', {
+                                get: function () {
+                                    supportsPassive = true;
+                                }
+                            }));
+                        } catch (e) { }
+                        return supportsPassive;
+                    })(),
+                    supportResizeObserver: !!COMPATIBILITY.rO(),
+                    supportMutationObserver: !!COMPATIBILITY.mO()
+                });
+
+                scrollbarDummyElement.removeAttr(LEXICON.s).remove();
+
+                //Catch zoom event:
+                (function () {
+                    if (nativeScrollbarIsOverlaid.x && nativeScrollbarIsOverlaid.y)
+                        return;
+
+                    var abs = MATH.abs;
+                    var windowWidth = COMPATIBILITY.wW();
+                    var windowHeight = COMPATIBILITY.wH();
+                    var windowDpr = getWindowDPR();
+                    var onResize = function () {
+                        if (INSTANCES().length > 0) {
+                            var newW = COMPATIBILITY.wW();
+                            var newH = COMPATIBILITY.wH();
+                            var deltaW = newW - windowWidth;
+                            var deltaH = newH - windowHeight;
+
+                            if (deltaW === 0 && deltaH === 0)
+                                return;
+
+                            var deltaWRatio = MATH.round(newW / (windowWidth / 100.0));
+                            var deltaHRatio = MATH.round(newH / (windowHeight / 100.0));
+                            var absDeltaW = abs(deltaW);
+                            var absDeltaH = abs(deltaH);
+                            var absDeltaWRatio = abs(deltaWRatio);
+                            var absDeltaHRatio = abs(deltaHRatio);
+                            var newDPR = getWindowDPR();
+
+                            var deltaIsBigger = absDeltaW > 2 && absDeltaH > 2;
+                            var difference = !differenceIsBiggerThanOne(absDeltaWRatio, absDeltaHRatio);
+                            var dprChanged = newDPR !== windowDpr && windowDpr > 0;
+                            var isZoom = deltaIsBigger && difference && dprChanged;
+                            var oldScrollbarSize = _base.nativeScrollbarSize;
+                            var newScrollbarSize;
+
+                            if (isZoom) {
+                                bodyElement.append(scrollbarDummyElement);
+                                newScrollbarSize = _base.nativeScrollbarSize = calcNativeScrollbarSize(scrollbarDummyElement[0]);
+                                scrollbarDummyElement.remove();
+                                if (oldScrollbarSize.x !== newScrollbarSize.x || oldScrollbarSize.y !== newScrollbarSize.y) {
+                                    FRAMEWORK.each(INSTANCES(), function () {
+                                        if (INSTANCES(this))
+                                            INSTANCES(this).update('zoom');
+                                    });
+                                }
+                            }
+
+                            windowWidth = newW;
+                            windowHeight = newH;
+                            windowDpr = newDPR;
+                        }
+                    };
+
+                    function differenceIsBiggerThanOne(valOne, valTwo) {
+                        var absValOne = abs(valOne);
+                        var absValTwo = abs(valTwo);
+                        return !(absValOne === absValTwo || absValOne + 1 === absValTwo || absValOne - 1 === absValTwo);
+                    }
+
+                    function getWindowDPR() {
+                        var dDPI = window.screen.deviceXDPI || 0;
+                        var sDPI = window.screen.logicalXDPI || 1;
+                        return window.devicePixelRatio || (dDPI / sDPI);
+                    }
+
+                    FRAMEWORK(window).on('resize', onResize);
+                })();
+
+                function calcNativeScrollbarSize(measureElement) {
+                    return {
+                        x: measureElement[LEXICON.oH] - measureElement[LEXICON.cH],
+                        y: measureElement[LEXICON.oW] - measureElement[LEXICON.cW]
+                    };
+                }
+            }
+
+            /**
+             * The object which manages the auto update loop for all OverlayScrollbars objects. This object is initialized only once: if the first OverlayScrollbars object gets initialized.
+             * @constructor
+             */
+            function OverlayScrollbarsAutoUpdateLoop(globals) {
+                var _base = this;
+                var _inArray = FRAMEWORK.inArray;
+                var _getNow = COMPATIBILITY.now;
+                var _strAutoUpdate = 'autoUpdate';
+                var _strAutoUpdateInterval = _strAutoUpdate + 'Interval';
+                var _strLength = LEXICON.l;
+                var _loopingInstances = [];
+                var _loopingInstancesIntervalCache = [];
+                var _loopIsActive = false;
+                var _loopIntervalDefault = 33;
+                var _loopInterval = _loopIntervalDefault;
+                var _loopTimeOld = _getNow();
+                var _loopID;
+
+
+                /**
+                 * The auto update loop which will run every 50 milliseconds or less if the update interval of a instance is lower than 50 milliseconds.
+                 */
+                var loop = function () {
+                    if (_loopingInstances[_strLength] > 0 && _loopIsActive) {
+                        _loopID = COMPATIBILITY.rAF()(function () {
+                            loop();
+                        });
+                        var timeNew = _getNow();
+                        var timeDelta = timeNew - _loopTimeOld;
+                        var lowestInterval;
+                        var instance;
+                        var instanceOptions;
+                        var instanceAutoUpdateAllowed;
+                        var instanceAutoUpdateInterval;
+                        var now;
+
+                        if (timeDelta > _loopInterval) {
+                            _loopTimeOld = timeNew - (timeDelta % _loopInterval);
+                            lowestInterval = _loopIntervalDefault;
+                            for (var i = 0; i < _loopingInstances[_strLength]; i++) {
+                                instance = _loopingInstances[i];
+                                if (instance !== undefined) {
+                                    instanceOptions = instance.options();
+                                    instanceAutoUpdateAllowed = instanceOptions[_strAutoUpdate];
+                                    instanceAutoUpdateInterval = MATH.max(1, instanceOptions[_strAutoUpdateInterval]);
+                                    now = _getNow();
+
+                                    if ((instanceAutoUpdateAllowed === true || instanceAutoUpdateAllowed === null) && (now - _loopingInstancesIntervalCache[i]) > instanceAutoUpdateInterval) {
+                                        instance.update('auto');
+                                        _loopingInstancesIntervalCache[i] = new Date(now += instanceAutoUpdateInterval);
+                                    }
+
+                                    lowestInterval = MATH.max(1, MATH.min(lowestInterval, instanceAutoUpdateInterval));
+                                }
+                            }
+                            _loopInterval = lowestInterval;
+                        }
+                    } else {
+                        _loopInterval = _loopIntervalDefault;
+                    }
+                };
+
+                /**
+                 * Add OverlayScrollbars instance to the auto update loop. Only successful if the instance isn't already added.
+                 * @param instance The instance which shall be updated in a loop automatically.
+                 */
+                _base.add = function (instance) {
+                    if (_inArray(instance, _loopingInstances) === -1) {
+                        _loopingInstances.push(instance);
+                        _loopingInstancesIntervalCache.push(_getNow());
+                        if (_loopingInstances[_strLength] > 0 && !_loopIsActive) {
+                            _loopIsActive = true;
+                            globals.autoUpdateLoop = _loopIsActive;
+                            loop();
+                        }
+                    }
+                };
+
+                /**
+                 * Remove OverlayScrollbars instance from the auto update loop. Only successful if the instance was added before.
+                 * @param instance The instance which shall be updated in a loop automatically.
+                 */
+                _base.remove = function (instance) {
+                    var index = _inArray(instance, _loopingInstances);
+                    if (index > -1) {
+                        //remove from loopingInstances list
+                        _loopingInstancesIntervalCache.splice(index, 1);
+                        _loopingInstances.splice(index, 1);
+
+                        //correct update loop behavior
+                        if (_loopingInstances[_strLength] === 0 && _loopIsActive) {
+                            _loopIsActive = false;
+                            globals.autoUpdateLoop = _loopIsActive;
+                            if (_loopID !== undefined) {
+                                COMPATIBILITY.cAF()(_loopID);
+                                _loopID = -1;
+                            }
+                        }
+                    }
+                };
+            }
+
+            /**
+             * A object which manages the scrollbars visibility of the target element.
+             * @param pluginTargetElement The element from which the scrollbars shall be hidden.
+             * @param options The custom options.
+             * @param extensions The custom extensions.
+             * @param globals
+             * @param autoUpdateLoop
+             * @returns {*}
+             * @constructor
+             */
+            function OverlayScrollbarsInstance(pluginTargetElement, options, extensions, globals, autoUpdateLoop) {
+                //shortcuts
+                var type = COMPATIBILITY.type;
+                var inArray = FRAMEWORK.inArray;
+                var each = FRAMEWORK.each;
+
+                //make correct instanceof
+                var _base = new _plugin();
+                var _frameworkProto = FRAMEWORK[LEXICON.p];
+
+                //if passed element is no HTML element: skip and return
+                if (!isHTMLElement(pluginTargetElement))
+                    return;
+
+                //if passed element is already initialized: set passed options if there are any and return its instance
+                if (INSTANCES(pluginTargetElement)) {
+                    var inst = INSTANCES(pluginTargetElement);
+                    inst.options(options);
+                    return inst;
+                }
+
+                //globals:
+                var _nativeScrollbarIsOverlaid;
+                var _overlayScrollbarDummySize;
+                var _rtlScrollBehavior;
+                var _autoUpdateRecommended;
+                var _msieVersion;
+                var _nativeScrollbarStyling;
+                var _cssCalc;
+                var _nativeScrollbarSize;
+                var _supportTransition;
+                var _supportTransform;
+                var _supportPassiveEvents;
+                var _supportResizeObserver;
+                var _supportMutationObserver;
+                var _restrictedMeasuring;
+
+                //general readonly:
+                var _initialized;
+                var _destroyed;
+                var _isTextarea;
+                var _isBody;
+                var _documentMixed;
+                var _domExists;
+
+                //general:
+                var _isBorderBox;
+                var _sizeAutoObserverAdded;
+                var _paddingX;
+                var _paddingY;
+                var _borderX;
+                var _borderY;
+                var _marginX;
+                var _marginY;
+                var _isRTL;
+                var _sleeping;
+                var _contentBorderSize = {};
+                var _scrollHorizontalInfo = {};
+                var _scrollVerticalInfo = {};
+                var _viewportSize = {};
+                var _nativeScrollbarMinSize = {};
+
+                //naming:	
+                var _strMinusHidden = '-hidden';
+                var _strMarginMinus = 'margin-';
+                var _strPaddingMinus = 'padding-';
+                var _strBorderMinus = 'border-';
+                var _strTop = 'top';
+                var _strRight = 'right';
+                var _strBottom = 'bottom';
+                var _strLeft = 'left';
+                var _strMinMinus = 'min-';
+                var _strMaxMinus = 'max-';
+                var _strWidth = 'width';
+                var _strHeight = 'height';
+                var _strFloat = 'float';
+                var _strEmpty = '';
+                var _strAuto = 'auto';
+                var _strSync = 'sync';
+                var _strScroll = 'scroll';
+                var _strHundredPercent = '100%';
+                var _strX = 'x';
+                var _strY = 'y';
+                var _strDot = '.';
+                var _strSpace = ' ';
+                var _strScrollbar = 'scrollbar';
+                var _strMinusHorizontal = '-horizontal';
+                var _strMinusVertical = '-vertical';
+                var _strScrollLeft = _strScroll + 'Left';
+                var _strScrollTop = _strScroll + 'Top';
+                var _strMouseTouchDownEvent = 'mousedown touchstart';
+                var _strMouseTouchUpEvent = 'mouseup touchend touchcancel';
+                var _strMouseTouchMoveEvent = 'mousemove touchmove';
+                var _strMouseEnter = 'mouseenter';
+                var _strMouseLeave = 'mouseleave';
+                var _strKeyDownEvent = 'keydown';
+                var _strKeyUpEvent = 'keyup';
+                var _strSelectStartEvent = 'selectstart';
+                var _strTransitionEndEvent = 'transitionend webkitTransitionEnd oTransitionEnd';
+                var _strResizeObserverProperty = '__overlayScrollbarsRO__';
+
+                //class names:	
+                var _cassNamesPrefix = 'os-';
+                var _classNameHTMLElement = _cassNamesPrefix + 'html';
+                var _classNameHostElement = _cassNamesPrefix + 'host';
+                var _classNameHostElementForeign = _classNameHostElement + '-foreign';
+                var _classNameHostTextareaElement = _classNameHostElement + '-textarea';
+                var _classNameHostScrollbarHorizontalHidden = _classNameHostElement + '-' + _strScrollbar + _strMinusHorizontal + _strMinusHidden;
+                var _classNameHostScrollbarVerticalHidden = _classNameHostElement + '-' + _strScrollbar + _strMinusVertical + _strMinusHidden;
+                var _classNameHostTransition = _classNameHostElement + '-transition';
+                var _classNameHostRTL = _classNameHostElement + '-rtl';
+                var _classNameHostResizeDisabled = _classNameHostElement + '-resize-disabled';
+                var _classNameHostScrolling = _classNameHostElement + '-scrolling';
+                var _classNameHostOverflow = _classNameHostElement + '-overflow';
+                var _classNameHostOverflow = _classNameHostElement + '-overflow';
+                var _classNameHostOverflowX = _classNameHostOverflow + '-x';
+                var _classNameHostOverflowY = _classNameHostOverflow + '-y';
+                var _classNameTextareaElement = _cassNamesPrefix + 'textarea';
+                var _classNameTextareaCoverElement = _classNameTextareaElement + '-cover';
+                var _classNamePaddingElement = _cassNamesPrefix + 'padding';
+                var _classNameViewportElement = _cassNamesPrefix + 'viewport';
+                var _classNameViewportNativeScrollbarsInvisible = _classNameViewportElement + '-native-scrollbars-invisible';
+                var _classNameViewportNativeScrollbarsOverlaid = _classNameViewportElement + '-native-scrollbars-overlaid';
+                var _classNameContentElement = _cassNamesPrefix + 'content';
+                var _classNameContentArrangeElement = _cassNamesPrefix + 'content-arrange';
+                var _classNameContentGlueElement = _cassNamesPrefix + 'content-glue';
+                var _classNameSizeAutoObserverElement = _cassNamesPrefix + 'size-auto-observer';
+                var _classNameResizeObserverElement = _cassNamesPrefix + 'resize-observer';
+                var _classNameResizeObserverItemElement = _cassNamesPrefix + 'resize-observer-item';
+                var _classNameResizeObserverItemFinalElement = _classNameResizeObserverItemElement + '-final';
+                var _classNameTextInherit = _cassNamesPrefix + 'text-inherit';
+                var _classNameScrollbar = _cassNamesPrefix + _strScrollbar;
+                var _classNameScrollbarTrack = _classNameScrollbar + '-track';
+                var _classNameScrollbarTrackOff = _classNameScrollbarTrack + '-off';
+                var _classNameScrollbarHandle = _classNameScrollbar + '-handle';
+                var _classNameScrollbarHandleOff = _classNameScrollbarHandle + '-off';
+                var _classNameScrollbarUnusable = _classNameScrollbar + '-unusable';
+                var _classNameScrollbarAutoHidden = _classNameScrollbar + '-' + _strAuto + _strMinusHidden;
+                var _classNameScrollbarCorner = _classNameScrollbar + '-corner';
+                var _classNameScrollbarCornerResize = _classNameScrollbarCorner + '-resize';
+                var _classNameScrollbarCornerResizeB = _classNameScrollbarCornerResize + '-both';
+                var _classNameScrollbarCornerResizeH = _classNameScrollbarCornerResize + _strMinusHorizontal;
+                var _classNameScrollbarCornerResizeV = _classNameScrollbarCornerResize + _strMinusVertical;
+                var _classNameScrollbarHorizontal = _classNameScrollbar + _strMinusHorizontal;
+                var _classNameScrollbarVertical = _classNameScrollbar + _strMinusVertical;
+                var _classNameDragging = _cassNamesPrefix + 'dragging';
+                var _classNameThemeNone = _cassNamesPrefix + 'theme-none';
+                var _classNamesDynamicDestroy = [
+                    _classNameViewportNativeScrollbarsInvisible,
+                    _classNameViewportNativeScrollbarsOverlaid,
+                    _classNameScrollbarTrackOff,
+                    _classNameScrollbarHandleOff,
+                    _classNameScrollbarUnusable,
+                    _classNameScrollbarAutoHidden,
+                    _classNameScrollbarCornerResize,
+                    _classNameScrollbarCornerResizeB,
+                    _classNameScrollbarCornerResizeH,
+                    _classNameScrollbarCornerResizeV,
+                    _classNameDragging].join(_strSpace);
+
+                //callbacks:	
+                var _callbacksInitQeueue = [];
+
+                //attrs viewport shall inherit from target	
+                var _viewportAttrsFromTarget = [LEXICON.ti];
+
+                //options:	
+                var _defaultOptions;
+                var _currentOptions;
+                var _currentPreparedOptions;
+
+                //extensions:	
+                var _extensions = {};
+                var _extensionsPrivateMethods = 'added removed on contract';
+
+                //update	
+                var _lastUpdateTime;
+                var _swallowedUpdateHints = {};
+                var _swallowedUpdateTimeout;
+                var _swallowUpdateLag = 42;
+                var _updateOnLoadEventName = 'load';
+                var _updateOnLoadElms = [];
+
+                //DOM elements:	
+                var _windowElement;
+                var _documentElement;
+                var _htmlElement;
+                var _bodyElement;
+                var _targetElement;                     //the target element of this OverlayScrollbars object	
+                var _hostElement;                       //the host element of this OverlayScrollbars object -> may be the same as targetElement	
+                var _sizeAutoObserverElement;           //observes size auto changes	
+                var _sizeObserverElement;               //observes size and padding changes	
+                var _paddingElement;                    //manages the padding	
+                var _viewportElement;                   //is the viewport of our scrollbar model	
+                var _contentElement;                    //the element which holds the content	
+                var _contentArrangeElement;             //is needed for correct sizing of the content element (only if native scrollbars are overlays)	
+                var _contentGlueElement;                //has always the size of the content element	
+                var _textareaCoverElement;              //only applied if target is a textarea element. Used for correct size calculation and for prevention of uncontrolled scrolling	
+                var _scrollbarCornerElement;
+                var _scrollbarHorizontalElement;
+                var _scrollbarHorizontalTrackElement;
+                var _scrollbarHorizontalHandleElement;
+                var _scrollbarVerticalElement;
+                var _scrollbarVerticalTrackElement;
+                var _scrollbarVerticalHandleElement;
+                var _windowElementNative;
+                var _documentElementNative;
+                var _targetElementNative;
+                var _hostElementNative;
+                var _sizeAutoObserverElementNative;
+                var _sizeObserverElementNative;
+                var _paddingElementNative;
+                var _viewportElementNative;
+                var _contentElementNative;
+
+                //Cache:	
+                var _hostSizeCache;
+                var _contentScrollSizeCache;
+                var _arrangeContentSizeCache;
+                var _hasOverflowCache;
+                var _hideOverflowCache;
+                var _widthAutoCache;
+                var _heightAutoCache;
+                var _cssBoxSizingCache;
+                var _cssPaddingCache;
+                var _cssBorderCache;
+                var _cssMarginCache;
+                var _cssDirectionCache;
+                var _cssDirectionDetectedCache;
+                var _paddingAbsoluteCache;
+                var _clipAlwaysCache;
+                var _contentGlueSizeCache;
+                var _overflowBehaviorCache;
+                var _overflowAmountCache;
+                var _ignoreOverlayScrollbarHidingCache;
+                var _autoUpdateCache;
+                var _sizeAutoCapableCache;
+                var _contentElementScrollSizeChangeDetectedCache;
+                var _hostElementSizeChangeDetectedCache;
+                var _scrollbarsVisibilityCache;
+                var _scrollbarsAutoHideCache;
+                var _scrollbarsClickScrollingCache;
+                var _scrollbarsDragScrollingCache;
+                var _resizeCache;
+                var _normalizeRTLCache;
+                var _classNameCache;
+                var _oldClassName;
+                var _textareaAutoWrappingCache;
+                var _textareaInfoCache;
+                var _textareaSizeCache;
+                var _textareaDynHeightCache;
+                var _textareaDynWidthCache;
+                var _bodyMinSizeCache;
+                var _updateAutoCache = {};
+
+                //MutationObserver:	
+                var _mutationObserverHost;
+                var _mutationObserverContent;
+                var _mutationObserverHostCallback;
+                var _mutationObserverContentCallback;
+                var _mutationObserversConnected;
+                var _mutationObserverAttrsTextarea = ['wrap', 'cols', 'rows'];
+                var _mutationObserverAttrsHost = [LEXICON.i, LEXICON.c, LEXICON.s, 'open'].concat(_viewportAttrsFromTarget);
+
+                //events:	
+                var _destroyEvents = [];
+
+                //textarea:	
+                var _textareaHasFocus;
+
+                //scrollbars:	
+                var _scrollbarsAutoHideTimeoutId;
+                var _scrollbarsAutoHideMoveTimeoutId;
+                var _scrollbarsAutoHideDelay;
+                var _scrollbarsAutoHideNever;
+                var _scrollbarsAutoHideScroll;
+                var _scrollbarsAutoHideMove;
+                var _scrollbarsAutoHideLeave;
+                var _scrollbarsHandleHovered;
+                var _scrollbarsHandlesDefineScrollPos;
+
+                //resize	
+                var _resizeNone;
+                var _resizeBoth;
+                var _resizeHorizontal;
+                var _resizeVertical;
+
+
+                //==== Event Listener ====//	
+
+                /**	
+                 * Adds or removes a event listener from the given element. 	
+                 * @param element The element to which the event listener shall be applied or removed.	
+                 * @param eventNames The name(s) of the events.	
+                 * @param listener The method which shall be called.	
+                 * @param remove True if the handler shall be removed, false or undefined if the handler shall be added.	
+                 * @param passiveOrOptions The options for the event.
+                 */
+                function setupResponsiveEventListener(element, eventNames, listener, remove, passiveOrOptions) {
+                    var collected = COMPATIBILITY.isA(eventNames) && COMPATIBILITY.isA(listener);
+                    var method = remove ? 'removeEventListener' : 'addEventListener';
+                    var onOff = remove ? 'off' : 'on';
+                    var events = collected ? false : eventNames.split(_strSpace)
+                    var i = 0;
+
+                    var passiveOrOptionsIsObj = FRAMEWORK.isPlainObject(passiveOrOptions);
+                    var passive = _supportPassiveEvents && (passiveOrOptionsIsObj ? (passiveOrOptions._passive || false) : passiveOrOptions);
+                    var capture = passiveOrOptionsIsObj && (passiveOrOptions._capture || false);
+                    var useNative = capture || passive;
+                    var nativeParam = passive ? {
+                        passive: passive,
+                        capture: capture,
+                    } : capture;
+
+                    if (collected) {
+                        for (; i < eventNames[LEXICON.l]; i++)
+                            setupResponsiveEventListener(element, eventNames[i], listener[i], remove, passiveOrOptions);
+                    }
+                    else {
+                        for (; i < events[LEXICON.l]; i++) {
+                            if(useNative) {
+                                element[0][method](events[i], listener, nativeParam);
+                            }
+                            else {
+                                element[onOff](events[i], listener);
+                            }     
+                        }
+                    }
+                }
+
+
+                function addDestroyEventListener(element, eventNames, listener, passive) {
+                    setupResponsiveEventListener(element, eventNames, listener, false, passive);
+                    _destroyEvents.push(COMPATIBILITY.bind(setupResponsiveEventListener, 0, element, eventNames, listener, true, passive));
+                }
+
+                //==== Resize Observer ====//
+
+                /**
+                 * Adds or removes a resize observer from the given element.
+                 * @param targetElement The element to which the resize observer shall be added or removed.
+                 * @param onElementResizedCallback The callback which is fired every time the resize observer registers a size change or false / undefined if the resizeObserver shall be removed.
+                 */
+                function setupResizeObserver(targetElement, onElementResizedCallback) {
+                    if (targetElement) {
+                        var resizeObserver = COMPATIBILITY.rO();
+                        var strAnimationStartEvent = 'animationstart mozAnimationStart webkitAnimationStart MSAnimationStart';
+                        var strChildNodes = 'childNodes';
+                        var constScroll = 3333333;
+                        var callback = function () {
+                            targetElement[_strScrollTop](constScroll)[_strScrollLeft](_isRTL ? _rtlScrollBehavior.n ? -constScroll : _rtlScrollBehavior.i ? 0 : constScroll : constScroll);
+                            onElementResizedCallback();
+                        };
+                        //add resize observer:
+                        if (onElementResizedCallback) {
+                            if (_supportResizeObserver) {
+                                var element = targetElement.addClass('observed').append(generateDiv(_classNameResizeObserverElement)).contents()[0];
+                                var observer = element[_strResizeObserverProperty] = new resizeObserver(callback);
+                                observer.observe(element);
+                            }
+                            else {
+                                if (_msieVersion > 9 || !_autoUpdateRecommended) {
+                                    targetElement.prepend(
+                                        generateDiv(_classNameResizeObserverElement,
+                                            generateDiv({ c: _classNameResizeObserverItemElement, dir: 'ltr' },
+                                                generateDiv(_classNameResizeObserverItemElement,
+                                                    generateDiv(_classNameResizeObserverItemFinalElement)
+                                                ) +
+                                                generateDiv(_classNameResizeObserverItemElement,
+                                                    generateDiv({ c: _classNameResizeObserverItemFinalElement, style: 'width: 200%; height: 200%' })
+                                                )
+                                            )
+                                        )
+                                    );
+
+                                    var observerElement = targetElement[0][strChildNodes][0][strChildNodes][0];
+                                    var shrinkElement = FRAMEWORK(observerElement[strChildNodes][1]);
+                                    var expandElement = FRAMEWORK(observerElement[strChildNodes][0]);
+                                    var expandElementChild = FRAMEWORK(expandElement[0][strChildNodes][0]);
+                                    var widthCache = observerElement[LEXICON.oW];
+                                    var heightCache = observerElement[LEXICON.oH];
+                                    var isDirty;
+                                    var rAFId;
+                                    var currWidth;
+                                    var currHeight;
+                                    var factor = 2;
+                                    var nativeScrollbarSize = globals.nativeScrollbarSize; //care don't make changes to this object!!!
+                                    var reset = function () {
+                                        /*
+                                         var sizeResetWidth = observerElement[LEXICON.oW] + nativeScrollbarSize.x * factor + nativeScrollbarSize.y * factor + _overlayScrollbarDummySize.x + _overlayScrollbarDummySize.y;
+                                         var sizeResetHeight = observerElement[LEXICON.oH] + nativeScrollbarSize.x * factor + nativeScrollbarSize.y * factor + _overlayScrollbarDummySize.x + _overlayScrollbarDummySize.y;
+                                         var expandChildCSS = {};
+                                         expandChildCSS[_strWidth] = sizeResetWidth;
+                                         expandChildCSS[_strHeight] = sizeResetHeight;
+                                         expandElementChild.css(expandChildCSS);
+
+
+                                         expandElement[_strScrollLeft](sizeResetWidth)[_strScrollTop](sizeResetHeight);
+                                         shrinkElement[_strScrollLeft](sizeResetWidth)[_strScrollTop](sizeResetHeight);
+                                         */
+                                        expandElement[_strScrollLeft](constScroll)[_strScrollTop](constScroll);
+                                        shrinkElement[_strScrollLeft](constScroll)[_strScrollTop](constScroll);
+                                    };
+                                    var onResized = function () {
+                                        rAFId = 0;
+                                        if (!isDirty)
+                                            return;
+
+                                        widthCache = currWidth;
+                                        heightCache = currHeight;
+                                        callback();
+                                    };
+                                    var onScroll = function (event) {
+                                        currWidth = observerElement[LEXICON.oW];
+                                        currHeight = observerElement[LEXICON.oH];
+                                        isDirty = currWidth != widthCache || currHeight != heightCache;
+
+                                        if (event && isDirty && !rAFId) {
+                                            COMPATIBILITY.cAF()(rAFId);
+                                            rAFId = COMPATIBILITY.rAF()(onResized);
+                                        }
+                                        else if (!event)
+                                            onResized();
+
+                                        reset();
+                                        if (event) {
+                                            COMPATIBILITY.prvD(event);
+                                            COMPATIBILITY.stpP(event);
+                                        }
+                                        return false;
+                                    };
+                                    var expandChildCSS = {};
+                                    var observerElementCSS = {};
+
+                                    setTopRightBottomLeft(observerElementCSS, _strEmpty, [
+                                        -((nativeScrollbarSize.y + 1) * factor),
+                                        nativeScrollbarSize.x * -factor,
+                                        nativeScrollbarSize.y * -factor,
+                                        -((nativeScrollbarSize.x + 1) * factor)
+                                    ]);
+
+                                    FRAMEWORK(observerElement).css(observerElementCSS);
+                                    expandElement.on(_strScroll, onScroll);
+                                    shrinkElement.on(_strScroll, onScroll);
+                                    targetElement.on(strAnimationStartEvent, function () {
+                                        onScroll(false);
+                                    });
+                                    //lets assume that the divs will never be that large and a constant value is enough
+                                    expandChildCSS[_strWidth] = constScroll;
+                                    expandChildCSS[_strHeight] = constScroll;
+                                    expandElementChild.css(expandChildCSS);
+
+                                    reset();
+                                }
+                                else {
+                                    var attachEvent = _documentElementNative.attachEvent;
+                                    var isIE = _msieVersion !== undefined;
+                                    if (attachEvent) {
+                                        targetElement.prepend(generateDiv(_classNameResizeObserverElement));
+                                        findFirst(targetElement, _strDot + _classNameResizeObserverElement)[0].attachEvent('onresize', callback);
+                                    }
+                                    else {
+                                        var obj = _documentElementNative.createElement(TYPES.o);
+                                        obj.setAttribute(LEXICON.ti, '-1');
+                                        obj.setAttribute(LEXICON.c, _classNameResizeObserverElement);
+                                        obj.onload = function () {
+                                            var wnd = this.contentDocument.defaultView;
+                                            wnd.addEventListener('resize', callback);
+                                            wnd.document.documentElement.style.display = 'none';
+                                        };
+                                        obj.type = 'text/html';
+                                        if (isIE)
+                                            targetElement.prepend(obj);
+                                        obj.data = 'about:blank';
+                                        if (!isIE)
+                                            targetElement.prepend(obj);
+                                        targetElement.on(strAnimationStartEvent, callback);
+                                    }
+                                }
+                            }
+
+                            if (targetElement[0] === _sizeObserverElementNative) {
+                                var directionChanged = function () {
+                                    var dir = _hostElement.css('direction');
+                                    var css = {};
+                                    var scrollLeftValue = 0;
+                                    var result = false;
+                                    if (dir !== _cssDirectionDetectedCache) {
+                                        if (dir === 'ltr') {
+                                            css[_strLeft] = 0;
+                                            css[_strRight] = _strAuto;
+                                            scrollLeftValue = constScroll;
+                                        }
+                                        else {
+                                            css[_strLeft] = _strAuto;
+                                            css[_strRight] = 0;
+                                            scrollLeftValue = _rtlScrollBehavior.n ? -constScroll : _rtlScrollBehavior.i ? 0 : constScroll;
+                                        }
+                                        //execution order is important for IE!!!
+                                        _sizeObserverElement.children().eq(0).css(css);
+                                        _sizeObserverElement[_strScrollLeft](scrollLeftValue)[_strScrollTop](constScroll);
+                                        _cssDirectionDetectedCache = dir;
+                                        result = true;
+                                    }
+                                    return result;
+                                };
+                                directionChanged();
+                                addDestroyEventListener(targetElement, _strScroll, function (event) {
+                                    if (directionChanged())
+                                        update();
+                                    COMPATIBILITY.prvD(event);
+                                    COMPATIBILITY.stpP(event);
+                                    return false;
+                                });
+                            }
+                        }
+                        //remove resize observer:
+                        else {
+                            if (_supportResizeObserver) {
+                                var element = targetElement.contents()[0];
+                                var resizeObserverObj = element[_strResizeObserverProperty];
+                                if (resizeObserverObj) {
+                                    resizeObserverObj.disconnect();
+                                    delete element[_strResizeObserverProperty];
+                                }
+                            }
+                            else {
+                                remove(targetElement.children(_strDot + _classNameResizeObserverElement).eq(0));
+                            }
+                        }
+                    }
+                }
+
+                /**
+                 * Freezes or unfreezes the given resize observer.
+                 * @param targetElement The element to which the target resize observer is applied.
+                 * @param freeze True if the resize observer shall be frozen, false otherwise.
+                 
+                function freezeResizeObserver(targetElement, freeze) {
+                    if (targetElement !== undefined) {
+                        if(freeze) {
+                            if (_supportResizeObserver) {
+                                var element = targetElement.contents()[0];
+                                element[_strResizeObserverProperty].unobserve(element);
+                            }
+                            else {
+                                targetElement = targetElement.children(_strDot + _classNameResizeObserverElement).eq(0);
+                                var w = targetElement.css(_strWidth);
+                                var h = targetElement.css(_strHeight);
+                                var css = {};
+                                css[_strWidth] = w;
+                                css[_strHeight] = h;
+                                targetElement.css(css);
+                            }
+                        }
+                        else {
+                            if (_supportResizeObserver) {
+                                var element = targetElement.contents()[0];
+                                element[_strResizeObserverProperty].observe(element);
+                            }
+                            else {
+                                var css = { };
+                                css[_strHeight] = _strEmpty;
+                                css[_strWidth] = _strEmpty;
+                                targetElement.children(_strDot + _classNameResizeObserverElement).eq(0).css(css);
+                            }
+                        }
+                    }
+                }
+                */
+
+
+                //==== Mutation Observers ====//
+
+                /**
+                 * Creates MutationObservers for the host and content Element if they are supported.
+                 */
+                function createMutationObservers() {
+                    if (_supportMutationObserver) {
+                        var mutationObserverContentLag = 11;
+                        var mutationObserver = COMPATIBILITY.mO();
+                        var contentLastUpdate = COMPATIBILITY.now();
+                        var mutationTarget;
+                        var mutationAttrName;
+                        var mutationIsClass;
+                        var oldMutationVal;
+                        var newClassVal;
+                        var hostClassNameRegex;
+                        var contentTimeout;
+                        var now;
+                        var sizeAuto;
+                        var action;
+
+                        _mutationObserverHostCallback = function (mutations) {
+
+                            var doUpdate = false;
+                            var doUpdateForce = false;
+                            var mutation;
+                            var mutatedAttrs = [];
+
+                            if (_initialized && !_sleeping) {
+                                each(mutations, function () {
+                                    mutation = this;
+                                    mutationTarget = mutation.target;
+                                    mutationAttrName = mutation.attributeName;
+                                    mutationIsClass = mutationAttrName === LEXICON.c;
+                                    oldMutationVal = mutation.oldValue;
+                                    newClassVal = mutationTarget.className;
+
+                                    if (_domExists && mutationIsClass && !doUpdateForce) {
+                                        // if old class value contains _classNameHostElementForeign and new class value doesn't
+                                        if (oldMutationVal.indexOf(_classNameHostElementForeign) > -1 && newClassVal.indexOf(_classNameHostElementForeign) < 0) {
+                                            hostClassNameRegex = createHostClassNameRegExp(true);
+                                            _hostElementNative.className = newClassVal.split(_strSpace).concat(oldMutationVal.split(_strSpace).filter(function (name) {
+                                                return name.match(hostClassNameRegex);
+                                            })).join(_strSpace);
+                                            doUpdate = doUpdateForce = true;
+                                        }
+                                    }
+
+                                    if (!doUpdate) {
+                                        doUpdate = mutationIsClass
+                                            ? hostClassNamesChanged(oldMutationVal, newClassVal)
+                                            : mutationAttrName === LEXICON.s
+                                                ? oldMutationVal !== mutationTarget[LEXICON.s].cssText
+                                                : true;
+                                    }
+
+                                    mutatedAttrs.push(mutationAttrName);
+                                });
+
+                                updateViewportAttrsFromTarget(mutatedAttrs);
+
+                                if (doUpdate)
+                                    _base.update(doUpdateForce || _strAuto);
+                            }
+                            return doUpdate;
+                        };
+                        _mutationObserverContentCallback = function (mutations) {
+                            var doUpdate = false;
+                            var mutation;
+
+                            if (_initialized && !_sleeping) {
+                                each(mutations, function () {
+                                    mutation = this;
+                                    doUpdate = isUnknownMutation(mutation);
+                                    return !doUpdate;
+                                });
+
+                                if (doUpdate) {
+                                    now = COMPATIBILITY.now();
+                                    sizeAuto = (_heightAutoCache || _widthAutoCache);
+                                    action = function () {
+                                        if (!_destroyed) {
+                                            contentLastUpdate = now;
+
+                                            //if cols, rows or wrap attr was changed
+                                            if (_isTextarea)
+                                                textareaUpdate();
+
+                                            if (sizeAuto)
+                                                update();
+                                            else
+                                                _base.update(_strAuto);
+                                        }
+                                    };
+                                    clearTimeout(contentTimeout);
+                                    if (mutationObserverContentLag <= 0 || now - contentLastUpdate > mutationObserverContentLag || !sizeAuto)
+                                        action();
+                                    else
+                                        contentTimeout = setTimeout(action, mutationObserverContentLag);
+                                }
+                            }
+                            return doUpdate;
+                        }
+
+                        _mutationObserverHost = new mutationObserver(_mutationObserverHostCallback);
+                        _mutationObserverContent = new mutationObserver(_mutationObserverContentCallback);
+                    }
+                }
+
+                /**
+                 * Connects the MutationObservers if they are supported.
+                 */
+                function connectMutationObservers() {
+                    if (_supportMutationObserver && !_mutationObserversConnected) {
+                        _mutationObserverHost.observe(_hostElementNative, {
+                            attributes: true,
+                            attributeOldValue: true,
+                            attributeFilter: _mutationObserverAttrsHost
+                        });
+
+                        _mutationObserverContent.observe(_isTextarea ? _targetElementNative : _contentElementNative, {
+                            attributes: true,
+                            attributeOldValue: true,
+                            subtree: !_isTextarea,
+                            childList: !_isTextarea,
+                            characterData: !_isTextarea,
+                            attributeFilter: _isTextarea ? _mutationObserverAttrsTextarea : _mutationObserverAttrsHost
+                        });
+
+                        _mutationObserversConnected = true;
+                    }
+                }
+
+                /**
+                 * Disconnects the MutationObservers if they are supported.
+                 */
+                function disconnectMutationObservers() {
+                    if (_supportMutationObserver && _mutationObserversConnected) {
+                        _mutationObserverHost.disconnect();
+                        _mutationObserverContent.disconnect();
+
+                        _mutationObserversConnected = false;
+                    }
+                }
+
+
+                //==== Events of elements ====//
+
+                /**
+                 * This method gets called every time the host element gets resized. IMPORTANT: Padding changes are detected too!!
+                 * It refreshes the hostResizedEventArgs and the hostSizeResizeCache.
+                 * If there are any size changes, the update method gets called.
+                 */
+                function hostOnResized() {
+                    if (!_sleeping) {
+                        var changed;
+                        var hostSize = {
+                            w: _sizeObserverElementNative[LEXICON.sW],
+                            h: _sizeObserverElementNative[LEXICON.sH]
+                        };
+
+                        changed = checkCache(hostSize, _hostElementSizeChangeDetectedCache);
+                        _hostElementSizeChangeDetectedCache = hostSize;
+                        if (changed)
+                            update({ _hostSizeChanged: true });
+                    }
+                }
+
+                /**
+                 * The mouse enter event of the host element. This event is only needed for the autoHide feature.
+                 */
+                function hostOnMouseEnter() {
+                    if (_scrollbarsAutoHideLeave)
+                        refreshScrollbarsAutoHide(true);
+                }
+
+                /**
+                 * The mouse leave event of the host element. This event is only needed for the autoHide feature.
+                 */
+                function hostOnMouseLeave() {
+                    if (_scrollbarsAutoHideLeave && !_bodyElement.hasClass(_classNameDragging))
+                        refreshScrollbarsAutoHide(false);
+                }
+
+                /**
+                 * The mouse move event of the host element. This event is only needed for the autoHide "move" feature.
+                 */
+                function hostOnMouseMove() {
+                    if (_scrollbarsAutoHideMove) {
+                        refreshScrollbarsAutoHide(true);
+                        clearTimeout(_scrollbarsAutoHideMoveTimeoutId);
+                        _scrollbarsAutoHideMoveTimeoutId = setTimeout(function () {
+                            if (_scrollbarsAutoHideMove && !_destroyed)
+                                refreshScrollbarsAutoHide(false);
+                        }, 100);
+                    }
+                }
+
+                /**
+                 * Prevents text from deselection if attached to the document element on the mousedown event of a DOM element.
+                 * @param event The select start event.
+                 */
+                function documentOnSelectStart(event) {
+                    COMPATIBILITY.prvD(event);
+                    return false;
+                }
+
+                /**	
+                 * A callback which will be called after a element has loaded.	
+                 */
+                function updateOnLoadCallback(event) {
+                    var elm = FRAMEWORK(event.target);
+
+                    eachUpdateOnLoad(function (i, updateOnLoadSelector) {
+                        if (elm.is(updateOnLoadSelector)) {
+                            update({ _contentSizeChanged: true });
+                        }
+                    });
+                }
+
+                /**
+                * Adds or removes mouse & touch events of the host element. (for handling auto-hiding of the scrollbars)
+                * @param destroy Indicates whether the events shall be added or removed.
+                */
+                function setupHostMouseTouchEvents(destroy) {
+                    if (!destroy)
+                        setupHostMouseTouchEvents(true);
+
+                    setupResponsiveEventListener(_hostElement,
+                        _strMouseTouchMoveEvent.split(_strSpace)[0],
+                        hostOnMouseMove,
+                        (!_scrollbarsAutoHideMove || destroy), true);
+                    setupResponsiveEventListener(_hostElement,
+                        [_strMouseEnter, _strMouseLeave],
+                        [hostOnMouseEnter, hostOnMouseLeave],
+                        (!_scrollbarsAutoHideLeave || destroy), true);
+
+                    //if the plugin is initialized and the mouse is over the host element, make the scrollbars visible
+                    if (!_initialized && !destroy)
+                        _hostElement.one('mouseover', hostOnMouseEnter);
+                }
+
+
+                //==== Update Detection ====//
+
+                /**
+                 * Measures the min width and min height of the body element and refreshes the related cache.
+                 * @returns {boolean} True if the min width or min height has changed, false otherwise.
+                 */
+                function bodyMinSizeChanged() {
+                    var bodyMinSize = {};
+                    if (_isBody && _contentArrangeElement) {
+                        bodyMinSize.w = parseToZeroOrNumber(_contentArrangeElement.css(_strMinMinus + _strWidth));
+                        bodyMinSize.h = parseToZeroOrNumber(_contentArrangeElement.css(_strMinMinus + _strHeight));
+                        bodyMinSize.c = checkCache(bodyMinSize, _bodyMinSizeCache);
+                        bodyMinSize.f = true; //flag for "measured at least once"
+                    }
+                    _bodyMinSizeCache = bodyMinSize;
+                    return !!bodyMinSize.c;
+                }
+
+                /**
+                 * Returns true if the class names really changed (new class without plugin host prefix)
+                 * @param oldClassNames The old ClassName string or array.
+                 * @param newClassNames The new ClassName string or array.
+                 * @returns {boolean} True if the class names has really changed, false otherwise.
+                 */
+                function hostClassNamesChanged(oldClassNames, newClassNames) {
+                    var currClasses = typeof newClassNames == TYPES.s ? newClassNames.split(_strSpace) : [];
+                    var oldClasses = typeof oldClassNames == TYPES.s ? oldClassNames.split(_strSpace) : [];
+                    var diff = getArrayDifferences(oldClasses, currClasses);
+
+                    // remove none theme from diff list to prevent update
+                    var idx = inArray(_classNameThemeNone, diff);
+                    var i;
+                    var regex;
+
+                    if (idx > -1)
+                        diff.splice(idx, 1);
+
+                    if (diff[LEXICON.l] > 0) {
+                        regex = createHostClassNameRegExp(true, true);
+                        for (i = 0; i < diff.length; i++) {
+                            if (!diff[i].match(regex)) {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }
+
+                /**
+                 * Returns true if the given mutation is not from a from the plugin generated element. If the target element is a textarea the mutation is always unknown.
+                 * @param mutation The mutation which shall be checked.
+                 * @returns {boolean} True if the mutation is from a unknown element, false otherwise.
+                 */
+                function isUnknownMutation(mutation) {
+                    var attributeName = mutation.attributeName;
+                    var mutationTarget = mutation.target;
+                    var mutationType = mutation.type;
+                    var strClosest = 'closest';
+
+                    if (mutationTarget === _contentElementNative)
+                        return attributeName === null;
+                    if (mutationType === 'attributes' && (attributeName === LEXICON.c || attributeName === LEXICON.s) && !_isTextarea) {
+                        //ignore className changes by the plugin	
+                        if (attributeName === LEXICON.c && FRAMEWORK(mutationTarget).hasClass(_classNameHostElement))
+                            return hostClassNamesChanged(mutation.oldValue, mutationTarget.className);
+
+                        //only do it of browser support it natively	
+                        if (typeof mutationTarget[strClosest] != TYPES.f)
+                            return true;
+                        if (mutationTarget[strClosest](_strDot + _classNameResizeObserverElement) !== null ||
+                            mutationTarget[strClosest](_strDot + _classNameScrollbar) !== null ||
+                            mutationTarget[strClosest](_strDot + _classNameScrollbarCorner) !== null)
+                            return false;
+                    }
+                    return true;
+                }
+
+                /**
+                 * Returns true if the content size was changed since the last time this method was called.
+                 * @returns {boolean} True if the content size was changed, false otherwise.
+                 */
+                function updateAutoContentSizeChanged() {
+                    if (_sleeping)
+                        return false;
+
+                    var contentMeasureElement = getContentMeasureElement();
+                    var textareaValueLength = _isTextarea && _widthAutoCache && !_textareaAutoWrappingCache ? _targetElement.val().length : 0;
+                    var setCSS = !_mutationObserversConnected && _widthAutoCache && !_isTextarea;
+                    var css = {};
+                    var float;
+                    var bodyMinSizeC;
+                    var changed;
+                    var contentElementScrollSize;
+
+                    if (setCSS) {
+                        float = _contentElement.css(_strFloat);
+                        css[_strFloat] = _isRTL ? _strRight : _strLeft;
+                        css[_strWidth] = _strAuto;
+                        _contentElement.css(css);
+                    }
+                    contentElementScrollSize = {
+                        w: contentMeasureElement[LEXICON.sW] + textareaValueLength,
+                        h: contentMeasureElement[LEXICON.sH] + textareaValueLength
+                    };
+                    if (setCSS) {
+                        css[_strFloat] = float;
+                        css[_strWidth] = _strHundredPercent;
+                        _contentElement.css(css);
+                    }
+
+                    bodyMinSizeC = bodyMinSizeChanged();
+                    changed = checkCache(contentElementScrollSize, _contentElementScrollSizeChangeDetectedCache);
+
+                    _contentElementScrollSizeChangeDetectedCache = contentElementScrollSize;
+
+                    return changed || bodyMinSizeC;
+                }
+
+                /**
+                 * Returns true when a attribute which the MutationObserver would observe has changed.  
+                 * @returns {boolean} True if one of the attributes which a MutationObserver would observe has changed, false or undefined otherwise.
+                 */
+                function meaningfulAttrsChanged() {
+                    if (_sleeping || _mutationObserversConnected)
+                        return;
+
+                    var elem;
+                    var curr;
+                    var cache;
+                    var changedAttrs = [];
+                    var checks = [
+                        {
+                            _elem: _hostElement,
+                            _attrs: _mutationObserverAttrsHost.concat(':visible')
+                        },
+                        {
+                            _elem: _isTextarea ? _targetElement : undefined,
+                            _attrs: _mutationObserverAttrsTextarea
+                        }
+                    ];
+
+                    each(checks, function (index, check) {
+                        elem = check._elem;
+                        if (elem) {
+                            each(check._attrs, function (index, attr) {
+                                curr = attr.charAt(0) === ':' ? elem.is(attr) : elem.attr(attr);
+                                cache = _updateAutoCache[attr];
+
+                                if (checkCache(curr, cache)) {
+                                    changedAttrs.push(attr);
+                                }
+
+                                _updateAutoCache[attr] = curr;
+                            });
+                        }
+                    });
+
+                    updateViewportAttrsFromTarget(changedAttrs);
+
+                    return changedAttrs[LEXICON.l] > 0;
+                }
+
+                /**
+                 * Checks is a CSS Property of a child element is affecting the scroll size of the content.
+                 * @param propertyName The CSS property name.
+                 * @returns {boolean} True if the property is affecting the content scroll size, false otherwise.
+                 */
+                function isSizeAffectingCSSProperty(propertyName) {
+                    if (!_initialized)
+                        return true;
+                    var flexGrow = 'flex-grow';
+                    var flexShrink = 'flex-shrink';
+                    var flexBasis = 'flex-basis';
+                    var affectingPropsX = [
+                        _strWidth,
+                        _strMinMinus + _strWidth,
+                        _strMaxMinus + _strWidth,
+                        _strMarginMinus + _strLeft,
+                        _strMarginMinus + _strRight,
+                        _strLeft,
+                        _strRight,
+                        'font-weight',
+                        'word-spacing',
+                        flexGrow,
+                        flexShrink,
+                        flexBasis
+                    ];
+                    var affectingPropsXContentBox = [
+                        _strPaddingMinus + _strLeft,
+                        _strPaddingMinus + _strRight,
+                        _strBorderMinus + _strLeft + _strWidth,
+                        _strBorderMinus + _strRight + _strWidth
+                    ];
+                    var affectingPropsY = [
+                        _strHeight,
+                        _strMinMinus + _strHeight,
+                        _strMaxMinus + _strHeight,
+                        _strMarginMinus + _strTop,
+                        _strMarginMinus + _strBottom,
+                        _strTop,
+                        _strBottom,
+                        'line-height',
+                        flexGrow,
+                        flexShrink,
+                        flexBasis
+                    ];
+                    var affectingPropsYContentBox = [
+                        _strPaddingMinus + _strTop,
+                        _strPaddingMinus + _strBottom,
+                        _strBorderMinus + _strTop + _strWidth,
+                        _strBorderMinus + _strBottom + _strWidth
+                    ];
+                    var _strS = 's';
+                    var _strVS = 'v-s';
+                    var checkX = _overflowBehaviorCache.x === _strS || _overflowBehaviorCache.x === _strVS;
+                    var checkY = _overflowBehaviorCache.y === _strS || _overflowBehaviorCache.y === _strVS;
+                    var sizeIsAffected = false;
+                    var checkPropertyName = function (arr, name) {
+                        for (var i = 0; i < arr[LEXICON.l]; i++) {
+                            if (arr[i] === name)
+                                return true;
+                        }
+                        return false;
+                    };
+
+                    if (checkY) {
+                        sizeIsAffected = checkPropertyName(affectingPropsY, propertyName);
+                        if (!sizeIsAffected && !_isBorderBox)
+                            sizeIsAffected = checkPropertyName(affectingPropsYContentBox, propertyName);
+                    }
+                    if (checkX && !sizeIsAffected) {
+                        sizeIsAffected = checkPropertyName(affectingPropsX, propertyName);
+                        if (!sizeIsAffected && !_isBorderBox)
+                            sizeIsAffected = checkPropertyName(affectingPropsXContentBox, propertyName);
+                    }
+                    return sizeIsAffected;
+                }
+
+
+                //==== Update ====//
+
+                /**
+                 * Sets the attribute values of the viewport element to the values from the target element.
+                 * The value of a attribute is only set if the attribute is whitelisted.
+                 * @attrs attrs The array of attributes which shall be set or undefined if all whitelisted shall be set.
+                 */
+                function updateViewportAttrsFromTarget(attrs) {
+                    attrs = attrs || _viewportAttrsFromTarget;
+                    each(attrs, function (index, attr) {
+                        if (COMPATIBILITY.inA(attr, _viewportAttrsFromTarget) > -1) {
+                            var targetAttr = _targetElement.attr(attr);
+                            if (type(targetAttr) == TYPES.s) {
+                                _viewportElement.attr(attr, targetAttr);
+                            }
+                            else {
+                                _viewportElement.removeAttr(attr);
+                            }
+                        }
+                    });
+                }
+
+                /**
+                 * Updates the variables and size of the textarea element, and manages the scroll on new line or new character.
+                 */
+                function textareaUpdate() {
+                    if (!_sleeping) {
+                        var wrapAttrOff = !_textareaAutoWrappingCache;
+                        var minWidth = _viewportSize.w;
+                        var minHeight = _viewportSize.h;
+                        var css = {};
+                        var doMeasure = _widthAutoCache || wrapAttrOff;
+                        var origWidth;
+                        var width;
+                        var origHeight;
+                        var height;
+
+                        //reset min size
+                        css[_strMinMinus + _strWidth] = _strEmpty;
+                        css[_strMinMinus + _strHeight] = _strEmpty;
+
+                        //set width auto
+                        css[_strWidth] = _strAuto;
+                        _targetElement.css(css);
+
+                        //measure width
+                        origWidth = _targetElementNative[LEXICON.oW];
+                        width = doMeasure ? MATH.max(origWidth, _targetElementNative[LEXICON.sW] - 1) : 1;
+                        /*width += (_widthAutoCache ? _marginX + (!_isBorderBox ? wrapAttrOff ? 0 : _paddingX + _borderX : 0) : 0);*/
+
+                        //set measured width
+                        css[_strWidth] = _widthAutoCache ? _strAuto /*width*/ : _strHundredPercent;
+                        css[_strMinMinus + _strWidth] = _strHundredPercent;
+
+                        //set height auto
+                        css[_strHeight] = _strAuto;
+                        _targetElement.css(css);
+
+                        //measure height
+                        origHeight = _targetElementNative[LEXICON.oH];
+                        height = MATH.max(origHeight, _targetElementNative[LEXICON.sH] - 1);
+
+                        //append correct size values
+                        css[_strWidth] = width;
+                        css[_strHeight] = height;
+                        _textareaCoverElement.css(css);
+
+                        //apply min width / min height to prevent textarea collapsing
+                        css[_strMinMinus + _strWidth] = minWidth /*+ (!_isBorderBox && _widthAutoCache ? _paddingX + _borderX : 0)*/;
+                        css[_strMinMinus + _strHeight] = minHeight /*+ (!_isBorderBox && _heightAutoCache ? _paddingY + _borderY : 0)*/;
+                        _targetElement.css(css);
+
+                        return {
+                            _originalWidth: origWidth,
+                            _originalHeight: origHeight,
+                            _dynamicWidth: width,
+                            _dynamicHeight: height
+                        };
+                    }
+                }
+
+                /**
+                 * Updates the plugin and DOM to the current options.
+                 * This method should only be called if a update is 100% required.
+                 * @param updateHints A objects which contains hints for this update:
+                 * {
+                 *   _hostSizeChanged : boolean,
+                 *   _contentSizeChanged : boolean,
+                 *   _force : boolean,                             == preventSwallowing
+                 *   _changedOptions : { },                        == preventSwallowing && preventSleep
+                *  }
+                 */
+                function update(updateHints) {
+                    clearTimeout(_swallowedUpdateTimeout);
+                    updateHints = updateHints || {};
+                    _swallowedUpdateHints._hostSizeChanged |= updateHints._hostSizeChanged;
+                    _swallowedUpdateHints._contentSizeChanged |= updateHints._contentSizeChanged;
+                    _swallowedUpdateHints._force |= updateHints._force;
+
+                    var now = COMPATIBILITY.now();
+                    var hostSizeChanged = !!_swallowedUpdateHints._hostSizeChanged;
+                    var contentSizeChanged = !!_swallowedUpdateHints._contentSizeChanged;
+                    var force = !!_swallowedUpdateHints._force;
+                    var changedOptions = updateHints._changedOptions;
+                    var swallow = _swallowUpdateLag > 0 && _initialized && !_destroyed && !force && !changedOptions && (now - _lastUpdateTime) < _swallowUpdateLag && (!_heightAutoCache && !_widthAutoCache);
+                    var displayIsHidden;
+
+                    if (swallow)
+                        _swallowedUpdateTimeout = setTimeout(update, _swallowUpdateLag);
+
+                    //abort update due to:
+                    //destroyed
+                    //swallowing
+                    //sleeping
+                    //host is hidden or has false display
+                    if (_destroyed || swallow || (_sleeping && !changedOptions) || (_initialized && !force && (displayIsHidden = _hostElement.is(':hidden'))) || _hostElement.css('display') === 'inline')
+                        return;
+
+                    _lastUpdateTime = now;
+                    _swallowedUpdateHints = {};
+
+                    //if scrollbar styling is possible and native scrollbars aren't overlaid the scrollbar styling will be applied which hides the native scrollbars completely.
+                    if (_nativeScrollbarStyling && !(_nativeScrollbarIsOverlaid.x && _nativeScrollbarIsOverlaid.y)) {
+                        //native scrollbars are hidden, so change the values to zero
+                        _nativeScrollbarSize.x = 0;
+                        _nativeScrollbarSize.y = 0;
+                    }
+                    else {
+                        //refresh native scrollbar size (in case of zoom)
+                        _nativeScrollbarSize = extendDeep({}, globals.nativeScrollbarSize);
+                    }
+
+                    // Scrollbar padding is needed for firefox, because firefox hides scrollbar automatically if the size of the div is too small.
+                    // The calculation: [scrollbar size +3 *3]
+                    // (+3 because of possible decoration e.g. borders, margins etc., but only if native scrollbar is NOT a overlaid scrollbar)
+                    // (*3 because (1)increase / (2)decrease -button and (3)resize handle)
+                    _nativeScrollbarMinSize = {
+                        x: (_nativeScrollbarSize.x + (_nativeScrollbarIsOverlaid.x ? 0 : 3)) * 3,
+                        y: (_nativeScrollbarSize.y + (_nativeScrollbarIsOverlaid.y ? 0 : 3)) * 3
+                    };
+
+                    changedOptions = changedOptions || {};
+                    //freezeResizeObserver(_sizeObserverElement, true);
+                    //freezeResizeObserver(_sizeAutoObserverElement, true);
+
+                    var checkCacheAutoForce = function () {
+                        return checkCache.apply(this, [].slice.call(arguments).concat([force]));
+                    };
+
+                    //save current scroll offset
+                    var currScroll = {
+                        x: _viewportElement[_strScrollLeft](),
+                        y: _viewportElement[_strScrollTop]()
+                    };
+
+                    var currentPreparedOptionsScrollbars = _currentPreparedOptions.scrollbars;
+                    var currentPreparedOptionsTextarea = _currentPreparedOptions.textarea;
+
+                    //scrollbars visibility:
+                    var scrollbarsVisibility = currentPreparedOptionsScrollbars.visibility;
+                    var scrollbarsVisibilityChanged = checkCacheAutoForce(scrollbarsVisibility, _scrollbarsVisibilityCache);
+
+                    //scrollbars autoHide:
+                    var scrollbarsAutoHide = currentPreparedOptionsScrollbars.autoHide;
+                    var scrollbarsAutoHideChanged = checkCacheAutoForce(scrollbarsAutoHide, _scrollbarsAutoHideCache);
+
+                    //scrollbars click scrolling
+                    var scrollbarsClickScrolling = currentPreparedOptionsScrollbars.clickScrolling;
+                    var scrollbarsClickScrollingChanged = checkCacheAutoForce(scrollbarsClickScrolling, _scrollbarsClickScrollingCache);
+
+                    //scrollbars drag scrolling
+                    var scrollbarsDragScrolling = currentPreparedOptionsScrollbars.dragScrolling;
+                    var scrollbarsDragScrollingChanged = checkCacheAutoForce(scrollbarsDragScrolling, _scrollbarsDragScrollingCache);
+
+                    //className
+                    var className = _currentPreparedOptions.className;
+                    var classNameChanged = checkCacheAutoForce(className, _classNameCache);
+
+                    //resize
+                    var resize = _currentPreparedOptions.resize;
+                    var resizeChanged = checkCacheAutoForce(resize, _resizeCache) && !_isBody; //body can't be resized since the window itself acts as resize possibility.
+
+                    //paddingAbsolute
+                    var paddingAbsolute = _currentPreparedOptions.paddingAbsolute;
+                    var paddingAbsoluteChanged = checkCacheAutoForce(paddingAbsolute, _paddingAbsoluteCache);
+
+                    //clipAlways
+                    var clipAlways = _currentPreparedOptions.clipAlways;
+                    var clipAlwaysChanged = checkCacheAutoForce(clipAlways, _clipAlwaysCache);
+
+                    //sizeAutoCapable
+                    var sizeAutoCapable = _currentPreparedOptions.sizeAutoCapable && !_isBody; //body can never be size auto, because it shall be always as big as the viewport.
+                    var sizeAutoCapableChanged = checkCacheAutoForce(sizeAutoCapable, _sizeAutoCapableCache);
+
+                    //showNativeScrollbars
+                    var ignoreOverlayScrollbarHiding = _currentPreparedOptions.nativeScrollbarsOverlaid.showNativeScrollbars;
+                    var ignoreOverlayScrollbarHidingChanged = checkCacheAutoForce(ignoreOverlayScrollbarHiding, _ignoreOverlayScrollbarHidingCache);
+
+                    //autoUpdate
+                    var autoUpdate = _currentPreparedOptions.autoUpdate;
+                    var autoUpdateChanged = checkCacheAutoForce(autoUpdate, _autoUpdateCache);
+
+                    //overflowBehavior
+                    var overflowBehavior = _currentPreparedOptions.overflowBehavior;
+                    var overflowBehaviorChanged = checkCacheAutoForce(overflowBehavior, _overflowBehaviorCache, force);
+
+                    //dynWidth:
+                    var textareaDynWidth = currentPreparedOptionsTextarea.dynWidth;
+                    var textareaDynWidthChanged = checkCacheAutoForce(_textareaDynWidthCache, textareaDynWidth);
+
+                    //dynHeight:
+                    var textareaDynHeight = currentPreparedOptionsTextarea.dynHeight;
+                    var textareaDynHeightChanged = checkCacheAutoForce(_textareaDynHeightCache, textareaDynHeight);
+
+                    //scrollbars visibility
+                    _scrollbarsAutoHideNever = scrollbarsAutoHide === 'n';
+                    _scrollbarsAutoHideScroll = scrollbarsAutoHide === 's';
+                    _scrollbarsAutoHideMove = scrollbarsAutoHide === 'm';
+                    _scrollbarsAutoHideLeave = scrollbarsAutoHide === 'l';
+
+                    //scrollbars autoHideDelay
+                    _scrollbarsAutoHideDelay = currentPreparedOptionsScrollbars.autoHideDelay;
+
+                    //old className
+                    _oldClassName = _classNameCache;
+
+                    //resize
+                    _resizeNone = resize === 'n';
+                    _resizeBoth = resize === 'b';
+                    _resizeHorizontal = resize === 'h';
+                    _resizeVertical = resize === 'v';
+
+                    //normalizeRTL
+                    _normalizeRTLCache = _currentPreparedOptions.normalizeRTL;
+
+                    //ignore overlay scrollbar hiding
+                    ignoreOverlayScrollbarHiding = ignoreOverlayScrollbarHiding && (_nativeScrollbarIsOverlaid.x && _nativeScrollbarIsOverlaid.y);
+
+                    //refresh options cache
+                    _scrollbarsVisibilityCache = scrollbarsVisibility;
+                    _scrollbarsAutoHideCache = scrollbarsAutoHide;
+                    _scrollbarsClickScrollingCache = scrollbarsClickScrolling;
+                    _scrollbarsDragScrollingCache = scrollbarsDragScrolling;
+                    _classNameCache = className;
+                    _resizeCache = resize;
+                    _paddingAbsoluteCache = paddingAbsolute;
+                    _clipAlwaysCache = clipAlways;
+                    _sizeAutoCapableCache = sizeAutoCapable;
+                    _ignoreOverlayScrollbarHidingCache = ignoreOverlayScrollbarHiding;
+                    _autoUpdateCache = autoUpdate;
+                    _overflowBehaviorCache = extendDeep({}, overflowBehavior);
+                    _textareaDynWidthCache = textareaDynWidth;
+                    _textareaDynHeightCache = textareaDynHeight;
+                    _hasOverflowCache = _hasOverflowCache || { x: false, y: false };
+
+                    //set correct class name to the host element
+                    if (classNameChanged) {
+                        removeClass(_hostElement, _oldClassName + _strSpace + _classNameThemeNone);
+                        addClass(_hostElement, className !== undefined && className !== null && className.length > 0 ? className : _classNameThemeNone);
+                    }
+
+                    //set correct auto Update
+                    if (autoUpdateChanged) {
+                        if (autoUpdate === true || (autoUpdate === null && _autoUpdateRecommended)) {
+                            disconnectMutationObservers();
+                            autoUpdateLoop.add(_base);
+                        }
+                        else {
+                            autoUpdateLoop.remove(_base);
+                            connectMutationObservers();
+                        }
+                    }
+
+                    //activate or deactivate size auto capability
+                    if (sizeAutoCapableChanged) {
+                        if (sizeAutoCapable) {
+                            if (_contentGlueElement) {
+                                _contentGlueElement.show();
+                            }
+                            else {
+                                _contentGlueElement = FRAMEWORK(generateDiv(_classNameContentGlueElement));
+                                _paddingElement.before(_contentGlueElement);
+                            }
+                            if (_sizeAutoObserverAdded) {
+                                _sizeAutoObserverElement.show();
+                            }
+                            else {
+                                _sizeAutoObserverElement = FRAMEWORK(generateDiv(_classNameSizeAutoObserverElement));
+                                _sizeAutoObserverElementNative = _sizeAutoObserverElement[0];
+
+                                _contentGlueElement.before(_sizeAutoObserverElement);
+                                var oldSize = { w: -1, h: -1 };
+                                setupResizeObserver(_sizeAutoObserverElement, function () {
+                                    var newSize = {
+                                        w: _sizeAutoObserverElementNative[LEXICON.oW],
+                                        h: _sizeAutoObserverElementNative[LEXICON.oH]
+                                    };
+                                    if (checkCache(newSize, oldSize)) {
+                                        if (_initialized && (_heightAutoCache && newSize.h > 0) || (_widthAutoCache && newSize.w > 0)) {
+                                            update();
+                                        }
+                                        else if (_initialized && (!_heightAutoCache && newSize.h === 0) || (!_widthAutoCache && newSize.w === 0)) {
+                                            update();
+                                        }
+                                    }
+                                    oldSize = newSize;
+                                });
+                                _sizeAutoObserverAdded = true;
+                                //fix heightAuto detector bug if height is fixed but contentHeight is 0.
+                                //the probability this bug will ever happen is very very low, thats why its ok if we use calc which isn't supported in IE8.
+                                if (_cssCalc !== null)
+                                    _sizeAutoObserverElement.css(_strHeight, _cssCalc + '(100% + 1px)');
+                            }
+                        }
+                        else {
+                            if (_sizeAutoObserverAdded)
+                                _sizeAutoObserverElement.hide();
+                            if (_contentGlueElement)
+                                _contentGlueElement.hide();
+                        }
+                    }
+
+                    //if force, update all resizeObservers too
+                    if (force) {
+                        _sizeObserverElement.find('*').trigger(_strScroll);
+                        if (_sizeAutoObserverAdded)
+                            _sizeAutoObserverElement.find('*').trigger(_strScroll);
+                    }
+
+                    //display hidden:
+                    displayIsHidden = displayIsHidden === undefined ? _hostElement.is(':hidden') : displayIsHidden;
+
+                    //textarea AutoWrapping:
+                    var textareaAutoWrapping = _isTextarea ? _targetElement.attr('wrap') !== 'off' : false;
+                    var textareaAutoWrappingChanged = checkCacheAutoForce(textareaAutoWrapping, _textareaAutoWrappingCache);
+
+                    //detect direction:
+                    var cssDirection = _hostElement.css('direction');
+                    var cssDirectionChanged = checkCacheAutoForce(cssDirection, _cssDirectionCache);
+
+                    //detect box-sizing:
+                    var boxSizing = _hostElement.css('box-sizing');
+                    var boxSizingChanged = checkCacheAutoForce(boxSizing, _cssBoxSizingCache);
+
+                    //detect padding:
+                    var padding = getTopRightBottomLeftHost(_strPaddingMinus);
+
+                    //width + height auto detecting var:
+                    var sizeAutoObserverElementBCRect;
+                    //exception occurs in IE8 sometimes (unknown exception)
+                    try {
+                        sizeAutoObserverElementBCRect = _sizeAutoObserverAdded ? _sizeAutoObserverElementNative[LEXICON.bCR]() : null;
+                    } catch (ex) {
+                        return;
+                    }
+
+                    _isRTL = cssDirection === 'rtl';
+                    _isBorderBox = (boxSizing === 'border-box');
+                    var isRTLLeft = _isRTL ? _strLeft : _strRight;
+                    var isRTLRight = _isRTL ? _strRight : _strLeft;
+
+                    //detect width auto:
+                    var widthAutoResizeDetection = false;
+                    var widthAutoObserverDetection = (_sizeAutoObserverAdded && (_hostElement.css(_strFloat) !== 'none' /*|| _isTextarea */)) ? (MATH.round(sizeAutoObserverElementBCRect.right - sizeAutoObserverElementBCRect.left) === 0) && (!paddingAbsolute ? (_hostElementNative[LEXICON.cW] - _paddingX) > 0 : true) : false;
+                    if (sizeAutoCapable && !widthAutoObserverDetection) {
+                        var tmpCurrHostWidth = _hostElementNative[LEXICON.oW];
+                        var tmpCurrContentGlueWidth = _contentGlueElement.css(_strWidth);
+                        _contentGlueElement.css(_strWidth, _strAuto);
+
+                        var tmpNewHostWidth = _hostElementNative[LEXICON.oW];
+                        _contentGlueElement.css(_strWidth, tmpCurrContentGlueWidth);
+                        widthAutoResizeDetection = tmpCurrHostWidth !== tmpNewHostWidth;
+                        if (!widthAutoResizeDetection) {
+                            _contentGlueElement.css(_strWidth, tmpCurrHostWidth + 1);
+                            tmpNewHostWidth = _hostElementNative[LEXICON.oW];
+                            _contentGlueElement.css(_strWidth, tmpCurrContentGlueWidth);
+                            widthAutoResizeDetection = tmpCurrHostWidth !== tmpNewHostWidth;
+                        }
+                    }
+                    var widthAuto = (widthAutoObserverDetection || widthAutoResizeDetection) && sizeAutoCapable && !displayIsHidden;
+                    var widthAutoChanged = checkCacheAutoForce(widthAuto, _widthAutoCache);
+                    var wasWidthAuto = !widthAuto && _widthAutoCache;
+
+                    //detect height auto:
+                    var heightAuto = _sizeAutoObserverAdded && sizeAutoCapable && !displayIsHidden ? (MATH.round(sizeAutoObserverElementBCRect.bottom - sizeAutoObserverElementBCRect.top) === 0) /* && (!paddingAbsolute && (_msieVersion > 9 || !_msieVersion) ? true : true) */ : false;
+                    var heightAutoChanged = checkCacheAutoForce(heightAuto, _heightAutoCache);
+                    var wasHeightAuto = !heightAuto && _heightAutoCache;
+
+                    //detect border:
+                    //we need the border only if border box and auto size
+                    var updateBorderX = (widthAuto && _isBorderBox) || !_isBorderBox;
+                    var updateBorderY = (heightAuto && _isBorderBox) || !_isBorderBox;
+                    var border = getTopRightBottomLeftHost(_strBorderMinus, '-' + _strWidth, !updateBorderX, !updateBorderY)
+
+                    //detect margin:
+                    var margin = getTopRightBottomLeftHost(_strMarginMinus);
+
+                    //vars to apply correct css
+                    var contentElementCSS = {};
+                    var contentGlueElementCSS = {};
+
+                    //funcs
+                    var getHostSize = function () {
+                        //has to be clientSize because offsetSize respect borders
+                        return {
+                            w: _hostElementNative[LEXICON.cW],
+                            h: _hostElementNative[LEXICON.cH]
+                        };
+                    };
+                    var getViewportSize = function () {
+                        //viewport size is padding container because it never has padding, margin and a border
+                        //determine zoom rounding error -> sometimes scrollWidth/Height is smaller than clientWidth/Height
+                        //if this happens add the difference to the viewportSize to compensate the rounding error
+                        return {
+                            w: _paddingElementNative[LEXICON.oW] + MATH.max(0, _contentElementNative[LEXICON.cW] - _contentElementNative[LEXICON.sW]),
+                            h: _paddingElementNative[LEXICON.oH] + MATH.max(0, _contentElementNative[LEXICON.cH] - _contentElementNative[LEXICON.sH])
+                        };
+                    };
+
+                    //set info for padding
+                    var paddingAbsoluteX = _paddingX = padding.l + padding.r;
+                    var paddingAbsoluteY = _paddingY = padding.t + padding.b;
+                    paddingAbsoluteX *= paddingAbsolute ? 1 : 0;
+                    paddingAbsoluteY *= paddingAbsolute ? 1 : 0;
+                    padding.c = checkCacheAutoForce(padding, _cssPaddingCache);
+
+                    //set info for border
+                    _borderX = border.l + border.r;
+                    _borderY = border.t + border.b;
+                    border.c = checkCacheAutoForce(border, _cssBorderCache);
+
+                    //set info for margin
+                    _marginX = margin.l + margin.r;
+                    _marginY = margin.t + margin.b;
+                    margin.c = checkCacheAutoForce(margin, _cssMarginCache);
+
+                    //refresh cache
+                    _textareaAutoWrappingCache = textareaAutoWrapping;
+                    _cssDirectionCache = cssDirection;
+                    _cssBoxSizingCache = boxSizing;
+                    _widthAutoCache = widthAuto;
+                    _heightAutoCache = heightAuto;
+                    _cssPaddingCache = padding;
+                    _cssBorderCache = border;
+                    _cssMarginCache = margin;
+
+                    //IEFix direction changed
+                    if (cssDirectionChanged && _sizeAutoObserverAdded)
+                        _sizeAutoObserverElement.css(_strFloat, isRTLRight);
+
+                    //apply padding:
+                    if (padding.c || cssDirectionChanged || paddingAbsoluteChanged || widthAutoChanged || heightAutoChanged || boxSizingChanged || sizeAutoCapableChanged) {
+                        var paddingElementCSS = {};
+                        var textareaCSS = {};
+                        var paddingValues = [padding.t, padding.r, padding.b, padding.l];
+
+                        setTopRightBottomLeft(contentGlueElementCSS, _strMarginMinus, [-padding.t, -padding.r, -padding.b, -padding.l]);
+                        if (paddingAbsolute) {
+                            setTopRightBottomLeft(paddingElementCSS, _strEmpty, paddingValues);
+                            setTopRightBottomLeft(_isTextarea ? textareaCSS : contentElementCSS, _strPaddingMinus);
+                        }
+                        else {
+                            setTopRightBottomLeft(paddingElementCSS, _strEmpty);
+                            setTopRightBottomLeft(_isTextarea ? textareaCSS : contentElementCSS, _strPaddingMinus, paddingValues);
+                        }
+
+                        _paddingElement.css(paddingElementCSS);
+                        _targetElement.css(textareaCSS);
+                    }
+
+                    //viewport size is padding container because it never has padding, margin and a border.
+                    _viewportSize = getViewportSize();
+
+                    //update Textarea
+                    var textareaSize = _isTextarea ? textareaUpdate() : false;
+                    var textareaSizeChanged = _isTextarea && checkCacheAutoForce(textareaSize, _textareaSizeCache);
+                    var textareaDynOrigSize = _isTextarea && textareaSize ? {
+                        w: textareaDynWidth ? textareaSize._dynamicWidth : textareaSize._originalWidth,
+                        h: textareaDynHeight ? textareaSize._dynamicHeight : textareaSize._originalHeight
+                    } : {};
+                    _textareaSizeCache = textareaSize;
+
+                    //fix height auto / width auto in cooperation with current padding & boxSizing behavior:
+                    if (heightAuto && (heightAutoChanged || paddingAbsoluteChanged || boxSizingChanged || padding.c || border.c)) {
+                        contentElementCSS[_strHeight] = _strAuto;
+                    }
+                    else if (heightAutoChanged || paddingAbsoluteChanged) {
+                        contentElementCSS[_strHeight] = _strHundredPercent;
+                    }
+                    if (widthAuto && (widthAutoChanged || paddingAbsoluteChanged || boxSizingChanged || padding.c || border.c || cssDirectionChanged)) {
+                        contentElementCSS[_strWidth] = _strAuto;
+                        contentGlueElementCSS[_strMaxMinus + _strWidth] = _strHundredPercent; //IE Fix
+                    }
+                    else if (widthAutoChanged || paddingAbsoluteChanged) {
+                        contentElementCSS[_strWidth] = _strHundredPercent;
+                        contentElementCSS[_strFloat] = _strEmpty;
+                        contentGlueElementCSS[_strMaxMinus + _strWidth] = _strEmpty; //IE Fix
+                    }
+                    if (widthAuto) {
+                        //textareaDynOrigSize.w || _strAuto :: doesnt works because applied margin will shift width
+                        contentGlueElementCSS[_strWidth] = _strAuto;
+
+                        contentElementCSS[_strWidth] = VENDORS._cssPropertyValue(_strWidth, 'max-content intrinsic') || _strAuto;
+                        contentElementCSS[_strFloat] = isRTLRight;
+                    }
+                    else {
+                        contentGlueElementCSS[_strWidth] = _strEmpty;
+                    }
+                    if (heightAuto) {
+                        //textareaDynOrigSize.h || _contentElementNative[LEXICON.cH] :: use for anti scroll jumping
+                        contentGlueElementCSS[_strHeight] = textareaDynOrigSize.h || _contentElementNative[LEXICON.cH];
+                    }
+                    else {
+                        contentGlueElementCSS[_strHeight] = _strEmpty;
+                    }
+                    if (sizeAutoCapable)
+                        _contentGlueElement.css(contentGlueElementCSS);
+                    _contentElement.css(contentElementCSS);
+
+                    //CHECKPOINT HERE ~
+                    contentElementCSS = {};
+                    contentGlueElementCSS = {};
+
+                    //if [content(host) client / scroll size, or target element direction, or content(host) max-sizes] changed, or force is true
+                    if (hostSizeChanged || contentSizeChanged || textareaSizeChanged || cssDirectionChanged || boxSizingChanged || paddingAbsoluteChanged || widthAutoChanged || widthAuto || heightAutoChanged || heightAuto || ignoreOverlayScrollbarHidingChanged || overflowBehaviorChanged || clipAlwaysChanged || resizeChanged || scrollbarsVisibilityChanged || scrollbarsAutoHideChanged || scrollbarsDragScrollingChanged || scrollbarsClickScrollingChanged || textareaDynWidthChanged || textareaDynHeightChanged || textareaAutoWrappingChanged) {
+                        var strOverflow = 'overflow';
+                        var strOverflowX = strOverflow + '-x';
+                        var strOverflowY = strOverflow + '-y';
+                        var strHidden = 'hidden';
+                        var strVisible = 'visible';
+
+                        //Reset the viewport (very important for natively overlaid scrollbars and zoom change
+                        //don't change the overflow prop as it is very expensive and affects performance !A LOT!
+                        if (!_nativeScrollbarStyling) {
+                            var viewportElementResetCSS = {};
+                            var resetXTmp = _hasOverflowCache.y && _hideOverflowCache.ys && !ignoreOverlayScrollbarHiding ? (_nativeScrollbarIsOverlaid.y ? _viewportElement.css(isRTLLeft) : -_nativeScrollbarSize.y) : 0;
+                            var resetBottomTmp = _hasOverflowCache.x && _hideOverflowCache.xs && !ignoreOverlayScrollbarHiding ? (_nativeScrollbarIsOverlaid.x ? _viewportElement.css(_strBottom) : -_nativeScrollbarSize.x) : 0;
+                            setTopRightBottomLeft(viewportElementResetCSS, _strEmpty);
+                            _viewportElement.css(viewportElementResetCSS);
+                        }
+
+                        //measure several sizes:
+                        var contentMeasureElement = getContentMeasureElement();
+                        //in Firefox content element has to have overflow hidden, else element margins aren't calculated properly, this element prevents this bug, but only if scrollbars aren't overlaid
+                        var contentSize = {
+                            //use clientSize because natively overlaidScrollbars add borders
+                            w: textareaDynOrigSize.w || contentMeasureElement[LEXICON.cW],
+                            h: textareaDynOrigSize.h || contentMeasureElement[LEXICON.cH]
+                        };
+                        var scrollSize = {
+                            w: contentMeasureElement[LEXICON.sW],
+                            h: contentMeasureElement[LEXICON.sH]
+                        };
+
+                        //apply the correct viewport style and measure viewport size
+                        if (!_nativeScrollbarStyling) {
+                            viewportElementResetCSS[_strBottom] = wasHeightAuto ? _strEmpty : resetBottomTmp;
+                            viewportElementResetCSS[isRTLLeft] = wasWidthAuto ? _strEmpty : resetXTmp;
+                            _viewportElement.css(viewportElementResetCSS);
+                        }
+                        _viewportSize = getViewportSize();
+
+                        //measure and correct several sizes
+                        var hostSize = getHostSize();
+                        var hostAbsoluteRectSize = {
+                            w: hostSize.w - _marginX - _borderX - (_isBorderBox ? 0 : _paddingX),
+                            h: hostSize.h - _marginY - _borderY - (_isBorderBox ? 0 : _paddingY)
+                        };
+                        var contentGlueSize = {
+                            //client/scrollSize + AbsolutePadding -> because padding is only applied to the paddingElement if its absolute, so you have to add it manually
+                            //hostSize is clientSize -> so padding should be added manually, right? FALSE! Because content glue is inside hostElement, so we don't have to worry about padding
+                            w: MATH.max((widthAuto ? contentSize.w : scrollSize.w) + paddingAbsoluteX, hostAbsoluteRectSize.w),
+                            h: MATH.max((heightAuto ? contentSize.h : scrollSize.h) + paddingAbsoluteY, hostAbsoluteRectSize.h)
+                        };
+                        contentGlueSize.c = checkCacheAutoForce(contentGlueSize, _contentGlueSizeCache);
+                        _contentGlueSizeCache = contentGlueSize;
+
+                        //apply correct contentGlue size
+                        if (sizeAutoCapable) {
+                            //size contentGlue correctly to make sure the element has correct size if the sizing switches to auto
+                            if (contentGlueSize.c || (heightAuto || widthAuto)) {
+                                contentGlueElementCSS[_strWidth] = contentGlueSize.w;
+                                contentGlueElementCSS[_strHeight] = contentGlueSize.h;
+
+                                //textarea-sizes are already calculated correctly at this point
+                                if (!_isTextarea) {
+                                    contentSize = {
+                                        //use clientSize because natively overlaidScrollbars add borders
+                                        w: contentMeasureElement[LEXICON.cW],
+                                        h: contentMeasureElement[LEXICON.cH]
+                                    };
+                                }
+                            }
+                            var textareaCoverCSS = {};
+                            var setContentGlueElementCSSfunction = function (horizontal) {
+                                var scrollbarVars = getScrollbarVars(horizontal);
+                                var wh = scrollbarVars._w_h;
+                                var strWH = scrollbarVars._width_height;
+                                var autoSize = horizontal ? widthAuto : heightAuto;
+                                var borderSize = horizontal ? _borderX : _borderY;
+                                var paddingSize = horizontal ? _paddingX : _paddingY;
+                                var marginSize = horizontal ? _marginX : _marginY;
+                                var viewportSize = _viewportSize[wh] - borderSize - marginSize - (_isBorderBox ? 0 : paddingSize);
+
+                                //make contentGlue size -1 if element is not auto sized, to make sure that a resize event happens when the element shrinks
+                                if (!autoSize || (!autoSize && border.c))
+                                    contentGlueElementCSS[strWH] = hostAbsoluteRectSize[wh] - 1;
+
+                                //if size is auto and host is smaller than size as min size, make content glue size -1 to make sure size changes will be detected (this is only needed if padding is 0)
+                                if (autoSize && (contentSize[wh] < viewportSize) && (horizontal && _isTextarea ? !textareaAutoWrapping : true)) {
+                                    if (_isTextarea)
+                                        textareaCoverCSS[strWH] = parseToZeroOrNumber(_textareaCoverElement.css(strWH)) - 1;
+                                    contentGlueElementCSS[strWH] -= 1;
+                                }
+
+                                //make sure content glue size is at least 1
+                                if (contentSize[wh] > 0)
+                                    contentGlueElementCSS[strWH] = MATH.max(1, contentGlueElementCSS[strWH]);
+                            };
+                            setContentGlueElementCSSfunction(true);
+                            setContentGlueElementCSSfunction(false);
+
+                            if (_isTextarea)
+                                _textareaCoverElement.css(textareaCoverCSS);
+                            _contentGlueElement.css(contentGlueElementCSS);
+                        }
+                        if (widthAuto)
+                            contentElementCSS[_strWidth] = _strHundredPercent;
+                        if (widthAuto && !_isBorderBox && !_mutationObserversConnected)
+                            contentElementCSS[_strFloat] = 'none';
+
+                        //apply and reset content style
+                        _contentElement.css(contentElementCSS);
+                        contentElementCSS = {};
+
+                        //measure again, but this time all correct sizes:
+                        var contentScrollSize = {
+                            w: contentMeasureElement[LEXICON.sW],
+                            h: contentMeasureElement[LEXICON.sH],
+                        };
+                        contentScrollSize.c = contentSizeChanged = checkCacheAutoForce(contentScrollSize, _contentScrollSizeCache);
+                        _contentScrollSizeCache = contentScrollSize;
+
+                        //refresh viewport size after correct measuring
+                        _viewportSize = getViewportSize();
+
+                        hostSize = getHostSize();
+                        hostSizeChanged = checkCacheAutoForce(hostSize, _hostSizeCache);
+                        _hostSizeCache = hostSize;
+
+                        var hideOverflowForceTextarea = _isTextarea && (_viewportSize.w === 0 || _viewportSize.h === 0);
+                        var previousOverflowAmount = _overflowAmountCache;
+                        var overflowBehaviorIsVS = {};
+                        var overflowBehaviorIsVH = {};
+                        var overflowBehaviorIsS = {};
+                        var overflowAmount = {};
+                        var hasOverflow = {};
+                        var hideOverflow = {};
+                        var canScroll = {};
+                        var viewportRect = _paddingElementNative[LEXICON.bCR]();
+                        var setOverflowVariables = function (horizontal) {
+                            var scrollbarVars = getScrollbarVars(horizontal);
+                            var scrollbarVarsInverted = getScrollbarVars(!horizontal);
+                            var xyI = scrollbarVarsInverted._x_y;
+                            var xy = scrollbarVars._x_y;
+                            var wh = scrollbarVars._w_h;
+                            var widthHeight = scrollbarVars._width_height;
+                            var scrollMax = _strScroll + scrollbarVars._Left_Top + 'Max';
+                            var fractionalOverflowAmount = viewportRect[widthHeight] ? MATH.abs(viewportRect[widthHeight] - _viewportSize[wh]) : 0;
+                            var checkFractionalOverflowAmount = previousOverflowAmount && previousOverflowAmount[xy] > 0 && _viewportElementNative[scrollMax] === 0;
+                            overflowBehaviorIsVS[xy] = overflowBehavior[xy] === 'v-s';
+                            overflowBehaviorIsVH[xy] = overflowBehavior[xy] === 'v-h';
+                            overflowBehaviorIsS[xy] = overflowBehavior[xy] === 's';
+                            overflowAmount[xy] = MATH.max(0, MATH.round((contentScrollSize[wh] - _viewportSize[wh]) * 100) / 100);
+                            overflowAmount[xy] *= (hideOverflowForceTextarea || (checkFractionalOverflowAmount && fractionalOverflowAmount > 0 && fractionalOverflowAmount < 1)) ? 0 : 1;
+                            hasOverflow[xy] = overflowAmount[xy] > 0;
+
+                            //hideOverflow:
+                            //x || y : true === overflow is hidden by "overflow: scroll" OR "overflow: hidden"
+                            //xs || ys : true === overflow is hidden by "overflow: scroll"
+                            hideOverflow[xy] = overflowBehaviorIsVS[xy] || overflowBehaviorIsVH[xy] ? (hasOverflow[xyI] && !overflowBehaviorIsVS[xyI] && !overflowBehaviorIsVH[xyI]) : hasOverflow[xy];
+                            hideOverflow[xy + 's'] = hideOverflow[xy] ? (overflowBehaviorIsS[xy] || overflowBehaviorIsVS[xy]) : false;
+
+                            canScroll[xy] = hasOverflow[xy] && hideOverflow[xy + 's'];
+                        };
+                        setOverflowVariables(true);
+                        setOverflowVariables(false);
+
+                        overflowAmount.c = checkCacheAutoForce(overflowAmount, _overflowAmountCache);
+                        _overflowAmountCache = overflowAmount;
+                        hasOverflow.c = checkCacheAutoForce(hasOverflow, _hasOverflowCache);
+                        _hasOverflowCache = hasOverflow;
+                        hideOverflow.c = checkCacheAutoForce(hideOverflow, _hideOverflowCache);
+                        _hideOverflowCache = hideOverflow;
+
+                        //if native scrollbar is overlay at x OR y axis, prepare DOM
+                        if (_nativeScrollbarIsOverlaid.x || _nativeScrollbarIsOverlaid.y) {
+                            var borderDesign = 'px solid transparent';
+                            var contentArrangeElementCSS = {};
+                            var arrangeContent = {};
+                            var arrangeChanged = force;
+                            var setContentElementCSS;
+
+                            if (hasOverflow.x || hasOverflow.y) {
+                                arrangeContent.w = _nativeScrollbarIsOverlaid.y && hasOverflow.y ? contentScrollSize.w + _overlayScrollbarDummySize.y : _strEmpty;
+                                arrangeContent.h = _nativeScrollbarIsOverlaid.x && hasOverflow.x ? contentScrollSize.h + _overlayScrollbarDummySize.x : _strEmpty;
+                                arrangeChanged = checkCacheAutoForce(arrangeContent, _arrangeContentSizeCache);
+                                _arrangeContentSizeCache = arrangeContent;
+                            }
+
+                            if (hasOverflow.c || hideOverflow.c || contentScrollSize.c || cssDirectionChanged || widthAutoChanged || heightAutoChanged || widthAuto || heightAuto || ignoreOverlayScrollbarHidingChanged) {
+                                contentElementCSS[_strMarginMinus + isRTLRight] = contentElementCSS[_strBorderMinus + isRTLRight] = _strEmpty;
+                                setContentElementCSS = function (horizontal) {
+                                    var scrollbarVars = getScrollbarVars(horizontal);
+                                    var scrollbarVarsInverted = getScrollbarVars(!horizontal);
+                                    var xy = scrollbarVars._x_y;
+                                    var strDirection = horizontal ? _strBottom : isRTLLeft;
+                                    var invertedAutoSize = horizontal ? heightAuto : widthAuto;
+
+                                    if (_nativeScrollbarIsOverlaid[xy] && hasOverflow[xy] && hideOverflow[xy + 's']) {
+                                        contentElementCSS[_strMarginMinus + strDirection] = invertedAutoSize ? (ignoreOverlayScrollbarHiding ? _strEmpty : _overlayScrollbarDummySize[xy]) : _strEmpty;
+                                        contentElementCSS[_strBorderMinus + strDirection] = ((horizontal ? !invertedAutoSize : true) && !ignoreOverlayScrollbarHiding) ? (_overlayScrollbarDummySize[xy] + borderDesign) : _strEmpty;
+                                    }
+                                    else {
+                                        arrangeContent[scrollbarVarsInverted._w_h] =
+                                            contentElementCSS[_strMarginMinus + strDirection] =
+                                            contentElementCSS[_strBorderMinus + strDirection] = _strEmpty;
+                                        arrangeChanged = true;
+                                    }
+                                };
+
+                                if (_nativeScrollbarStyling) {
+                                    addRemoveClass(_viewportElement, _classNameViewportNativeScrollbarsInvisible, !ignoreOverlayScrollbarHiding)
+                                }
+                                else {
+                                    setContentElementCSS(true);
+                                    setContentElementCSS(false);
+                                }
+                            }
+                            if (ignoreOverlayScrollbarHiding) {
+                                arrangeContent.w = arrangeContent.h = _strEmpty;
+                                arrangeChanged = true;
+                            }
+                            if (arrangeChanged && !_nativeScrollbarStyling) {
+                                contentArrangeElementCSS[_strWidth] = hideOverflow.y ? arrangeContent.w : _strEmpty;
+                                contentArrangeElementCSS[_strHeight] = hideOverflow.x ? arrangeContent.h : _strEmpty;
+
+                                if (!_contentArrangeElement) {
+                                    _contentArrangeElement = FRAMEWORK(generateDiv(_classNameContentArrangeElement));
+                                    _viewportElement.prepend(_contentArrangeElement);
+                                }
+                                _contentArrangeElement.css(contentArrangeElementCSS);
+                            }
+                            _contentElement.css(contentElementCSS);
+                        }
+
+                        var viewportElementCSS = {};
+                        var paddingElementCSS = {};
+                        var setViewportCSS;
+                        if (hostSizeChanged || hasOverflow.c || hideOverflow.c || contentScrollSize.c || overflowBehaviorChanged || boxSizingChanged || ignoreOverlayScrollbarHidingChanged || cssDirectionChanged || clipAlwaysChanged || heightAutoChanged) {
+                            viewportElementCSS[isRTLRight] = _strEmpty;
+                            setViewportCSS = function (horizontal) {
+                                var scrollbarVars = getScrollbarVars(horizontal);
+                                var scrollbarVarsInverted = getScrollbarVars(!horizontal);
+                                var xy = scrollbarVars._x_y;
+                                var XY = scrollbarVars._X_Y;
+                                var strDirection = horizontal ? _strBottom : isRTLLeft;
+
+                                var reset = function () {
+                                    viewportElementCSS[strDirection] = _strEmpty;
+                                    _contentBorderSize[scrollbarVarsInverted._w_h] = 0;
+                                };
+                                if (hasOverflow[xy] && hideOverflow[xy + 's']) {
+                                    viewportElementCSS[strOverflow + XY] = _strScroll;
+                                    if (ignoreOverlayScrollbarHiding || _nativeScrollbarStyling) {
+                                        reset();
+                                    }
+                                    else {
+                                        viewportElementCSS[strDirection] = -(_nativeScrollbarIsOverlaid[xy] ? _overlayScrollbarDummySize[xy] : _nativeScrollbarSize[xy]);
+                                        _contentBorderSize[scrollbarVarsInverted._w_h] = _nativeScrollbarIsOverlaid[xy] ? _overlayScrollbarDummySize[scrollbarVarsInverted._x_y] : 0;
+                                    }
+                                } else {
+                                    viewportElementCSS[strOverflow + XY] = _strEmpty;
+                                    reset();
+                                }
+                            };
+                            setViewportCSS(true);
+                            setViewportCSS(false);
+
+                            // if the scroll container is too small and if there is any overflow with no overlay scrollbar (and scrollbar styling isn't possible), 
+                            // make viewport element greater in size (Firefox hide Scrollbars fix)
+                            // because firefox starts hiding scrollbars on too small elements
+                            // with this behavior the overflow calculation may be incorrect or the scrollbars would appear suddenly
+                            // https://bugzilla.mozilla.org/show_bug.cgi?id=292284
+                            if (!_nativeScrollbarStyling
+                                && (_viewportSize.h < _nativeScrollbarMinSize.x || _viewportSize.w < _nativeScrollbarMinSize.y)
+                                && ((hasOverflow.x && hideOverflow.x && !_nativeScrollbarIsOverlaid.x) || (hasOverflow.y && hideOverflow.y && !_nativeScrollbarIsOverlaid.y))) {
+                                viewportElementCSS[_strPaddingMinus + _strTop] = _nativeScrollbarMinSize.x;
+                                viewportElementCSS[_strMarginMinus + _strTop] = -_nativeScrollbarMinSize.x;
+
+                                viewportElementCSS[_strPaddingMinus + isRTLRight] = _nativeScrollbarMinSize.y;
+                                viewportElementCSS[_strMarginMinus + isRTLRight] = -_nativeScrollbarMinSize.y;
+                            }
+                            else {
+                                viewportElementCSS[_strPaddingMinus + _strTop] =
+                                    viewportElementCSS[_strMarginMinus + _strTop] =
+                                    viewportElementCSS[_strPaddingMinus + isRTLRight] =
+                                    viewportElementCSS[_strMarginMinus + isRTLRight] = _strEmpty;
+                            }
+                            viewportElementCSS[_strPaddingMinus + isRTLLeft] =
+                                viewportElementCSS[_strMarginMinus + isRTLLeft] = _strEmpty;
+
+                            //if there is any overflow (x OR y axis) and this overflow shall be hidden, make overflow hidden, else overflow visible
+                            if ((hasOverflow.x && hideOverflow.x) || (hasOverflow.y && hideOverflow.y) || hideOverflowForceTextarea) {
+                                //only hide if is Textarea
+                                if (_isTextarea && hideOverflowForceTextarea) {
+                                    paddingElementCSS[strOverflowX] =
+                                        paddingElementCSS[strOverflowY] = strHidden;
+                                }
+                            }
+                            else {
+                                if (!clipAlways || (overflowBehaviorIsVH.x || overflowBehaviorIsVS.x || overflowBehaviorIsVH.y || overflowBehaviorIsVS.y)) {
+                                    //only un-hide if Textarea
+                                    if (_isTextarea) {
+                                        paddingElementCSS[strOverflowX] =
+                                            paddingElementCSS[strOverflowY] = _strEmpty;
+                                    }
+                                    viewportElementCSS[strOverflowX] =
+                                        viewportElementCSS[strOverflowY] = strVisible;
+                                }
+                            }
+
+                            _paddingElement.css(paddingElementCSS);
+                            _viewportElement.css(viewportElementCSS);
+                            viewportElementCSS = {};
+
+                            //force soft redraw in webkit because without the scrollbars will may appear because DOM wont be redrawn under special conditions
+                            if ((hasOverflow.c || boxSizingChanged || widthAutoChanged || heightAutoChanged) && !(_nativeScrollbarIsOverlaid.x && _nativeScrollbarIsOverlaid.y)) {
+                                var elementStyle = _contentElementNative[LEXICON.s];
+                                var dump;
+                                elementStyle.webkitTransform = 'scale(1)';
+                                elementStyle.display = 'run-in';
+                                dump = _contentElementNative[LEXICON.oH];
+                                elementStyle.display = _strEmpty; //|| dump; //use dump to prevent it from deletion if minify
+                                elementStyle.webkitTransform = _strEmpty;
+                            }
+                            /*
+                            //force hard redraw in webkit if native overlaid scrollbars shall appear
+                            if (ignoreOverlayScrollbarHidingChanged && ignoreOverlayScrollbarHiding) {
+                                _hostElement.hide();
+                                var dump = _hostElementNative[LEXICON.oH];
+                                _hostElement.show();
+                            }
+                            */
+                        }
+
+                        //change to direction RTL and width auto Bugfix in Webkit
+                        //without this fix, the DOM still thinks the scrollbar is LTR and thus the content is shifted to the left
+                        contentElementCSS = {};
+                        if (cssDirectionChanged || widthAutoChanged || heightAutoChanged) {
+                            if (_isRTL && widthAuto) {
+                                var floatTmp = _contentElement.css(_strFloat);
+                                var posLeftWithoutFloat = MATH.round(_contentElement.css(_strFloat, _strEmpty).css(_strLeft, _strEmpty).position().left);
+                                _contentElement.css(_strFloat, floatTmp);
+                                var posLeftWithFloat = MATH.round(_contentElement.position().left);
+
+                                if (posLeftWithoutFloat !== posLeftWithFloat)
+                                    contentElementCSS[_strLeft] = posLeftWithoutFloat;
+                            }
+                            else {
+                                contentElementCSS[_strLeft] = _strEmpty;
+                            }
+                        }
+                        _contentElement.css(contentElementCSS);
+
+                        //handle scroll position
+                        if (_isTextarea && contentSizeChanged) {
+                            var textareaInfo = getTextareaInfo();
+                            if (textareaInfo) {
+                                var textareaRowsChanged = _textareaInfoCache === undefined ? true : textareaInfo._rows !== _textareaInfoCache._rows;
+                                var cursorRow = textareaInfo._cursorRow;
+                                var cursorCol = textareaInfo._cursorColumn;
+                                var widestRow = textareaInfo._widestRow;
+                                var lastRow = textareaInfo._rows;
+                                var lastCol = textareaInfo._columns;
+                                var cursorPos = textareaInfo._cursorPosition;
+                                var cursorMax = textareaInfo._cursorMax;
+                                var cursorIsLastPosition = (cursorPos >= cursorMax && _textareaHasFocus);
+                                var textareaScrollAmount = {
+                                    x: (!textareaAutoWrapping && (cursorCol === lastCol && cursorRow === widestRow)) ? _overflowAmountCache.x : -1,
+                                    y: (textareaAutoWrapping ? cursorIsLastPosition || textareaRowsChanged && (previousOverflowAmount ? (currScroll.y === previousOverflowAmount.y) : false) : (cursorIsLastPosition || textareaRowsChanged) && cursorRow === lastRow) ? _overflowAmountCache.y : -1
+                                };
+                                currScroll.x = textareaScrollAmount.x > -1 ? (_isRTL && _normalizeRTLCache && _rtlScrollBehavior.i ? 0 : textareaScrollAmount.x) : currScroll.x; //if inverted, scroll to 0 -> normalized this means to max scroll offset.
+                                currScroll.y = textareaScrollAmount.y > -1 ? textareaScrollAmount.y : currScroll.y;
+                            }
+                            _textareaInfoCache = textareaInfo;
+                        }
+                        if (_isRTL && _rtlScrollBehavior.i && _nativeScrollbarIsOverlaid.y && hasOverflow.x && _normalizeRTLCache)
+                            currScroll.x += _contentBorderSize.w || 0;
+                        if (widthAuto)
+                            _hostElement[_strScrollLeft](0);
+                        if (heightAuto)
+                            _hostElement[_strScrollTop](0);
+                        _viewportElement[_strScrollLeft](currScroll.x)[_strScrollTop](currScroll.y);
+
+                        //scrollbars management:
+                        var scrollbarsVisibilityVisible = scrollbarsVisibility === 'v';
+                        var scrollbarsVisibilityHidden = scrollbarsVisibility === 'h';
+                        var scrollbarsVisibilityAuto = scrollbarsVisibility === 'a';
+                        var refreshScrollbarsVisibility = function (showX, showY) {
+                            showY = showY === undefined ? showX : showY;
+                            refreshScrollbarAppearance(true, showX, canScroll.x)
+                            refreshScrollbarAppearance(false, showY, canScroll.y)
+                        };
+
+                        //manage class name which indicates scrollable overflow
+                        addRemoveClass(_hostElement, _classNameHostOverflow, hideOverflow.x || hideOverflow.y);
+                        addRemoveClass(_hostElement, _classNameHostOverflowX, hideOverflow.x);
+                        addRemoveClass(_hostElement, _classNameHostOverflowY, hideOverflow.y);
+
+                        //add or remove rtl class name for styling purposes except when its body, then the scrollbar stays
+                        if (cssDirectionChanged && !_isBody) {
+                            addRemoveClass(_hostElement, _classNameHostRTL, _isRTL);
+                        }
+
+                        //manage the resize feature (CSS3 resize "polyfill" for this plugin)
+                        if (_isBody)
+                            addClass(_hostElement, _classNameHostResizeDisabled);
+                        if (resizeChanged) {
+                            addRemoveClass(_hostElement, _classNameHostResizeDisabled, _resizeNone);
+                            addRemoveClass(_scrollbarCornerElement, _classNameScrollbarCornerResize, !_resizeNone);
+                            addRemoveClass(_scrollbarCornerElement, _classNameScrollbarCornerResizeB, _resizeBoth);
+                            addRemoveClass(_scrollbarCornerElement, _classNameScrollbarCornerResizeH, _resizeHorizontal);
+                            addRemoveClass(_scrollbarCornerElement, _classNameScrollbarCornerResizeV, _resizeVertical);
+                        }
+
+                        //manage the scrollbars general visibility + the scrollbar interactivity (unusable class name)
+                        if (scrollbarsVisibilityChanged || overflowBehaviorChanged || hideOverflow.c || hasOverflow.c || ignoreOverlayScrollbarHidingChanged) {
+                            if (ignoreOverlayScrollbarHiding) {
+                                if (ignoreOverlayScrollbarHidingChanged) {
+                                    removeClass(_hostElement, _classNameHostScrolling);
+                                    if (ignoreOverlayScrollbarHiding) {
+                                        refreshScrollbarsVisibility(false);
+                                    }
+                                }
+                            }
+                            else if (scrollbarsVisibilityAuto) {
+                                refreshScrollbarsVisibility(canScroll.x, canScroll.y);
+                            }
+                            else if (scrollbarsVisibilityVisible) {
+                                refreshScrollbarsVisibility(true);
+                            }
+                            else if (scrollbarsVisibilityHidden) {
+                                refreshScrollbarsVisibility(false);
+                            }
+                        }
+
+                        //manage the scrollbars auto hide feature (auto hide them after specific actions)
+                        if (scrollbarsAutoHideChanged || ignoreOverlayScrollbarHidingChanged) {
+                            setupHostMouseTouchEvents(!_scrollbarsAutoHideLeave && !_scrollbarsAutoHideMove);
+                            refreshScrollbarsAutoHide(_scrollbarsAutoHideNever, !_scrollbarsAutoHideNever);
+                        }
+
+                        //manage scrollbars handle length & offset - don't remove!
+                        if (hostSizeChanged || overflowAmount.c || heightAutoChanged || widthAutoChanged || resizeChanged || boxSizingChanged || paddingAbsoluteChanged || ignoreOverlayScrollbarHidingChanged || cssDirectionChanged) {
+                            refreshScrollbarHandleLength(true);
+                            refreshScrollbarHandleOffset(true);
+                            refreshScrollbarHandleLength(false);
+                            refreshScrollbarHandleOffset(false);
+                        }
+
+                        //manage interactivity
+                        if (scrollbarsClickScrollingChanged)
+                            refreshScrollbarsInteractive(true, scrollbarsClickScrolling);
+                        if (scrollbarsDragScrollingChanged)
+                            refreshScrollbarsInteractive(false, scrollbarsDragScrolling);
+
+                        //callbacks:
+                        dispatchCallback('onDirectionChanged', {
+                            isRTL: _isRTL,
+                            dir: cssDirection
+                        }, cssDirectionChanged);
+                        dispatchCallback('onHostSizeChanged', {
+                            width: _hostSizeCache.w,
+                            height: _hostSizeCache.h
+                        }, hostSizeChanged);
+                        dispatchCallback('onContentSizeChanged', {
+                            width: _contentScrollSizeCache.w,
+                            height: _contentScrollSizeCache.h
+                        }, contentSizeChanged);
+                        dispatchCallback('onOverflowChanged', {
+                            x: hasOverflow.x,
+                            y: hasOverflow.y,
+                            xScrollable: hideOverflow.xs,
+                            yScrollable: hideOverflow.ys,
+                            clipped: hideOverflow.x || hideOverflow.y
+                        }, hasOverflow.c || hideOverflow.c);
+                        dispatchCallback('onOverflowAmountChanged', {
+                            x: overflowAmount.x,
+                            y: overflowAmount.y
+                        }, overflowAmount.c);
+                    }
+
+                    //fix body min size
+                    if (_isBody && _bodyMinSizeCache && (_hasOverflowCache.c || _bodyMinSizeCache.c)) {
+                        //its possible that no min size was measured until now, because the content arrange element was just added now, in this case, measure now the min size.
+                        if (!_bodyMinSizeCache.f)
+                            bodyMinSizeChanged();
+                        if (_nativeScrollbarIsOverlaid.y && _hasOverflowCache.x)
+                            _contentElement.css(_strMinMinus + _strWidth, _bodyMinSizeCache.w + _overlayScrollbarDummySize.y);
+                        if (_nativeScrollbarIsOverlaid.x && _hasOverflowCache.y)
+                            _contentElement.css(_strMinMinus + _strHeight, _bodyMinSizeCache.h + _overlayScrollbarDummySize.x);
+                        _bodyMinSizeCache.c = false;
+                    }
+
+                    if (_initialized && changedOptions.updateOnLoad) {
+                        updateElementsOnLoad();
+                    }
+
+                    //freezeResizeObserver(_sizeObserverElement, false);
+                    //freezeResizeObserver(_sizeAutoObserverElement, false);
+
+                    dispatchCallback('onUpdated', { forced: force });
+                }
+
+                /**
+                 * Updates the found elements of which the load event shall be handled.
+                 */
+                function updateElementsOnLoad() {
+                    if (!_isTextarea) {
+                        eachUpdateOnLoad(function (i, updateOnLoadSelector) {
+                            _contentElement.find(updateOnLoadSelector).each(function (i, el) {
+                                // if element doesn't have a updateOnLoadCallback applied
+                                if (COMPATIBILITY.inA(el, _updateOnLoadElms) < 0) {
+                                    _updateOnLoadElms.push(el);
+                                    FRAMEWORK(el)
+                                        .off(_updateOnLoadEventName, updateOnLoadCallback)
+                                        .on(_updateOnLoadEventName, updateOnLoadCallback);
+                                }
+                            });
+                        });
+                    }
+                }
+
+                //==== Options ====//
+
+                /**
+                 * Sets new options but doesn't call the update method.
+                 * @param newOptions The object which contains the new options.
+                 * @returns {*} A object which contains the changed options.
+                 */
+                function setOptions(newOptions) {
+                    var validatedOpts = _pluginsOptions._validate(newOptions, _pluginsOptions._template, true, _currentOptions)
+
+                    _currentOptions = extendDeep({}, _currentOptions, validatedOpts._default);
+                    _currentPreparedOptions = extendDeep({}, _currentPreparedOptions, validatedOpts._prepared);
+
+                    return validatedOpts._prepared;
+                }
+
+
+                //==== Structure ====//
+
+                /**
+                 * Builds or destroys the wrapper and helper DOM elements.
+                 * @param destroy Indicates whether the DOM shall be build or destroyed.
+                 */
+                /**
+                 * Builds or destroys the wrapper and helper DOM elements.
+                 * @param destroy Indicates whether the DOM shall be build or destroyed.
+                 */
+                function setupStructureDOM(destroy) {
+                    var strParent = 'parent';
+                    var classNameResizeObserverHost = 'os-resize-observer-host';
+                    var classNameTextareaElementFull = _classNameTextareaElement + _strSpace + _classNameTextInherit;
+                    var textareaClass = _isTextarea ? _strSpace + _classNameTextInherit : _strEmpty;
+                    var adoptAttrs = _currentPreparedOptions.textarea.inheritedAttrs;
+                    var adoptAttrsMap = {};
+                    var applyAdoptedAttrs = function () {
+                        var applyAdoptedAttrsElm = destroy ? _targetElement : _hostElement;
+                        each(adoptAttrsMap, function (key, value) {
+                            if (type(value) == TYPES.s) {
+                                if (key == LEXICON.c)
+                                    applyAdoptedAttrsElm.addClass(value);
+                                else
+                                    applyAdoptedAttrsElm.attr(key, value);
+                            }
+                        });
+                    };
+                    var hostElementClassNames = [
+                        _classNameHostElement,
+                        _classNameHostElementForeign,
+                        _classNameHostTextareaElement,
+                        _classNameHostResizeDisabled,
+                        _classNameHostRTL,
+                        _classNameHostScrollbarHorizontalHidden,
+                        _classNameHostScrollbarVerticalHidden,
+                        _classNameHostTransition,
+                        _classNameHostScrolling,
+                        _classNameHostOverflow,
+                        _classNameHostOverflowX,
+                        _classNameHostOverflowY,
+                        _classNameThemeNone,
+                        _classNameTextareaElement,
+                        _classNameTextInherit,
+                        _classNameCache].join(_strSpace);
+                    var hostElementCSS = {};
+
+                    //get host element as first element, because that's the most upper element and required for the other elements
+                    _hostElement = _hostElement || (_isTextarea ? (_domExists ? _targetElement[strParent]()[strParent]()[strParent]()[strParent]() : FRAMEWORK(generateDiv(_classNameHostTextareaElement))) : _targetElement);
+                    _contentElement = _contentElement || selectOrGenerateDivByClass(_classNameContentElement + textareaClass);
+                    _viewportElement = _viewportElement || selectOrGenerateDivByClass(_classNameViewportElement + textareaClass);
+                    _paddingElement = _paddingElement || selectOrGenerateDivByClass(_classNamePaddingElement + textareaClass);
+                    _sizeObserverElement = _sizeObserverElement || selectOrGenerateDivByClass(classNameResizeObserverHost);
+                    _textareaCoverElement = _textareaCoverElement || (_isTextarea ? selectOrGenerateDivByClass(_classNameTextareaCoverElement) : undefined);
+
+                    //add this class to workaround class changing issues with UI frameworks especially Vue
+                    if (_domExists)
+                        addClass(_hostElement, _classNameHostElementForeign);
+
+                    //on destroy, remove all generated class names from the host element before collecting the adopted attributes 
+                    //to prevent adopting generated class names
+                    if (destroy)
+                        removeClass(_hostElement, hostElementClassNames);
+
+                    //collect all adopted attributes
+                    adoptAttrs = type(adoptAttrs) == TYPES.s ? adoptAttrs.split(_strSpace) : adoptAttrs;
+                    if (COMPATIBILITY.isA(adoptAttrs) && _isTextarea) {
+                        each(adoptAttrs, function (i, v) {
+                            if (type(v) == TYPES.s) {
+                                adoptAttrsMap[v] = destroy ? _hostElement.attr(v) : _targetElement.attr(v);
+                            }
+                        });
+                    }
+
+                    if (!destroy) {
+                        if (_isTextarea) {
+                            if (!_currentPreparedOptions.sizeAutoCapable) {
+                                hostElementCSS[_strWidth] = _targetElement.css(_strWidth);
+                                hostElementCSS[_strHeight] = _targetElement.css(_strHeight);
+                            }
+
+                            if (!_domExists)
+                                _targetElement.addClass(_classNameTextInherit).wrap(_hostElement);
+
+                            //jQuery clones elements in wrap functions, so we have to select them again
+                            _hostElement = _targetElement[strParent]().css(hostElementCSS);
+                        }
+
+                        if (!_domExists) {
+                            //add the correct class to the target element
+                            addClass(_targetElement, _isTextarea ? classNameTextareaElementFull : _classNameHostElement);
+
+                            //wrap the content into the generated elements to create the required DOM
+                            _hostElement.wrapInner(_contentElement)
+                                .wrapInner(_viewportElement)
+                                .wrapInner(_paddingElement)
+                                .prepend(_sizeObserverElement);
+
+                            //jQuery clones elements in wrap functions, so we have to select them again
+                            _contentElement = findFirst(_hostElement, _strDot + _classNameContentElement);
+                            _viewportElement = findFirst(_hostElement, _strDot + _classNameViewportElement);
+                            _paddingElement = findFirst(_hostElement, _strDot + _classNamePaddingElement);
+
+                            if (_isTextarea) {
+                                _contentElement.prepend(_textareaCoverElement);
+                                applyAdoptedAttrs();
+                            }
+                        }
+
+                        if (_nativeScrollbarStyling)
+                            addClass(_viewportElement, _classNameViewportNativeScrollbarsInvisible);
+                        if (_nativeScrollbarIsOverlaid.x && _nativeScrollbarIsOverlaid.y)
+                            addClass(_viewportElement, _classNameViewportNativeScrollbarsOverlaid);
+                        if (_isBody)
+                            addClass(_htmlElement, _classNameHTMLElement);
+
+                        _sizeObserverElementNative = _sizeObserverElement[0];
+                        _hostElementNative = _hostElement[0];
+                        _paddingElementNative = _paddingElement[0];
+                        _viewportElementNative = _viewportElement[0];
+                        _contentElementNative = _contentElement[0];
+
+                        updateViewportAttrsFromTarget();
+                    }
+                    else {
+                        if (_domExists && _initialized) {
+                            //clear size observer
+                            _sizeObserverElement.children().remove();
+
+                            //remove the style property and classes from already generated elements
+                            each([_paddingElement, _viewportElement, _contentElement, _textareaCoverElement], function (i, elm) {
+                                if (elm) {
+                                    removeClass(elm.removeAttr(LEXICON.s), _classNamesDynamicDestroy);
+                                }
+                            });
+
+                            //add classes to the host element which was removed previously to match the expected DOM
+                            addClass(_hostElement, _isTextarea ? _classNameHostTextareaElement : _classNameHostElement);
+                        }
+                        else {
+                            //remove size observer
+                            remove(_sizeObserverElement);
+
+                            //unwrap the content to restore DOM
+                            _contentElement.contents()
+                                .unwrap()
+                                .unwrap()
+                                .unwrap();
+
+                            if (_isTextarea) {
+                                _targetElement.unwrap();
+                                remove(_hostElement);
+                                remove(_textareaCoverElement);
+                                applyAdoptedAttrs();
+                            }
+                        }
+
+                        if (_isTextarea)
+                            _targetElement.removeAttr(LEXICON.s);
+
+                        if (_isBody)
+                            removeClass(_htmlElement, _classNameHTMLElement);
+                    }
+                }
+
+                /**
+                 * Adds or removes all wrapper elements interactivity events.
+                 * @param destroy Indicates whether the Events shall be added or removed.
+                 */
+                function setupStructureEvents() {
+                    var textareaKeyDownRestrictedKeyCodes = [
+                        112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 123,    //F1 to F12
+                        33, 34,                                                   //page up, page down
+                        37, 38, 39, 40,                                           //left, up, right, down arrows
+                        16, 17, 18, 19, 20, 144                                   //Shift, Ctrl, Alt, Pause, CapsLock, NumLock
+                    ];
+                    var textareaKeyDownKeyCodesList = [];
+                    var textareaUpdateIntervalID;
+                    var scrollStopTimeoutId;
+                    var scrollStopDelay = 175;
+                    var strFocus = 'focus';
+
+                    function updateTextarea(doClearInterval) {
+                        textareaUpdate();
+                        _base.update(_strAuto);
+                        if (doClearInterval && _autoUpdateRecommended)
+                            clearInterval(textareaUpdateIntervalID);
+                    }
+                    function textareaOnScroll(event) {
+                        _targetElement[_strScrollLeft](_rtlScrollBehavior.i && _normalizeRTLCache ? 9999999 : 0);
+                        _targetElement[_strScrollTop](0);
+                        COMPATIBILITY.prvD(event);
+                        COMPATIBILITY.stpP(event);
+                        return false;
+                    }
+                    function textareaOnDrop(event) {
+                        setTimeout(function () {
+                            if (!_destroyed)
+                                updateTextarea();
+                        }, 50);
+                    }
+                    function textareaOnFocus() {
+                        _textareaHasFocus = true;
+                        addClass(_hostElement, strFocus);
+                    }
+                    function textareaOnFocusout() {
+                        _textareaHasFocus = false;
+                        textareaKeyDownKeyCodesList = [];
+                        removeClass(_hostElement, strFocus);
+                        updateTextarea(true);
+                    }
+                    function textareaOnKeyDown(event) {
+                        var keyCode = event.keyCode;
+
+                        if (inArray(keyCode, textareaKeyDownRestrictedKeyCodes) < 0) {
+                            if (!textareaKeyDownKeyCodesList[LEXICON.l]) {
+                                updateTextarea();
+                                textareaUpdateIntervalID = setInterval(updateTextarea, 1000 / 60);
+                            }
+                            if (inArray(keyCode, textareaKeyDownKeyCodesList) < 0)
+                                textareaKeyDownKeyCodesList.push(keyCode);
+                        }
+                    }
+                    function textareaOnKeyUp(event) {
+                        var keyCode = event.keyCode;
+                        var index = inArray(keyCode, textareaKeyDownKeyCodesList);
+
+                        if (inArray(keyCode, textareaKeyDownRestrictedKeyCodes) < 0) {
+                            if (index > -1)
+                                textareaKeyDownKeyCodesList.splice(index, 1);
+                            if (!textareaKeyDownKeyCodesList[LEXICON.l])
+                                updateTextarea(true);
+                        }
+                    }
+                    function contentOnTransitionEnd(event) {
+                        if (_autoUpdateCache === true)
+                            return;
+                        event = event.originalEvent || event;
+                        if (isSizeAffectingCSSProperty(event.propertyName))
+                            _base.update(_strAuto);
+                    }
+                    function viewportOnScroll(event) {
+                        if (!_sleeping) {
+                            if (scrollStopTimeoutId !== undefined)
+                                clearTimeout(scrollStopTimeoutId);
+                            else {
+                                if (_scrollbarsAutoHideScroll || _scrollbarsAutoHideMove)
+                                    refreshScrollbarsAutoHide(true);
+
+                                if (!nativeOverlayScrollbarsAreActive())
+                                    addClass(_hostElement, _classNameHostScrolling);
+
+                                dispatchCallback('onScrollStart', event);
+                            }
+
+                            //if a scrollbars handle gets dragged, the mousemove event is responsible for refreshing the handle offset
+                            //because if CSS scroll-snap is used, the handle offset gets only refreshed on every snap point
+                            //this looks laggy & clunky, it looks much better if the offset refreshes with the mousemove
+                            if (!_scrollbarsHandlesDefineScrollPos) {
+                                refreshScrollbarHandleOffset(true);
+                                refreshScrollbarHandleOffset(false);
+                            }
+                            dispatchCallback('onScroll', event);
+
+                            scrollStopTimeoutId = setTimeout(function () {
+                                if (!_destroyed) {
+                                    //OnScrollStop:
+                                    clearTimeout(scrollStopTimeoutId);
+                                    scrollStopTimeoutId = undefined;
+
+                                    if (_scrollbarsAutoHideScroll || _scrollbarsAutoHideMove)
+                                        refreshScrollbarsAutoHide(false);
+
+                                    if (!nativeOverlayScrollbarsAreActive())
+                                        removeClass(_hostElement, _classNameHostScrolling);
+
+                                    dispatchCallback('onScrollStop', event);
+                                }
+                            }, scrollStopDelay);
+                        }
+                    }
+
+
+                    if (_isTextarea) {
+                        if (_msieVersion > 9 || !_autoUpdateRecommended) {
+                            addDestroyEventListener(_targetElement, 'input', updateTextarea);
+                        }
+                        else {
+                            addDestroyEventListener(_targetElement,
+                                [_strKeyDownEvent, _strKeyUpEvent],
+                                [textareaOnKeyDown, textareaOnKeyUp]);
+                        }
+
+                        addDestroyEventListener(_targetElement,
+                            [_strScroll, 'drop', strFocus, strFocus + 'out'],
+                            [textareaOnScroll, textareaOnDrop, textareaOnFocus, textareaOnFocusout]);
+                    }
+                    else {
+                        addDestroyEventListener(_contentElement, _strTransitionEndEvent, contentOnTransitionEnd);
+                    }
+                    addDestroyEventListener(_viewportElement, _strScroll, viewportOnScroll, true);
+                }
+
+
+                //==== Scrollbars ====//
+
+                /**
+                 * Builds or destroys all scrollbar DOM elements (scrollbar, track, handle)
+                 * @param destroy Indicates whether the DOM shall be build or destroyed.
+                 */
+                function setupScrollbarsDOM(destroy) {
+                    var selectOrGenerateScrollbarDOM = function (isHorizontal) {
+                        var scrollbarClassName = isHorizontal ? _classNameScrollbarHorizontal : _classNameScrollbarVertical;
+                        var scrollbar = selectOrGenerateDivByClass(_classNameScrollbar + _strSpace + scrollbarClassName, true);
+                        var track = selectOrGenerateDivByClass(_classNameScrollbarTrack, scrollbar);
+                        var handle = selectOrGenerateDivByClass(_classNameScrollbarHandle, scrollbar);
+
+                        if (!_domExists && !destroy) {
+                            scrollbar.append(track);
+                            track.append(handle);
+                        }
+
+                        return {
+                            _scrollbar: scrollbar,
+                            _track: track,
+                            _handle: handle
+                        };
+                    };
+                    function resetScrollbarDOM(isHorizontal) {
+                        var scrollbarVars = getScrollbarVars(isHorizontal);
+                        var scrollbar = scrollbarVars._scrollbar;
+                        var track = scrollbarVars._track;
+                        var handle = scrollbarVars._handle;
+
+                        if (_domExists && _initialized) {
+                            each([scrollbar, track, handle], function (i, elm) {
+                                removeClass(elm.removeAttr(LEXICON.s), _classNamesDynamicDestroy);
+                            });
+                        }
+                        else {
+                            remove(scrollbar || selectOrGenerateScrollbarDOM(isHorizontal)._scrollbar);
+                        }
+                    }
+                    var horizontalElements;
+                    var verticalElements;
+
+                    if (!destroy) {
+                        horizontalElements = selectOrGenerateScrollbarDOM(true);
+                        verticalElements = selectOrGenerateScrollbarDOM();
+
+                        _scrollbarHorizontalElement = horizontalElements._scrollbar;
+                        _scrollbarHorizontalTrackElement = horizontalElements._track;
+                        _scrollbarHorizontalHandleElement = horizontalElements._handle;
+                        _scrollbarVerticalElement = verticalElements._scrollbar;
+                        _scrollbarVerticalTrackElement = verticalElements._track;
+                        _scrollbarVerticalHandleElement = verticalElements._handle;
+
+                        if (!_domExists) {
+                            _paddingElement.after(_scrollbarVerticalElement);
+                            _paddingElement.after(_scrollbarHorizontalElement);
+                        }
+                    }
+                    else {
+                        resetScrollbarDOM(true);
+                        resetScrollbarDOM();
+                    }
+                }
+
+                /**
+                 * Initializes all scrollbar interactivity events. (track and handle dragging, clicking, scrolling)
+                 * @param isHorizontal True if the target scrollbar is the horizontal scrollbar, false if the target scrollbar is the vertical scrollbar.
+                 */
+                function setupScrollbarEvents(isHorizontal) {
+                    var scrollbarVars = getScrollbarVars(isHorizontal);
+                    var scrollbarVarsInfo = scrollbarVars._info;
+                    var insideIFrame = _windowElementNative.top !== _windowElementNative;
+                    var xy = scrollbarVars._x_y;
+                    var XY = scrollbarVars._X_Y;
+                    var scroll = _strScroll + scrollbarVars._Left_Top;
+                    var strActive = 'active';
+                    var strSnapHandle = 'snapHandle';
+                    var strClickEvent = 'click';
+                    var scrollDurationFactor = 1;
+                    var increaseDecreaseScrollAmountKeyCodes = [16, 17]; //shift, ctrl
+                    var trackTimeout;
+                    var mouseDownScroll;
+                    var mouseDownOffset;
+                    var mouseDownInvertedScale;
+
+                    function getPointerPosition(event) {
+                        return _msieVersion && insideIFrame ? event['screen' + XY] : COMPATIBILITY.page(event)[xy]; //use screen coordinates in EDGE & IE because the page values are incorrect in frames.
+                    }
+                    function getPreparedScrollbarsOption(name) {
+                        return _currentPreparedOptions.scrollbars[name];
+                    }
+                    function increaseTrackScrollAmount() {
+                        scrollDurationFactor = 0.5;
+                    }
+                    function decreaseTrackScrollAmount() {
+                        scrollDurationFactor = 1;
+                    }
+                    function stopClickEventPropagation(event) {
+                        COMPATIBILITY.stpP(event);
+                    }
+                    function documentKeyDown(event) {
+                        if (inArray(event.keyCode, increaseDecreaseScrollAmountKeyCodes) > -1)
+                            increaseTrackScrollAmount();
+                    }
+                    function documentKeyUp(event) {
+                        if (inArray(event.keyCode, increaseDecreaseScrollAmountKeyCodes) > -1)
+                            decreaseTrackScrollAmount();
+                    }
+                    function onMouseTouchDownContinue(event) {
+                        var originalEvent = event.originalEvent || event;
+                        var isTouchEvent = originalEvent.touches !== undefined;
+                        return _sleeping || _destroyed || nativeOverlayScrollbarsAreActive() || !_scrollbarsDragScrollingCache || (isTouchEvent && !getPreparedScrollbarsOption('touchSupport')) ? false : COMPATIBILITY.mBtn(event) === 1 || isTouchEvent;
+                    }
+                    function documentDragMove(event) {
+                        if (onMouseTouchDownContinue(event)) {
+                            var trackLength = scrollbarVarsInfo._trackLength;
+                            var handleLength = scrollbarVarsInfo._handleLength;
+                            var scrollRange = scrollbarVarsInfo._maxScroll;
+                            var scrollRaw = (getPointerPosition(event) - mouseDownOffset) * mouseDownInvertedScale;
+                            var scrollDeltaPercent = scrollRaw / (trackLength - handleLength);
+                            var scrollDelta = (scrollRange * scrollDeltaPercent);
+                            scrollDelta = isFinite(scrollDelta) ? scrollDelta : 0;
+                            if (_isRTL && isHorizontal && !_rtlScrollBehavior.i)
+                                scrollDelta *= -1;
+
+                            _viewportElement[scroll](MATH.round(mouseDownScroll + scrollDelta));
+
+                            if (_scrollbarsHandlesDefineScrollPos)
+                                refreshScrollbarHandleOffset(isHorizontal, mouseDownScroll + scrollDelta);
+
+                            if (!_supportPassiveEvents)
+                                COMPATIBILITY.prvD(event);
+                        }
+                        else
+                            documentMouseTouchUp(event);
+                    }
+                    function documentMouseTouchUp(event) {
+                        event = event || event.originalEvent;
+
+                        setupResponsiveEventListener(_documentElement,
+                            [_strMouseTouchMoveEvent, _strMouseTouchUpEvent, _strKeyDownEvent, _strKeyUpEvent, _strSelectStartEvent],
+                            [documentDragMove, documentMouseTouchUp, documentKeyDown, documentKeyUp, documentOnSelectStart],
+                            true);
+                        COMPATIBILITY.rAF()(function() {
+                            setupResponsiveEventListener(_documentElement, strClickEvent, stopClickEventPropagation, true, { _capture: true });
+                        });
+                        
+                            
+                        if (_scrollbarsHandlesDefineScrollPos)
+                            refreshScrollbarHandleOffset(isHorizontal, true);
+
+                        _scrollbarsHandlesDefineScrollPos = false;
+                        removeClass(_bodyElement, _classNameDragging);
+                        removeClass(scrollbarVars._handle, strActive);
+                        removeClass(scrollbarVars._track, strActive);
+                        removeClass(scrollbarVars._scrollbar, strActive);
+
+                        mouseDownScroll = undefined;
+                        mouseDownOffset = undefined;
+                        mouseDownInvertedScale = 1;
+
+                        decreaseTrackScrollAmount();
+
+                        if (trackTimeout !== undefined) {
+                            _base.scrollStop();
+                            clearTimeout(trackTimeout);
+                            trackTimeout = undefined;
+                        }
+
+                        if (event) {
+                            var rect = _hostElementNative[LEXICON.bCR]();
+                            var mouseInsideHost = event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom;
+
+                            //if mouse is outside host element
+                            if (!mouseInsideHost)
+                                hostOnMouseLeave();
+
+                            if (_scrollbarsAutoHideScroll || _scrollbarsAutoHideMove)
+                                refreshScrollbarsAutoHide(false);
+                        }
+                    }
+                    function onHandleMouseTouchDown(event) {
+                        if (onMouseTouchDownContinue(event))
+                            onHandleMouseTouchDownAction(event);
+                    }
+                    function onHandleMouseTouchDownAction(event) {
+                        mouseDownScroll = _viewportElement[scroll]();
+                        mouseDownScroll = isNaN(mouseDownScroll) ? 0 : mouseDownScroll;
+                        if (_isRTL && isHorizontal && !_rtlScrollBehavior.n || !_isRTL)
+                            mouseDownScroll = mouseDownScroll < 0 ? 0 : mouseDownScroll;
+
+                        mouseDownInvertedScale = getHostElementInvertedScale()[xy];
+                        mouseDownOffset = getPointerPosition(event);
+
+                        _scrollbarsHandlesDefineScrollPos = !getPreparedScrollbarsOption(strSnapHandle);
+                        addClass(_bodyElement, _classNameDragging);
+                        addClass(scrollbarVars._handle, strActive);
+                        addClass(scrollbarVars._scrollbar, strActive);
+
+                        setupResponsiveEventListener(_documentElement,
+                            [_strMouseTouchMoveEvent, _strMouseTouchUpEvent, _strSelectStartEvent],
+                            [documentDragMove, documentMouseTouchUp, documentOnSelectStart]);
+                        COMPATIBILITY.rAF()(function() {
+                            setupResponsiveEventListener(_documentElement, strClickEvent, stopClickEventPropagation, false, { _capture: true });
+                        });
+                        
+
+                        if (_msieVersion || !_documentMixed)
+                            COMPATIBILITY.prvD(event);
+                        COMPATIBILITY.stpP(event);
+                    }
+                    function onTrackMouseTouchDown(event) {
+                        if (onMouseTouchDownContinue(event)) {
+                            var handleToViewportRatio = scrollbarVars._info._handleLength / Math.round(MATH.min(1, _viewportSize[scrollbarVars._w_h] / _contentScrollSizeCache[scrollbarVars._w_h]) * scrollbarVars._info._trackLength);
+                            var scrollDistance = MATH.round(_viewportSize[scrollbarVars._w_h] * handleToViewportRatio);
+                            var scrollBaseDuration = 270 * handleToViewportRatio;
+                            var scrollFirstIterationDelay = 400 * handleToViewportRatio;
+                            var trackOffset = scrollbarVars._track.offset()[scrollbarVars._left_top];
+                            var ctrlKey = event.ctrlKey;
+                            var instantScroll = event.shiftKey;
+                            var instantScrollTransition = instantScroll && ctrlKey;
+                            var isFirstIteration = true;
+                            var easing = 'linear';
+                            var decreaseScroll;
+                            var finishedCondition;
+                            var scrollActionFinsished = function (transition) {
+                                if (_scrollbarsHandlesDefineScrollPos)
+                                    refreshScrollbarHandleOffset(isHorizontal, transition);
+                            };
+                            var scrollActionInstantFinished = function () {
+                                scrollActionFinsished();
+                                onHandleMouseTouchDownAction(event);
+                            };
+                            var scrollAction = function () {
+                                if (!_destroyed) {
+                                    var mouseOffset = (mouseDownOffset - trackOffset) * mouseDownInvertedScale;
+                                    var handleOffset = scrollbarVarsInfo._handleOffset;
+                                    var trackLength = scrollbarVarsInfo._trackLength;
+                                    var handleLength = scrollbarVarsInfo._handleLength;
+                                    var scrollRange = scrollbarVarsInfo._maxScroll;
+                                    var currScroll = scrollbarVarsInfo._currentScroll;
+                                    var scrollDuration = scrollBaseDuration * scrollDurationFactor;
+                                    var timeoutDelay = isFirstIteration ? MATH.max(scrollFirstIterationDelay, scrollDuration) : scrollDuration;
+                                    var instantScrollPosition = scrollRange * ((mouseOffset - (handleLength / 2)) / (trackLength - handleLength)); // 100% * positionPercent
+                                    var rtlIsNormal = _isRTL && isHorizontal && ((!_rtlScrollBehavior.i && !_rtlScrollBehavior.n) || _normalizeRTLCache);
+                                    var decreaseScrollCondition = rtlIsNormal ? handleOffset < mouseOffset : handleOffset > mouseOffset;
+                                    var scrollObj = {};
+                                    var animationObj = {
+                                        easing: easing,
+                                        step: function (now) {
+                                            if (_scrollbarsHandlesDefineScrollPos) {
+                                                _viewportElement[scroll](now); //https://github.com/jquery/jquery/issues/4340
+                                                refreshScrollbarHandleOffset(isHorizontal, now);
+                                            }
+                                        }
+                                    };
+                                    instantScrollPosition = isFinite(instantScrollPosition) ? instantScrollPosition : 0;
+                                    instantScrollPosition = _isRTL && isHorizontal && !_rtlScrollBehavior.i ? (scrollRange - instantScrollPosition) : instantScrollPosition;
+
+                                    //_base.scrollStop();
+
+                                    if (instantScroll) {
+                                        _viewportElement[scroll](instantScrollPosition); //scroll instantly to new position
+                                        if (instantScrollTransition) {
+                                            //get the scroll position after instant scroll (in case CSS Snap Points are used) to get the correct snapped scroll position
+                                            //and the animation stops at the correct point
+                                            instantScrollPosition = _viewportElement[scroll]();
+                                            //scroll back to the position before instant scrolling so animation can be performed
+                                            _viewportElement[scroll](currScroll);
+
+                                            instantScrollPosition = rtlIsNormal && _rtlScrollBehavior.i ? (scrollRange - instantScrollPosition) : instantScrollPosition;
+                                            instantScrollPosition = rtlIsNormal && _rtlScrollBehavior.n ? -instantScrollPosition : instantScrollPosition;
+
+                                            scrollObj[xy] = instantScrollPosition;
+                                            _base.scroll(scrollObj, extendDeep(animationObj, {
+                                                duration: 130,
+                                                complete: scrollActionInstantFinished
+                                            }));
+                                        }
+                                        else
+                                            scrollActionInstantFinished();
+                                    }
+                                    else {
+                                        decreaseScroll = isFirstIteration ? decreaseScrollCondition : decreaseScroll;
+                                        finishedCondition = rtlIsNormal
+                                            ? (decreaseScroll ? handleOffset + handleLength >= mouseOffset : handleOffset <= mouseOffset)
+                                            : (decreaseScroll ? handleOffset <= mouseOffset : handleOffset + handleLength >= mouseOffset);
+
+                                        if (finishedCondition) {
+                                            clearTimeout(trackTimeout);
+                                            _base.scrollStop();
+                                            trackTimeout = undefined;
+                                            scrollActionFinsished(true);
+                                        }
+                                        else {
+                                            trackTimeout = setTimeout(scrollAction, timeoutDelay);
+
+                                            scrollObj[xy] = (decreaseScroll ? '-=' : '+=') + scrollDistance;
+                                            _base.scroll(scrollObj, extendDeep(animationObj, {
+                                                duration: scrollDuration
+                                            }));
+                                        }
+                                        isFirstIteration = false;
+                                    }
+                                }
+                            };
+                            if (ctrlKey)
+                                increaseTrackScrollAmount();
+
+                            mouseDownInvertedScale = getHostElementInvertedScale()[xy];
+                            mouseDownOffset = COMPATIBILITY.page(event)[xy];
+
+                            _scrollbarsHandlesDefineScrollPos = !getPreparedScrollbarsOption(strSnapHandle);
+                            addClass(_bodyElement, _classNameDragging);
+                            addClass(scrollbarVars._track, strActive);
+                            addClass(scrollbarVars._scrollbar, strActive);
+
+                            setupResponsiveEventListener(_documentElement,
+                                [_strMouseTouchUpEvent, _strKeyDownEvent, _strKeyUpEvent, _strSelectStartEvent],
+                                [documentMouseTouchUp, documentKeyDown, documentKeyUp, documentOnSelectStart]);
+
+                            scrollAction();
+                            COMPATIBILITY.prvD(event);
+                            COMPATIBILITY.stpP(event);
+                        }
+                    }
+                    function onTrackMouseTouchEnter(event) {
+                        //make sure both scrollbars will stay visible if one scrollbar is hovered if autoHide is "scroll" or "move".
+                        _scrollbarsHandleHovered = true;
+                        if (_scrollbarsAutoHideScroll || _scrollbarsAutoHideMove)
+                            refreshScrollbarsAutoHide(true);
+                    }
+                    function onTrackMouseTouchLeave(event) {
+                        _scrollbarsHandleHovered = false;
+                        if (_scrollbarsAutoHideScroll || _scrollbarsAutoHideMove)
+                            refreshScrollbarsAutoHide(false);
+                    }
+                    function onScrollbarMouseTouchDown(event) {
+                        COMPATIBILITY.stpP(event);
+                    }
+
+                    addDestroyEventListener(scrollbarVars._handle,
+                        _strMouseTouchDownEvent,
+                        onHandleMouseTouchDown);
+                    addDestroyEventListener(scrollbarVars._track,
+                        [_strMouseTouchDownEvent, _strMouseEnter, _strMouseLeave],
+                        [onTrackMouseTouchDown, onTrackMouseTouchEnter, onTrackMouseTouchLeave]);
+                    addDestroyEventListener(scrollbarVars._scrollbar,
+                        _strMouseTouchDownEvent,
+                        onScrollbarMouseTouchDown);
+
+                    if (_supportTransition) {
+                        addDestroyEventListener(scrollbarVars._scrollbar, _strTransitionEndEvent, function (event) {
+                            if (event.target !== scrollbarVars._scrollbar[0])
+                                return;
+                            refreshScrollbarHandleLength(isHorizontal);
+                            refreshScrollbarHandleOffset(isHorizontal);
+                        });
+                    }
+                }
+
+                /**
+                 * Shows or hides the given scrollbar and applied a class name which indicates if the scrollbar is scrollable or not.
+                 * @param isHorizontal True if the horizontal scrollbar is the target, false if the vertical scrollbar is the target.
+                 * @param shallBeVisible True if the scrollbar shall be shown, false if hidden.
+                 * @param canScroll True if the scrollbar is scrollable, false otherwise.
+                 */
+                function refreshScrollbarAppearance(isHorizontal, shallBeVisible, canScroll) {
+                    var scrollbarHiddenClassName = isHorizontal ? _classNameHostScrollbarHorizontalHidden : _classNameHostScrollbarVerticalHidden;
+                    var scrollbarElement = isHorizontal ? _scrollbarHorizontalElement : _scrollbarVerticalElement;
+
+                    addRemoveClass(_hostElement, scrollbarHiddenClassName, !shallBeVisible);
+                    addRemoveClass(scrollbarElement, _classNameScrollbarUnusable, !canScroll);
+                }
+
+                /**
+                 * Autoshows / autohides both scrollbars with.
+                 * @param shallBeVisible True if the scrollbars shall be autoshown (only the case if they are hidden by a autohide), false if the shall be auto hidden.
+                 * @param delayfree True if the scrollbars shall be hidden without a delay, false or undefined otherwise.
+                 */
+                function refreshScrollbarsAutoHide(shallBeVisible, delayfree) {
+                    clearTimeout(_scrollbarsAutoHideTimeoutId);
+                    if (shallBeVisible) {
+                        //if(_hasOverflowCache.x && _hideOverflowCache.xs)
+                        removeClass(_scrollbarHorizontalElement, _classNameScrollbarAutoHidden);
+                        //if(_hasOverflowCache.y && _hideOverflowCache.ys)
+                        removeClass(_scrollbarVerticalElement, _classNameScrollbarAutoHidden);
+                    }
+                    else {
+                        var anyActive;
+                        var strActive = 'active';
+                        var hide = function () {
+                            if (!_scrollbarsHandleHovered && !_destroyed) {
+                                anyActive = _scrollbarHorizontalHandleElement.hasClass(strActive) || _scrollbarVerticalHandleElement.hasClass(strActive);
+                                if (!anyActive && (_scrollbarsAutoHideScroll || _scrollbarsAutoHideMove || _scrollbarsAutoHideLeave))
+                                    addClass(_scrollbarHorizontalElement, _classNameScrollbarAutoHidden);
+                                if (!anyActive && (_scrollbarsAutoHideScroll || _scrollbarsAutoHideMove || _scrollbarsAutoHideLeave))
+                                    addClass(_scrollbarVerticalElement, _classNameScrollbarAutoHidden);
+                            }
+                        };
+                        if (_scrollbarsAutoHideDelay > 0 && delayfree !== true)
+                            _scrollbarsAutoHideTimeoutId = setTimeout(hide, _scrollbarsAutoHideDelay);
+                        else
+                            hide();
+                    }
+                }
+
+                /**
+                 * Refreshes the handle length of the given scrollbar.
+                 * @param isHorizontal True if the horizontal scrollbar handle shall be refreshed, false if the vertical one shall be refreshed.
+                 */
+                function refreshScrollbarHandleLength(isHorizontal) {
+                    var handleCSS = {};
+                    var scrollbarVars = getScrollbarVars(isHorizontal);
+                    var scrollbarVarsInfo = scrollbarVars._info;
+                    var digit = 1000000;
+                    //get and apply intended handle length
+                    var handleRatio = MATH.min(1, _viewportSize[scrollbarVars._w_h] / _contentScrollSizeCache[scrollbarVars._w_h]);
+                    handleCSS[scrollbarVars._width_height] = (MATH.floor(handleRatio * 100 * digit) / digit) + '%'; //the last * digit / digit is for flooring to the 4th digit
+
+                    if (!nativeOverlayScrollbarsAreActive())
+                        scrollbarVars._handle.css(handleCSS);
+
+                    //measure the handle length to respect min & max length
+                    scrollbarVarsInfo._handleLength = scrollbarVars._handle[0]['offset' + scrollbarVars._Width_Height];
+                    scrollbarVarsInfo._handleLengthRatio = handleRatio;
+                }
+
+                /**
+                 * Refreshes the handle offset of the given scrollbar.
+                 * @param isHorizontal True if the horizontal scrollbar handle shall be refreshed, false if the vertical one shall be refreshed.
+                 * @param scrollOrTransition The scroll position of the given scrollbar axis to which the handle shall be moved or a boolean which indicates whether a transition shall be applied. If undefined or boolean if the current scroll-offset is taken. (if isHorizontal ? scrollLeft : scrollTop)
+                 */
+                function refreshScrollbarHandleOffset(isHorizontal, scrollOrTransition) {
+                    var transition = type(scrollOrTransition) == TYPES.b;
+                    var transitionDuration = 250;
+                    var isRTLisHorizontal = _isRTL && isHorizontal;
+                    var scrollbarVars = getScrollbarVars(isHorizontal);
+                    var scrollbarVarsInfo = scrollbarVars._info;
+                    var strTranslateBrace = 'translate(';
+                    var strTransform = VENDORS._cssProperty('transform');
+                    var strTransition = VENDORS._cssProperty('transition');
+                    var nativeScroll = isHorizontal ? _viewportElement[_strScrollLeft]() : _viewportElement[_strScrollTop]();
+                    var currentScroll = scrollOrTransition === undefined || transition ? nativeScroll : scrollOrTransition;
+
+                    //measure the handle length to respect min & max length
+                    var handleLength = scrollbarVarsInfo._handleLength;
+                    var trackLength = scrollbarVars._track[0]['offset' + scrollbarVars._Width_Height];
+                    var handleTrackDiff = trackLength - handleLength;
+                    var handleCSS = {};
+                    var transformOffset;
+                    var translateValue;
+
+                    //DONT use the variable '_contentScrollSizeCache[scrollbarVars._w_h]' instead of '_viewportElement[0]['scroll' + scrollbarVars._Width_Height]'
+                    // because its a bit behind during the small delay when content size updates
+                    //(delay = mutationObserverContentLag, if its 0 then this var could be used)
+                    var maxScroll = (_viewportElementNative[_strScroll + scrollbarVars._Width_Height] - _viewportElementNative['client' + scrollbarVars._Width_Height]) * (_rtlScrollBehavior.n && isRTLisHorizontal ? -1 : 1); //* -1 if rtl scroll max is negative
+                    var getScrollRatio = function (base) {
+                        return isNaN(base / maxScroll) ? 0 : MATH.max(0, MATH.min(1, base / maxScroll));
+                    };
+                    var getHandleOffset = function (scrollRatio) {
+                        var offset = handleTrackDiff * scrollRatio;
+                        offset = isNaN(offset) ? 0 : offset;
+                        offset = (isRTLisHorizontal && !_rtlScrollBehavior.i) ? (trackLength - handleLength - offset) : offset;
+                        offset = MATH.max(0, offset);
+                        return offset;
+                    };
+                    var scrollRatio = getScrollRatio(nativeScroll);
+                    var unsnappedScrollRatio = getScrollRatio(currentScroll);
+                    var handleOffset = getHandleOffset(unsnappedScrollRatio);
+                    var snappedHandleOffset = getHandleOffset(scrollRatio);
+
+                    scrollbarVarsInfo._maxScroll = maxScroll;
+                    scrollbarVarsInfo._currentScroll = nativeScroll;
+                    scrollbarVarsInfo._currentScrollRatio = scrollRatio;
+
+                    if (_supportTransform) {
+                        transformOffset = isRTLisHorizontal ? -(trackLength - handleLength - handleOffset) : handleOffset; //in px
+                        //transformOffset = (transformOffset / trackLength * 100) * (trackLength / handleLength); //in %
+                        translateValue = isHorizontal ? strTranslateBrace + transformOffset + 'px, 0)' : strTranslateBrace + '0, ' + transformOffset + 'px)';
+
+                        handleCSS[strTransform] = translateValue;
+
+                        //apply or clear up transition
+                        if (_supportTransition)
+                            handleCSS[strTransition] = transition && MATH.abs(handleOffset - scrollbarVarsInfo._handleOffset) > 1 ? getCSSTransitionString(scrollbarVars._handle) + ', ' + (strTransform + _strSpace + transitionDuration + 'ms') : _strEmpty;
+                    }
+                    else
+                        handleCSS[scrollbarVars._left_top] = handleOffset;
+
+
+                    //only apply css if offset has changed and overflow exists.
+                    if (!nativeOverlayScrollbarsAreActive()) {
+                        scrollbarVars._handle.css(handleCSS);
+
+                        //clear up transition
+                        if (_supportTransform && _supportTransition && transition) {
+                            scrollbarVars._handle.one(_strTransitionEndEvent, function () {
+                                if (!_destroyed)
+                                    scrollbarVars._handle.css(strTransition, _strEmpty);
+                            });
+                        }
+                    }
+
+                    scrollbarVarsInfo._handleOffset = handleOffset;
+                    scrollbarVarsInfo._snappedHandleOffset = snappedHandleOffset;
+                    scrollbarVarsInfo._trackLength = trackLength;
+                }
+
+                /**
+                 * Refreshes the interactivity of the given scrollbar element.
+                 * @param isTrack True if the track element is the target, false if the handle element is the target.
+                 * @param value True for interactivity false for no interactivity.
+                 */
+                function refreshScrollbarsInteractive(isTrack, value) {
+                    var action = value ? 'removeClass' : 'addClass';
+                    var element1 = isTrack ? _scrollbarHorizontalTrackElement : _scrollbarHorizontalHandleElement;
+                    var element2 = isTrack ? _scrollbarVerticalTrackElement : _scrollbarVerticalHandleElement;
+                    var className = isTrack ? _classNameScrollbarTrackOff : _classNameScrollbarHandleOff;
+
+                    element1[action](className);
+                    element2[action](className);
+                }
+
+                /**
+                 * Returns a object which is used for fast access for specific variables.
+                 * @param isHorizontal True if the horizontal scrollbar vars shall be accessed, false if the vertical scrollbar vars shall be accessed.
+                 * @returns {{wh: string, WH: string, lt: string, _wh: string, _lt: string, t: *, h: *, c: {}, s: *}}
+                 */
+                function getScrollbarVars(isHorizontal) {
+                    return {
+                        _width_height: isHorizontal ? _strWidth : _strHeight,
+                        _Width_Height: isHorizontal ? 'Width' : 'Height',
+                        _left_top: isHorizontal ? _strLeft : _strTop,
+                        _Left_Top: isHorizontal ? 'Left' : 'Top',
+                        _x_y: isHorizontal ? _strX : _strY,
+                        _X_Y: isHorizontal ? 'X' : 'Y',
+                        _w_h: isHorizontal ? 'w' : 'h',
+                        _l_t: isHorizontal ? 'l' : 't',
+                        _track: isHorizontal ? _scrollbarHorizontalTrackElement : _scrollbarVerticalTrackElement,
+                        _handle: isHorizontal ? _scrollbarHorizontalHandleElement : _scrollbarVerticalHandleElement,
+                        _scrollbar: isHorizontal ? _scrollbarHorizontalElement : _scrollbarVerticalElement,
+                        _info: isHorizontal ? _scrollHorizontalInfo : _scrollVerticalInfo
+                    };
+                }
+
+
+                //==== Scrollbar Corner ====//
+
+                /**
+                 * Builds or destroys the scrollbar corner DOM element.
+                 * @param destroy Indicates whether the DOM shall be build or destroyed.
+                 */
+                function setupScrollbarCornerDOM(destroy) {
+                    _scrollbarCornerElement = _scrollbarCornerElement || selectOrGenerateDivByClass(_classNameScrollbarCorner, true);
+
+                    if (!destroy) {
+                        if (!_domExists) {
+                            _hostElement.append(_scrollbarCornerElement);
+                        }
+                    }
+                    else {
+                        if (_domExists && _initialized) {
+                            removeClass(_scrollbarCornerElement.removeAttr(LEXICON.s), _classNamesDynamicDestroy);
+                        }
+                        else {
+                            remove(_scrollbarCornerElement);
+                        }
+                    }
+                }
+
+                /**
+                 * Initializes all scrollbar corner interactivity events.
+                 */
+                function setupScrollbarCornerEvents() {
+                    var insideIFrame = _windowElementNative.top !== _windowElementNative;
+                    var mouseDownPosition = {};
+                    var mouseDownSize = {};
+                    var mouseDownInvertedScale = {};
+                    var reconnectMutationObserver;
+
+                    function documentDragMove(event) {
+                        if (onMouseTouchDownContinue(event)) {
+                            var pageOffset = getCoordinates(event);
+                            var hostElementCSS = {};
+                            if (_resizeHorizontal || _resizeBoth)
+                                hostElementCSS[_strWidth] = (mouseDownSize.w + (pageOffset.x - mouseDownPosition.x) * mouseDownInvertedScale.x);
+                            if (_resizeVertical || _resizeBoth)
+                                hostElementCSS[_strHeight] = (mouseDownSize.h + (pageOffset.y - mouseDownPosition.y) * mouseDownInvertedScale.y);
+                            _hostElement.css(hostElementCSS);
+                            COMPATIBILITY.stpP(event);
+                        }
+                        else {
+                            documentMouseTouchUp(event);
+                        }
+                    }
+                    function documentMouseTouchUp(event) {
+                        var eventIsTrusted = event !== undefined;
+
+                        setupResponsiveEventListener(_documentElement,
+                            [_strSelectStartEvent, _strMouseTouchMoveEvent, _strMouseTouchUpEvent],
+                            [documentOnSelectStart, documentDragMove, documentMouseTouchUp],
+                            true);
+
+                        removeClass(_bodyElement, _classNameDragging);
+                        if (_scrollbarCornerElement.releaseCapture)
+                            _scrollbarCornerElement.releaseCapture();
+
+                        if (eventIsTrusted) {
+                            if (reconnectMutationObserver)
+                                connectMutationObservers();
+                            _base.update(_strAuto);
+                        }
+                        reconnectMutationObserver = false;
+                    }
+                    function onMouseTouchDownContinue(event) {
+                        var originalEvent = event.originalEvent || event;
+                        var isTouchEvent = originalEvent.touches !== undefined;
+                        return _sleeping || _destroyed ? false : COMPATIBILITY.mBtn(event) === 1 || isTouchEvent;
+                    }
+                    function getCoordinates(event) {
+                        return _msieVersion && insideIFrame ? { x: event.screenX, y: event.screenY } : COMPATIBILITY.page(event);
+                    }
+
+                    addDestroyEventListener(_scrollbarCornerElement, _strMouseTouchDownEvent, function (event) {
+                        if (onMouseTouchDownContinue(event) && !_resizeNone) {
+                            if (_mutationObserversConnected) {
+                                reconnectMutationObserver = true;
+                                disconnectMutationObservers();
+                            }
+
+                            mouseDownPosition = getCoordinates(event);
+
+                            mouseDownSize.w = _hostElementNative[LEXICON.oW] - (!_isBorderBox ? _paddingX : 0);
+                            mouseDownSize.h = _hostElementNative[LEXICON.oH] - (!_isBorderBox ? _paddingY : 0);
+                            mouseDownInvertedScale = getHostElementInvertedScale();
+
+                            setupResponsiveEventListener(_documentElement,
+                                [_strSelectStartEvent, _strMouseTouchMoveEvent, _strMouseTouchUpEvent],
+                                [documentOnSelectStart, documentDragMove, documentMouseTouchUp]);
+
+                            addClass(_bodyElement, _classNameDragging);
+                            if (_scrollbarCornerElement.setCapture)
+                                _scrollbarCornerElement.setCapture();
+
+                            COMPATIBILITY.prvD(event);
+                            COMPATIBILITY.stpP(event);
+                        }
+                    });
+                }
+
+
+                //==== Utils ====//
+
+                /**
+                 * Calls the callback with the given name. The Context of this callback is always _base (this).
+                 * @param name The name of the target which shall be called.
+                 * @param args The args with which the callback shall be called.
+                 * @param dependent Boolean which decides whether the callback shall be fired, undefined is like a "true" value.
+                 */
+                function dispatchCallback(name, args, dependent) {
+                    if (dependent === false)
+                        return;
+                    if (_initialized) {
+                        var callback = _currentPreparedOptions.callbacks[name];
+                        var extensionOnName = name;
+                        var ext;
+
+                        if (extensionOnName.substr(0, 2) === 'on')
+                            extensionOnName = extensionOnName.substr(2, 1).toLowerCase() + extensionOnName.substr(3);
+
+                        if (type(callback) == TYPES.f)
+                            callback.call(_base, args);
+
+                        each(_extensions, function () {
+                            ext = this;
+                            if (type(ext.on) == TYPES.f)
+                                ext.on(extensionOnName, args);
+                        });
+                    }
+                    else if (!_destroyed)
+                        _callbacksInitQeueue.push({ n: name, a: args });
+                }
+
+                /**
+                 * Sets the "top, right, bottom, left" properties, with a given prefix, of the given css object.
+                 * @param targetCSSObject The css object to which the values shall be applied.
+                 * @param prefix The prefix of the "top, right, bottom, left" css properties. (example: 'padding-' is a valid prefix)
+                 * @param values A array of values which shall be applied to the "top, right, bottom, left" -properties. The array order is [top, right, bottom, left].
+                 * If this argument is undefined the value '' (empty string) will be applied to all properties.
+                 */
+                function setTopRightBottomLeft(targetCSSObject, prefix, values) {
+                    prefix = prefix || _strEmpty;
+                    values = values || [_strEmpty, _strEmpty, _strEmpty, _strEmpty];
+
+                    targetCSSObject[prefix + _strTop] = values[0];
+                    targetCSSObject[prefix + _strRight] = values[1];
+                    targetCSSObject[prefix + _strBottom] = values[2];
+                    targetCSSObject[prefix + _strLeft] = values[3];
+                }
+
+                /**
+                 * Gets the "top, right, bottom, left" CSS properties of the CSS property with the given prefix from the host element.
+                 * @param prefix The prefix of the "top, right, bottom, left" css properties. (example: 'padding-' is a valid prefix)
+                 * @param suffix The suffix of the "top, right, bottom, left" css properties. (example: 'border-' is a valid prefix with '-width' is a valid suffix)
+                 * @param zeroX True if the x axis shall be 0.
+                 * @param zeroY True if the y axis shall be 0.
+                 * @returns {{}} The object which contains the numbers of the read CSS properties.
+                 */
+                function getTopRightBottomLeftHost(prefix, suffix, zeroX, zeroY) {
+                    suffix = suffix || _strEmpty;
+                    prefix = prefix || _strEmpty;
+                    return {
+                        t: zeroY ? 0 : parseToZeroOrNumber(_hostElement.css(prefix + _strTop + suffix)),
+                        r: zeroX ? 0 : parseToZeroOrNumber(_hostElement.css(prefix + _strRight + suffix)),
+                        b: zeroY ? 0 : parseToZeroOrNumber(_hostElement.css(prefix + _strBottom + suffix)),
+                        l: zeroX ? 0 : parseToZeroOrNumber(_hostElement.css(prefix + _strLeft + suffix))
+                    };
+                }
+
+                /**
+                 * Returns the computed CSS transition string from the given element.
+                 * @param element The element from which the transition string shall be returned.
+                 * @returns {string} The CSS transition string from the given element.
+                 */
+                function getCSSTransitionString(element) {
+                    var transitionStr = VENDORS._cssProperty('transition');
+                    var assembledValue = element.css(transitionStr);
+                    if (assembledValue)
+                        return assembledValue;
+                    var regExpString = '\\s*(' + '([^,(]+(\\(.+?\\))?)+' + ')[\\s,]*';
+                    var regExpMain = new RegExp(regExpString);
+                    var regExpValidate = new RegExp('^(' + regExpString + ')+$');
+                    var properties = 'property duration timing-function delay'.split(' ');
+                    var result = [];
+                    var strResult;
+                    var valueArray;
+                    var i = 0;
+                    var j;
+                    var splitCssStyleByComma = function (str) {
+                        strResult = [];
+                        if (!str.match(regExpValidate))
+                            return str;
+                        while (str.match(regExpMain)) {
+                            strResult.push(RegExp.$1);
+                            str = str.replace(regExpMain, _strEmpty);
+                        }
+
+                        return strResult;
+                    };
+                    for (; i < properties[LEXICON.l]; i++) {
+                        valueArray = splitCssStyleByComma(element.css(transitionStr + '-' + properties[i]));
+                        for (j = 0; j < valueArray[LEXICON.l]; j++)
+                            result[j] = (result[j] ? result[j] + _strSpace : _strEmpty) + valueArray[j];
+                    }
+                    return result.join(', ');
+                }
+
+                /**
+                 * Generates a Regular Expression which matches with a string which starts with 'os-host'.
+                 * @param {boolean} withCurrClassNameOption The Regular Expression also matches if the string is the current ClassName option (multiple values splitted by space possible).
+                 * @param {boolean} withOldClassNameOption The Regular Expression also matches if the string is the old ClassName option (multiple values splitted by space possible).
+                 */
+                function createHostClassNameRegExp(withCurrClassNameOption, withOldClassNameOption) {
+                    var i;
+                    var split;
+                    var appendix;
+                    var appendClasses = function (classes, condition) {
+                        appendix = '';
+                        if (condition && typeof classes == TYPES.s) {
+                            split = classes.split(_strSpace);
+                            for (i = 0; i < split[LEXICON.l]; i++)
+                                appendix += '|' + split[i] + '$';
+                            // split[i].replace(/[.*+?^${}()|[\]\\]/g, '\\$&') for escaping regex characters
+                        }
+                        return appendix;
+                    };
+
+                    return new RegExp(
+                        '(^' + _classNameHostElement + '([-_].+|)$)' +
+                        appendClasses(_classNameCache, withCurrClassNameOption) +
+                        appendClasses(_oldClassName, withOldClassNameOption), 'g');
+                }
+
+                /**
+                 * Calculates the host-elements inverted scale. (invertedScale = 1 / scale)
+                 * @returns {{x: number, y: number}} The scale of the host-element.
+                 */
+                function getHostElementInvertedScale() {
+                    var rect = _paddingElementNative[LEXICON.bCR]();
+                    return {
+                        x: _supportTransform ? 1 / (MATH.round(rect.width) / _paddingElementNative[LEXICON.oW]) || 1 : 1,
+                        y: _supportTransform ? 1 / (MATH.round(rect.height) / _paddingElementNative[LEXICON.oH]) || 1 : 1
+                    };
+                }
+
+                /**
+                 * Checks whether the given object is a HTMLElement.
+                 * @param o The object which shall be checked.
+                 * @returns {boolean} True the given object is a HTMLElement, false otherwise.
+                 */
+                function isHTMLElement(o) {
+                    var strOwnerDocument = 'ownerDocument';
+                    var strHTMLElement = 'HTMLElement';
+                    var wnd = o && o[strOwnerDocument] ? (o[strOwnerDocument].parentWindow || window) : window;
+                    return (
+                        typeof wnd[strHTMLElement] == TYPES.o ? o instanceof wnd[strHTMLElement] : //DOM2
+                            o && typeof o == TYPES.o && o !== null && o.nodeType === 1 && typeof o.nodeName == TYPES.s
+                    );
+                }
+
+                /**
+                 * Compares 2 arrays and returns the differences between them as a array.
+                 * @param a1 The first array which shall be compared.
+                 * @param a2 The second array which shall be compared.
+                 * @returns {Array} The differences between the two arrays.
+                 */
+                function getArrayDifferences(a1, a2) {
+                    var a = [];
+                    var diff = [];
+                    var i;
+                    var k;
+                    for (i = 0; i < a1.length; i++)
+                        a[a1[i]] = true;
+                    for (i = 0; i < a2.length; i++) {
+                        if (a[a2[i]])
+                            delete a[a2[i]];
+                        else
+                            a[a2[i]] = true;
+                    }
+                    for (k in a)
+                        diff.push(k);
+                    return diff;
+                }
+
+                /**
+                 * Returns Zero or the number to which the value can be parsed.
+                 * @param value The value which shall be parsed.
+                 * @param toFloat Indicates whether the number shall be parsed to a float.
+                 */
+                function parseToZeroOrNumber(value, toFloat) {
+                    var num = toFloat ? parseFloat(value) : parseInt(value, 10);
+                    return isNaN(num) ? 0 : num;
+                }
+
+                /**
+                 * Gets several information of the textarea and returns them as a object or undefined if the browser doesn't support it.
+                 * @returns {{cursorRow: Number, cursorCol, rows: Number, cols: number, wRow: number, pos: number, max : number}} or undefined if not supported.
+                 */
+                function getTextareaInfo() {
+                    //read needed values
+                    var textareaCursorPosition = _targetElementNative.selectionStart;
+                    if (textareaCursorPosition === undefined)
+                        return;
+
+                    var textareaValue = _targetElement.val();
+                    var textareaLength = textareaValue[LEXICON.l];
+                    var textareaRowSplit = textareaValue.split('\n');
+                    var textareaLastRow = textareaRowSplit[LEXICON.l];
+                    var textareaCurrentCursorRowSplit = textareaValue.substr(0, textareaCursorPosition).split('\n');
+                    var widestRow = 0;
+                    var textareaLastCol = 0;
+                    var cursorRow = textareaCurrentCursorRowSplit[LEXICON.l];
+                    var cursorCol = textareaCurrentCursorRowSplit[textareaCurrentCursorRowSplit[LEXICON.l] - 1][LEXICON.l];
+                    var rowCols;
+                    var i;
+
+                    //get widest Row and the last column of the textarea
+                    for (i = 0; i < textareaRowSplit[LEXICON.l]; i++) {
+                        rowCols = textareaRowSplit[i][LEXICON.l];
+                        if (rowCols > textareaLastCol) {
+                            widestRow = i + 1;
+                            textareaLastCol = rowCols;
+                        }
+                    }
+
+                    return {
+                        _cursorRow: cursorRow, //cursorRow
+                        _cursorColumn: cursorCol, //cursorCol
+                        _rows: textareaLastRow, //rows
+                        _columns: textareaLastCol, //cols
+                        _widestRow: widestRow, //wRow
+                        _cursorPosition: textareaCursorPosition, //pos
+                        _cursorMax: textareaLength //max
+                    };
+                }
+
+                /**
+                 * Determines whether native overlay scrollbars are active.
+                 * @returns {boolean} True if native overlay scrollbars are active, false otherwise.
+                 */
+                function nativeOverlayScrollbarsAreActive() {
+                    return (_ignoreOverlayScrollbarHidingCache && (_nativeScrollbarIsOverlaid.x && _nativeScrollbarIsOverlaid.y));
+                }
+
+                /**
+                 * Gets the element which is used to measure the content size.
+                 * @returns {*} TextareaCover if target element is textarea else the ContentElement.
+                 */
+                function getContentMeasureElement() {
+                    return _isTextarea ? _textareaCoverElement[0] : _contentElementNative;
+                }
+
+                /**
+                 * Generates a string which represents a HTML div with the given classes or attributes.
+                 * @param classesOrAttrs The class of the div as string or a object which represents the attributes of the div. (The class attribute can also be written as "className".)
+                 * @param content The content of the div as string.
+                 * @returns {string} The concated string which represents a HTML div and its content.
+                 */
+                function generateDiv(classesOrAttrs, content) {
+                    return '<div ' + (classesOrAttrs ? type(classesOrAttrs) == TYPES.s ?
+                        'class="' + classesOrAttrs + '"' :
+                        (function () {
+                            var key;
+                            var attrs = _strEmpty;
+                            if (FRAMEWORK.isPlainObject(classesOrAttrs)) {
+                                for (key in classesOrAttrs)
+                                    attrs += (key === 'c' ? 'class' : key) + '="' + classesOrAttrs[key] + '" ';
+                            }
+                            return attrs;
+                        })() :
+                        _strEmpty) +
+                        '>' +
+                        (content || _strEmpty) +
+                        '</div>';
+                }
+
+                /**
+                 * Selects or generates a div with the given class attribute.
+                 * @param className The class names (divided by spaces) of the div which shall be selected or generated.
+                 * @param selectParentOrOnlyChildren The parent element from which of the element shall be selected. (if undefined or boolean its hostElement)
+                 * If its a boolean it decides whether only the children of the host element shall be selected.
+                 * @returns {*} The generated or selected element.
+                 */
+                function selectOrGenerateDivByClass(className, selectParentOrOnlyChildren) {
+                    var onlyChildren = type(selectParentOrOnlyChildren) == TYPES.b;
+                    var selectParent = onlyChildren ? _hostElement : (selectParentOrOnlyChildren || _hostElement);
+
+                    return (_domExists && !selectParent[LEXICON.l])
+                        ? null
+                        : _domExists
+                            ? selectParent[onlyChildren ? 'children' : 'find'](_strDot + className.replace(/\s/g, _strDot)).eq(0)
+                            : FRAMEWORK(generateDiv(className))
+                }
+
+                /**
+                 * Gets the value of the given property from the given object.
+                 * @param obj The object from which the property value shall be got.
+                 * @param path The property of which the value shall be got.
+                 * @returns {*} Returns the value of the searched property or undefined of the property wasn't found.
+                 */
+                function getObjectPropVal(obj, path) {
+                    var splits = path.split(_strDot);
+                    var i = 0;
+                    var val;
+                    for (; i < splits.length; i++) {
+                        if (!obj[LEXICON.hOP](splits[i]))
+                            return;
+                        val = obj[splits[i]];
+                        if (i < splits.length && type(val) == TYPES.o)
+                            obj = val;
+                    }
+                    return val;
+                }
+
+                /**
+                 * Sets the value of the given property from the given object.
+                 * @param obj The object from which the property value shall be set.
+                 * @param path The property of which the value shall be set.
+                 * @param val The value of the property which shall be set.
+                 */
+                function setObjectPropVal(obj, path, val) {
+                    var splits = path.split(_strDot);
+                    var splitsLength = splits.length;
+                    var i = 0;
+                    var extendObj = {};
+                    var extendObjRoot = extendObj;
+                    for (; i < splitsLength; i++)
+                        extendObj = extendObj[splits[i]] = i + 1 < splitsLength ? {} : val;
+                    FRAMEWORK.extend(obj, extendObjRoot, true);
+                }
+
+                /**	
+                 * Runs a action for each selector inside the updateOnLoad option.	
+                 * @param {Function} action The action for each updateOnLoad selector, the arguments the function takes is the index and the value (the selector).	
+                 */
+                function eachUpdateOnLoad(action) {
+                    var updateOnLoad = _currentPreparedOptions.updateOnLoad;
+                    updateOnLoad = type(updateOnLoad) == TYPES.s ? updateOnLoad.split(_strSpace) : updateOnLoad;
+
+                    if (COMPATIBILITY.isA(updateOnLoad) && !_destroyed) {
+                        each(updateOnLoad, action);
+                    }
+                }
+
+
+                //==== Utils Cache ====//
+
+                /**
+                 * Compares two values or objects and returns true if they aren't equal.
+                 * @param current The first value or object which shall be compared.
+                 * @param cache The second value or object which shall be compared.
+                 * @param force If true the returned value is always true.
+                 * @returns {boolean} True if both values or objects aren't equal or force is true, false otherwise.
+                 */
+                function checkCache(current, cache, force) {
+                    if (force)
+                        return force;
+                    if (type(current) == TYPES.o && type(cache) == TYPES.o) {
+                        for (var prop in current) {
+                            if (prop !== 'c') {
+                                if (current[LEXICON.hOP](prop) && cache[LEXICON.hOP](prop)) {
+                                    if (checkCache(current[prop], cache[prop]))
+                                        return true;
+                                }
+                                else {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        return current !== cache;
+                    }
+                    return false;
+                }
+
+
+                //==== Shortcuts ====//
+
+                /**
+                 * jQuery extend method shortcut with a appended "true" as first argument.
+                 */
+                function extendDeep() {
+                    return FRAMEWORK.extend.apply(this, [true].concat([].slice.call(arguments)));
+                }
+
+                /**
+                 * jQuery addClass method shortcut.
+                 */
+                function addClass(el, classes) {
+                    return _frameworkProto.addClass.call(el, classes);
+                }
+
+                /**
+                 * jQuery removeClass method shortcut.
+                 */
+                function removeClass(el, classes) {
+                    return _frameworkProto.removeClass.call(el, classes);
+                }
+
+                /**
+                 * Adds or removes the given classes dependent on the boolean value. True for add, false for remove.
+                 */
+                function addRemoveClass(el, classes, doAdd) {
+                    return doAdd ? addClass(el, classes) : removeClass(el, classes);
+                }
+
+                /**
+                 * jQuery remove method shortcut.
+                 */
+                function remove(el) {
+                    return _frameworkProto.remove.call(el);
+                }
+
+                /**
+                 * Finds the first child element with the given selector of the given element.
+                 * @param el The root element from which the selector shall be valid.
+                 * @param selector The selector of the searched element.
+                 * @returns {*} The first element which is a child of the given element and matches the givens selector.
+                 */
+                function findFirst(el, selector) {
+                    return _frameworkProto.find.call(el, selector).eq(0);
+                }
+
+
+                //==== API ====//
+
+                /**
+                 * Puts the instance to sleep. It wont respond to any changes in the DOM and won't update. Scrollbar Interactivity is also disabled as well as the resize handle.
+                 * This behavior can be reset by calling the update method.
+                 */
+                _base.sleep = function () {
+                    _sleeping = true;
+                };
+
+                /**
+                 * Updates the plugin and DOM to the current options.
+                 * This method should only be called if a update is 100% required.
+                 * @param force True if every property shall be updated and the cache shall be ignored.
+                 * !INTERNAL USAGE! : force can be a string "auto", "sync" or "zoom" too
+                 * if "auto" then before a real update the content size and host element attributes gets checked, and if they changed only then the update method will be called.
+                 * if "sync" then the async update process (MutationObserver or UpdateLoop) gets synchronized and a corresponding update takes place if one was needed due to pending changes.
+                 * if "zoom" then a update takes place where it's assumed that content and host size changed
+                 * @returns {boolean|undefined} 
+                 * If force is "sync" then a boolean is returned which indicates whether a update was needed due to pending changes.
+                 * If force is "auto" then a boolean is returned whether a update was needed due to attribute or size changes.
+                 * undefined otherwise.
+                 */
+                _base.update = function (force) {
+                    if (_destroyed)
+                        return;
+
+                    var attrsChanged;
+                    var contentSizeC;
+                    var isString = type(force) == TYPES.s;
+                    var doUpdateAuto;
+                    var mutHost;
+                    var mutContent;
+
+                    if (isString) {
+                        if (force === _strAuto) {
+                            attrsChanged = meaningfulAttrsChanged();
+                            contentSizeC = updateAutoContentSizeChanged();
+                            doUpdateAuto = attrsChanged || contentSizeC;
+                            if (doUpdateAuto) {
+                                update({
+                                    _contentSizeChanged: contentSizeC,
+                                    _changedOptions: _initialized ? undefined : _currentPreparedOptions
+                                });
+                            }
+                        }
+                        else if (force === _strSync) {
+                            if (_mutationObserversConnected) {
+                                mutHost = _mutationObserverHostCallback(_mutationObserverHost.takeRecords());
+                                mutContent = _mutationObserverContentCallback(_mutationObserverContent.takeRecords());
+                            }
+                            else {
+                                mutHost = _base.update(_strAuto);
+                            }
+                        }
+                        else if (force === 'zoom') {
+                            update({
+                                _hostSizeChanged: true,
+                                _contentSizeChanged: true
+                            });
+                        }
+                    }
+                    else {
+                        force = _sleeping || force;
+                        _sleeping = false;
+                        if (!_base.update(_strSync) || force)
+                            update({ _force: force });
+                    }
+
+                    updateElementsOnLoad();
+
+                    return doUpdateAuto || mutHost || mutContent;
+                };
+
+                /**
+                 Gets or sets the current options. The update method will be called automatically if new options were set.
+                 * @param newOptions If new options are given, then the new options will be set, if new options aren't given (undefined or a not a plain object) then the current options will be returned.
+                 * @param value If new options is a property path string, then this value will be used to set the option to which the property path string leads.
+                 * @returns {*}
+                 */
+                _base.options = function (newOptions, value) {
+                    var option = {};
+                    var changedOps;
+
+                    //return current options if newOptions are undefined or empty
+                    if (FRAMEWORK.isEmptyObject(newOptions) || !FRAMEWORK.isPlainObject(newOptions)) {
+                        if (type(newOptions) == TYPES.s) {
+                            if (arguments.length > 1) {
+                                setObjectPropVal(option, newOptions, value);
+                                changedOps = setOptions(option);
+                            }
+                            else
+                                return getObjectPropVal(_currentOptions, newOptions);
+                        }
+                        else
+                            return _currentOptions;
+                    }
+                    else {
+                        changedOps = setOptions(newOptions);
+                    }
+
+                    if (!FRAMEWORK.isEmptyObject(changedOps)) {
+                        update({ _changedOptions: changedOps });
+                    }
+                };
+
+                /**
+                 * Restore the DOM, disconnects all observers, remove all resize observers and put the instance to sleep.
+                 */
+                _base.destroy = function () {
+                    if (_destroyed)
+                        return;
+
+                    //remove this instance from auto update loop
+                    autoUpdateLoop.remove(_base);
+
+                    //disconnect all mutation observers
+                    disconnectMutationObservers();
+
+                    //remove all resize observers
+                    setupResizeObserver(_sizeObserverElement);
+                    setupResizeObserver(_sizeAutoObserverElement);
+
+                    //remove all extensions
+                    for (var extName in _extensions)
+                        _base.removeExt(extName);
+
+                    //remove all 'destroy' events
+                    while (_destroyEvents[LEXICON.l] > 0)
+                        _destroyEvents.pop()();
+
+                    //remove all events from host element
+                    setupHostMouseTouchEvents(true);
+
+                    //remove all helper / detection elements
+                    if (_contentGlueElement)
+                        remove(_contentGlueElement);
+                    if (_contentArrangeElement)
+                        remove(_contentArrangeElement);
+                    if (_sizeAutoObserverAdded)
+                        remove(_sizeAutoObserverElement);
+
+                    //remove all generated DOM
+                    setupScrollbarsDOM(true);
+                    setupScrollbarCornerDOM(true);
+                    setupStructureDOM(true);
+
+                    //remove all generated image load events
+                    for (var i = 0; i < _updateOnLoadElms[LEXICON.l]; i++)
+                        FRAMEWORK(_updateOnLoadElms[i]).off(_updateOnLoadEventName, updateOnLoadCallback);
+                    _updateOnLoadElms = undefined;
+
+                    _destroyed = true;
+                    _sleeping = true;
+
+                    //remove this instance from the instances list
+                    INSTANCES(pluginTargetElement, 0);
+                    dispatchCallback('onDestroyed');
+
+                    //remove all properties and methods
+                    //for (var property in _base)
+                    //    delete _base[property];
+                    //_base = undefined;
+                };
+
+                /**
+                 * Scrolls to a given position or element.
+                 * @param coordinates
+                 * 1. Can be "coordinates" which looks like:
+                 *    { x : ?, y : ? } OR          Object with x and y properties
+                 *    { left : ?, top : ? } OR     Object with left and top properties
+                 *    { l : ?, t : ? } OR          Object with l and t properties
+                 *    [ ?, ? ] OR                  Array where the first two element are the coordinates (first is x, second is y)
+                 *    ?                            A single value which stays for both axis
+                 *    A value can be a number, a string or a calculation.
+                 *
+                 *    Operators:
+                 *    [NONE]  The current scroll will be overwritten by the value.
+                 *    '+='    The value will be added to the current scroll offset
+                 *    '-='    The value will be subtracted from the current scroll offset
+                 *    '*='    The current scroll wil be multiplicated by the value.
+                 *    '/='    The current scroll wil be divided by the value.
+                 *
+                 *    Units:
+                 *    [NONE]  The value is the final scroll amount.                   final = (value * 1)
+                 *    'px'    Same as none
+                 *    '%'     The value is dependent on the current scroll value.     final = ((currentScrollValue / 100) * value)
+                 *    'vw'    The value is multiplicated by the viewport width.       final = (value * viewportWidth)
+                 *    'vh'    The value is multiplicated by the viewport height.      final = (value * viewportHeight)
+                 *
+                 *    example final values:
+                 *    200, '200px', '50%', '1vw', '1vh', '+=200', '/=1vw', '*=2px', '-=5vh', '+=33%', '+= 50% - 2px', '-= 1vw - 50%'
+                 *
+                 * 2. Can be a HTML or jQuery element:
+                 *    The final scroll offset is the offset (without margin) of the given HTML / jQuery element.
+                 *
+                 * 3. Can be a object with a HTML or jQuery element with additional settings:
+                 *    {
+                 *      el : [HTMLElement, jQuery element],             MUST be specified, else this object isn't valid.
+                 *      scroll : [string, array, object],               Default value is 'always'.
+                 *      block : [string, array, object],                Default value is 'begin'.
+                 *      margin : [number, boolean, array, object]       Default value is false.
+                 *    }
+                 *
+                 *    Possible scroll settings are:
+                 *    'always'      Scrolls always.
+                 *    'ifneeded'    Scrolls only if the element isnt fully in view.
+                 *    'never'       Scrolls never.
+                 *
+                 *    Possible block settings are:
+                 *    'begin'   Both axis shall be docked to the "begin" edge. - The element will be docked to the top and left edge of the viewport.
+                 *    'end'     Both axis shall be docked to the "end" edge. - The element will be docked to the bottom and right edge of the viewport. (If direction is RTL to the bottom and left edge.)
+                 *    'center'  Both axis shall be docked to "center". - The element will be centered in the viewport.
+                 *    'nearest' The element will be docked to the nearest edge(s).
+                 *
+                 *    Possible margin settings are: -- The actual margin of the element wont be affect, this option affects only the final scroll offset.
+                 *    [BOOLEAN]                                         If true the css margin of the element will be used, if false no margin will be used.
+                 *    [NUMBER]                                          The margin will be used for all edges.
+                 *
+                 * @param duration The duration of the scroll animation, OR a jQuery animation configuration object.
+                 * @param easing The animation easing.
+                 * @param complete The animation complete callback.
+                 * @returns {{
+                 *   position: {x: number, y: number},
+                 *   ratio: {x: number, y: number},
+                 *   max: {x: number, y: number},
+                 *   handleOffset: {x: number, y: number},
+                 *   handleLength: {x: number, y: number},
+                 *   handleLengthRatio: {x: number, y: number}, t
+                 *   rackLength: {x: number, y: number},
+                 *   isRTL: boolean,
+                 *   isRTLNormalized: boolean
+                 *  }}
+                 */
+                _base.scroll = function (coordinates, duration, easing, complete) {
+                    if (arguments.length === 0 || coordinates === undefined) {
+                        var infoX = _scrollHorizontalInfo;
+                        var infoY = _scrollVerticalInfo;
+                        var normalizeInvert = _normalizeRTLCache && _isRTL && _rtlScrollBehavior.i;
+                        var normalizeNegate = _normalizeRTLCache && _isRTL && _rtlScrollBehavior.n;
+                        var scrollX = infoX._currentScroll;
+                        var scrollXRatio = infoX._currentScrollRatio;
+                        var maxScrollX = infoX._maxScroll;
+                        scrollXRatio = normalizeInvert ? 1 - scrollXRatio : scrollXRatio;
+                        scrollX = normalizeInvert ? maxScrollX - scrollX : scrollX;
+                        scrollX *= normalizeNegate ? -1 : 1;
+                        maxScrollX *= normalizeNegate ? -1 : 1;
+
+                        return {
+                            position: {
+                                x: scrollX,
+                                y: infoY._currentScroll
+                            },
+                            ratio: {
+                                x: scrollXRatio,
+                                y: infoY._currentScrollRatio
+                            },
+                            max: {
+                                x: maxScrollX,
+                                y: infoY._maxScroll
+                            },
+                            handleOffset: {
+                                x: infoX._handleOffset,
+                                y: infoY._handleOffset
+                            },
+                            handleLength: {
+                                x: infoX._handleLength,
+                                y: infoY._handleLength
+                            },
+                            handleLengthRatio: {
+                                x: infoX._handleLengthRatio,
+                                y: infoY._handleLengthRatio
+                            },
+                            trackLength: {
+                                x: infoX._trackLength,
+                                y: infoY._trackLength
+                            },
+                            snappedHandleOffset: {
+                                x: infoX._snappedHandleOffset,
+                                y: infoY._snappedHandleOffset
+                            },
+                            isRTL: _isRTL,
+                            isRTLNormalized: _normalizeRTLCache
+                        };
+                    }
+
+                    _base.update(_strSync);
+
+                    var normalizeRTL = _normalizeRTLCache;
+                    var coordinatesXAxisProps = [_strX, _strLeft, 'l'];
+                    var coordinatesYAxisProps = [_strY, _strTop, 't'];
+                    var coordinatesOperators = ['+=', '-=', '*=', '/='];
+                    var durationIsObject = type(duration) == TYPES.o;
+                    var completeCallback = durationIsObject ? duration.complete : complete;
+                    var i;
+                    var finalScroll = {};
+                    var specialEasing = {};
+                    var doScrollLeft;
+                    var doScrollTop;
+                    var animationOptions;
+                    var strEnd = 'end';
+                    var strBegin = 'begin';
+                    var strCenter = 'center';
+                    var strNearest = 'nearest';
+                    var strAlways = 'always';
+                    var strNever = 'never';
+                    var strIfNeeded = 'ifneeded';
+                    var strLength = LEXICON.l;
+                    var settingsAxis;
+                    var settingsScroll;
+                    var settingsBlock;
+                    var settingsMargin;
+                    var finalElement;
+                    var elementObjSettingsAxisValues = [_strX, _strY, 'xy', 'yx'];
+                    var elementObjSettingsBlockValues = [strBegin, strEnd, strCenter, strNearest];
+                    var elementObjSettingsScrollValues = [strAlways, strNever, strIfNeeded];
+                    var coordinatesIsElementObj = coordinates[LEXICON.hOP]('el');
+                    var possibleElement = coordinatesIsElementObj ? coordinates.el : coordinates;
+                    var possibleElementIsJQuery = possibleElement instanceof FRAMEWORK || JQUERY ? possibleElement instanceof JQUERY : false;
+                    var possibleElementIsHTMLElement = possibleElementIsJQuery ? false : isHTMLElement(possibleElement);
+                    var updateScrollbarInfos = function () {
+                        if (doScrollLeft)
+                            refreshScrollbarHandleOffset(true);
+                        if (doScrollTop)
+                            refreshScrollbarHandleOffset(false);
+                    };
+                    var proxyCompleteCallback = type(completeCallback) != TYPES.f ? undefined : function () {
+                        updateScrollbarInfos();
+                        completeCallback();
+                    };
+                    function checkSettingsStringValue(currValue, allowedValues) {
+                        for (i = 0; i < allowedValues[strLength]; i++) {
+                            if (currValue === allowedValues[i])
+                                return true;
+                        }
+                        return false;
+                    }
+                    function getRawScroll(isX, coordinates) {
+                        var coordinateProps = isX ? coordinatesXAxisProps : coordinatesYAxisProps;
+                        coordinates = type(coordinates) == TYPES.s || type(coordinates) == TYPES.n ? [coordinates, coordinates] : coordinates;
+
+                        if (COMPATIBILITY.isA(coordinates))
+                            return isX ? coordinates[0] : coordinates[1];
+                        else if (type(coordinates) == TYPES.o) {
+                            //decides RTL normalization "hack" with .n
+                            //normalizeRTL = type(coordinates.n) == TYPES.b ? coordinates.n : normalizeRTL; 
+                            for (i = 0; i < coordinateProps[strLength]; i++)
+                                if (coordinateProps[i] in coordinates)
+                                    return coordinates[coordinateProps[i]];
+                        }
+                    }
+                    function getFinalScroll(isX, rawScroll) {
+                        var isString = type(rawScroll) == TYPES.s;
+                        var operator;
+                        var amount;
+                        var scrollInfo = isX ? _scrollHorizontalInfo : _scrollVerticalInfo;
+                        var currScroll = scrollInfo._currentScroll;
+                        var maxScroll = scrollInfo._maxScroll;
+                        var mult = ' * ';
+                        var finalValue;
+                        var isRTLisX = _isRTL && isX;
+                        var normalizeShortcuts = isRTLisX && _rtlScrollBehavior.n && !normalizeRTL;
+                        var strReplace = 'replace';
+                        var evalFunc = eval;
+                        var possibleOperator;
+                        if (isString) {
+                            //check operator
+                            if (rawScroll[strLength] > 2) {
+                                possibleOperator = rawScroll.substr(0, 2);
+                                if (inArray(possibleOperator, coordinatesOperators) > -1)
+                                    operator = possibleOperator;
+                            }
+
+                            //calculate units and shortcuts
+                            rawScroll = operator ? rawScroll.substr(2) : rawScroll;
+                            rawScroll = rawScroll
+                            [strReplace](/min/g, 0) //'min' = 0%
+                            [strReplace](/</g, 0)   //'<'   = 0%
+                            [strReplace](/max/g, (normalizeShortcuts ? '-' : _strEmpty) + _strHundredPercent)    //'max' = 100%
+                            [strReplace](/>/g, (normalizeShortcuts ? '-' : _strEmpty) + _strHundredPercent)      //'>'   = 100%
+                            [strReplace](/px/g, _strEmpty)
+                            [strReplace](/%/g, mult + (maxScroll * (isRTLisX && _rtlScrollBehavior.n ? -1 : 1) / 100.0))
+                            [strReplace](/vw/g, mult + _viewportSize.w)
+                            [strReplace](/vh/g, mult + _viewportSize.h);
+                            amount = parseToZeroOrNumber(isNaN(rawScroll) ? parseToZeroOrNumber(evalFunc(rawScroll), true).toFixed() : rawScroll);
+                        }
+                        else {
+                            amount = rawScroll;
+                        }
+
+                        if (amount !== undefined && !isNaN(amount) && type(amount) == TYPES.n) {
+                            var normalizeIsRTLisX = normalizeRTL && isRTLisX;
+                            var operatorCurrScroll = currScroll * (normalizeIsRTLisX && _rtlScrollBehavior.n ? -1 : 1);
+                            var invert = normalizeIsRTLisX && _rtlScrollBehavior.i;
+                            var negate = normalizeIsRTLisX && _rtlScrollBehavior.n;
+                            operatorCurrScroll = invert ? (maxScroll - operatorCurrScroll) : operatorCurrScroll;
+                            switch (operator) {
+                                case '+=':
+                                    finalValue = operatorCurrScroll + amount;
+                                    break;
+                                case '-=':
+                                    finalValue = operatorCurrScroll - amount;
+                                    break;
+                                case '*=':
+                                    finalValue = operatorCurrScroll * amount;
+                                    break;
+                                case '/=':
+                                    finalValue = operatorCurrScroll / amount;
+                                    break;
+                                default:
+                                    finalValue = amount;
+                                    break;
+                            }
+                            finalValue = invert ? maxScroll - finalValue : finalValue;
+                            finalValue *= negate ? -1 : 1;
+                            finalValue = isRTLisX && _rtlScrollBehavior.n ? MATH.min(0, MATH.max(maxScroll, finalValue)) : MATH.max(0, MATH.min(maxScroll, finalValue));
+                        }
+                        return finalValue === currScroll ? undefined : finalValue;
+                    }
+                    function getPerAxisValue(value, valueInternalType, defaultValue, allowedValues) {
+                        var resultDefault = [defaultValue, defaultValue];
+                        var valueType = type(value);
+                        var valueArrLength;
+                        var valueArrItem;
+
+                        //value can be [ string, or array of two strings ]
+                        if (valueType == valueInternalType) {
+                            value = [value, value];
+                        }
+                        else if (valueType == TYPES.a) {
+                            valueArrLength = value[strLength];
+                            if (valueArrLength > 2 || valueArrLength < 1)
+                                value = resultDefault;
+                            else {
+                                if (valueArrLength === 1)
+                                    value[1] = defaultValue;
+                                for (i = 0; i < valueArrLength; i++) {
+                                    valueArrItem = value[i];
+                                    if (type(valueArrItem) != valueInternalType || !checkSettingsStringValue(valueArrItem, allowedValues)) {
+                                        value = resultDefault;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        else if (valueType == TYPES.o)
+                            value = [value[_strX] || defaultValue, value[_strY] || defaultValue];
+                        else
+                            value = resultDefault;
+                        return { x: value[0], y: value[1] };
+                    }
+                    function generateMargin(marginTopRightBottomLeftArray) {
+                        var result = [];
+                        var currValue;
+                        var currValueType;
+                        var valueDirections = [_strTop, _strRight, _strBottom, _strLeft];
+                        for (i = 0; i < marginTopRightBottomLeftArray[strLength]; i++) {
+                            if (i === valueDirections[strLength])
+                                break;
+                            currValue = marginTopRightBottomLeftArray[i];
+                            currValueType = type(currValue);
+                            if (currValueType == TYPES.b)
+                                result.push(currValue ? parseToZeroOrNumber(finalElement.css(_strMarginMinus + valueDirections[i])) : 0);
+                            else
+                                result.push(currValueType == TYPES.n ? currValue : 0);
+                        }
+                        return result;
+                    }
+
+                    if (possibleElementIsJQuery || possibleElementIsHTMLElement) {
+                        //get settings
+                        var margin = coordinatesIsElementObj ? coordinates.margin : 0;
+                        var axis = coordinatesIsElementObj ? coordinates.axis : 0;
+                        var scroll = coordinatesIsElementObj ? coordinates.scroll : 0;
+                        var block = coordinatesIsElementObj ? coordinates.block : 0;
+                        var marginDefault = [0, 0, 0, 0];
+                        var marginType = type(margin);
+                        var marginLength;
+                        finalElement = possibleElementIsJQuery ? possibleElement : FRAMEWORK(possibleElement);
+
+                        if (finalElement[strLength] > 0) {
+                            //margin can be [ boolean, number, array of 2, array of 4, object ]
+                            if (marginType == TYPES.n || marginType == TYPES.b)
+                                margin = generateMargin([margin, margin, margin, margin]);
+                            else if (marginType == TYPES.a) {
+                                marginLength = margin[strLength];
+                                if (marginLength === 2)
+                                    margin = generateMargin([margin[0], margin[1], margin[0], margin[1]]);
+                                else if (marginLength >= 4)
+                                    margin = generateMargin(margin);
+                                else
+                                    margin = marginDefault;
+                            }
+                            else if (marginType == TYPES.o)
+                                margin = generateMargin([margin[_strTop], margin[_strRight], margin[_strBottom], margin[_strLeft]]);
+                            else
+                                margin = marginDefault;
+
+                            //block = type(block) === TYPES.b ? block ? [ strNearest, strBegin ] : [ strNearest, strEnd ] : block;
+                            settingsAxis = checkSettingsStringValue(axis, elementObjSettingsAxisValues) ? axis : 'xy';
+                            settingsScroll = getPerAxisValue(scroll, TYPES.s, strAlways, elementObjSettingsScrollValues);
+                            settingsBlock = getPerAxisValue(block, TYPES.s, strBegin, elementObjSettingsBlockValues);
+                            settingsMargin = margin;
+
+                            var viewportScroll = {
+                                l: _scrollHorizontalInfo._currentScroll,
+                                t: _scrollVerticalInfo._currentScroll
+                            };
+                            // use padding element instead of viewport element because padding element has never padding, margin or position applied.
+                            var viewportOffset = _paddingElement.offset();
+
+                            //get coordinates
+                            var elementOffset = finalElement.offset();
+                            var doNotScroll = {
+                                x: settingsScroll.x == strNever || settingsAxis == _strY,
+                                y: settingsScroll.y == strNever || settingsAxis == _strX
+                            };
+                            elementOffset[_strTop] -= settingsMargin[0];
+                            elementOffset[_strLeft] -= settingsMargin[3];
+                            var elementScrollCoordinates = {
+                                x: MATH.round(elementOffset[_strLeft] - viewportOffset[_strLeft] + viewportScroll.l),
+                                y: MATH.round(elementOffset[_strTop] - viewportOffset[_strTop] + viewportScroll.t)
+                            };
+                            if (_isRTL) {
+                                if (!_rtlScrollBehavior.n && !_rtlScrollBehavior.i)
+                                    elementScrollCoordinates.x = MATH.round(viewportOffset[_strLeft] - elementOffset[_strLeft] + viewportScroll.l);
+                                if (_rtlScrollBehavior.n && normalizeRTL)
+                                    elementScrollCoordinates.x *= -1;
+                                if (_rtlScrollBehavior.i && normalizeRTL)
+                                    elementScrollCoordinates.x = MATH.round(viewportOffset[_strLeft] - elementOffset[_strLeft] + (_scrollHorizontalInfo._maxScroll - viewportScroll.l));
+                            }
+
+                            //measuring is required
+                            if (settingsBlock.x != strBegin || settingsBlock.y != strBegin || settingsScroll.x == strIfNeeded || settingsScroll.y == strIfNeeded || _isRTL) {
+                                var measuringElm = finalElement[0];
+                                var rawElementSize = _supportTransform ? measuringElm[LEXICON.bCR]() : {
+                                    width: measuringElm[LEXICON.oW],
+                                    height: measuringElm[LEXICON.oH]
+                                };
+                                var elementSize = {
+                                    w: rawElementSize[_strWidth] + settingsMargin[3] + settingsMargin[1],
+                                    h: rawElementSize[_strHeight] + settingsMargin[0] + settingsMargin[2]
+                                };
+                                var finalizeBlock = function (isX) {
+                                    var vars = getScrollbarVars(isX);
+                                    var wh = vars._w_h;
+                                    var lt = vars._left_top;
+                                    var xy = vars._x_y;
+                                    var blockIsEnd = settingsBlock[xy] == (isX ? _isRTL ? strBegin : strEnd : strEnd);
+                                    var blockIsCenter = settingsBlock[xy] == strCenter;
+                                    var blockIsNearest = settingsBlock[xy] == strNearest;
+                                    var scrollNever = settingsScroll[xy] == strNever;
+                                    var scrollIfNeeded = settingsScroll[xy] == strIfNeeded;
+                                    var vpSize = _viewportSize[wh];
+                                    var vpOffset = viewportOffset[lt];
+                                    var elSize = elementSize[wh];
+                                    var elOffset = elementOffset[lt];
+                                    var divide = blockIsCenter ? 2 : 1;
+                                    var elementCenterOffset = elOffset + (elSize / 2);
+                                    var viewportCenterOffset = vpOffset + (vpSize / 2);
+                                    var isInView =
+                                        elSize <= vpSize
+                                        && elOffset >= vpOffset
+                                        && elOffset + elSize <= vpOffset + vpSize;
+
+                                    if (scrollNever)
+                                        doNotScroll[xy] = true;
+                                    else if (!doNotScroll[xy]) {
+                                        if (blockIsNearest || scrollIfNeeded) {
+                                            doNotScroll[xy] = scrollIfNeeded ? isInView : false;
+                                            blockIsEnd = elSize < vpSize ? elementCenterOffset > viewportCenterOffset : elementCenterOffset < viewportCenterOffset;
+                                        }
+                                        elementScrollCoordinates[xy] -= blockIsEnd || blockIsCenter ? ((vpSize / divide) - (elSize / divide)) * (isX && _isRTL && normalizeRTL ? -1 : 1) : 0;
+                                    }
+                                };
+                                finalizeBlock(true);
+                                finalizeBlock(false);
+                            }
+
+                            if (doNotScroll.y)
+                                delete elementScrollCoordinates.y;
+                            if (doNotScroll.x)
+                                delete elementScrollCoordinates.x;
+
+                            coordinates = elementScrollCoordinates;
+                        }
+                    }
+
+                    finalScroll[_strScrollLeft] = getFinalScroll(true, getRawScroll(true, coordinates));
+                    finalScroll[_strScrollTop] = getFinalScroll(false, getRawScroll(false, coordinates));
+                    doScrollLeft = finalScroll[_strScrollLeft] !== undefined;
+                    doScrollTop = finalScroll[_strScrollTop] !== undefined;
+
+                    if ((doScrollLeft || doScrollTop) && (duration > 0 || durationIsObject)) {
+                        if (durationIsObject) {
+                            duration.complete = proxyCompleteCallback;
+                            _viewportElement.animate(finalScroll, duration);
+                        }
+                        else {
+                            animationOptions = {
+                                duration: duration,
+                                complete: proxyCompleteCallback
+                            };
+                            if (COMPATIBILITY.isA(easing) || FRAMEWORK.isPlainObject(easing)) {
+                                specialEasing[_strScrollLeft] = easing[0] || easing.x;
+                                specialEasing[_strScrollTop] = easing[1] || easing.y;
+                                animationOptions.specialEasing = specialEasing;
+                            }
+                            else {
+                                animationOptions.easing = easing;
+                            }
+                            _viewportElement.animate(finalScroll, animationOptions);
+                        }
+                    }
+                    else {
+                        if (doScrollLeft)
+                            _viewportElement[_strScrollLeft](finalScroll[_strScrollLeft]);
+                        if (doScrollTop)
+                            _viewportElement[_strScrollTop](finalScroll[_strScrollTop]);
+                        updateScrollbarInfos();
+                    }
+                };
+
+                /**
+                 * Stops all scroll animations.
+                 * @returns {*} The current OverlayScrollbars instance (for chaining).
+                 */
+                _base.scrollStop = function (param1, param2, param3) {
+                    _viewportElement.stop(param1, param2, param3);
+                    return _base;
+                };
+
+                /**
+                 * Returns all relevant elements.
+                 * @param elementName The name of the element which shall be returned.
+                 * @returns {{target: *, host: *, padding: *, viewport: *, content: *, scrollbarHorizontal: {scrollbar: *, track: *, handle: *}, scrollbarVertical: {scrollbar: *, track: *, handle: *}, scrollbarCorner: *} | *}
+                 */
+                _base.getElements = function (elementName) {
+                    var obj = {
+                        target: _targetElementNative,
+                        host: _hostElementNative,
+                        padding: _paddingElementNative,
+                        viewport: _viewportElementNative,
+                        content: _contentElementNative,
+                        scrollbarHorizontal: {
+                            scrollbar: _scrollbarHorizontalElement[0],
+                            track: _scrollbarHorizontalTrackElement[0],
+                            handle: _scrollbarHorizontalHandleElement[0]
+                        },
+                        scrollbarVertical: {
+                            scrollbar: _scrollbarVerticalElement[0],
+                            track: _scrollbarVerticalTrackElement[0],
+                            handle: _scrollbarVerticalHandleElement[0]
+                        },
+                        scrollbarCorner: _scrollbarCornerElement[0]
+                    };
+                    return type(elementName) == TYPES.s ? getObjectPropVal(obj, elementName) : obj;
+                };
+
+                /**
+                 * Returns a object which describes the current state of this instance.
+                 * @param stateProperty A specific property from the state object which shall be returned.
+                 * @returns {{widthAuto, heightAuto, overflowAmount, hideOverflow, hasOverflow, contentScrollSize, viewportSize, hostSize, autoUpdate} | *}
+                 */
+                _base.getState = function (stateProperty) {
+                    function prepare(obj) {
+                        if (!FRAMEWORK.isPlainObject(obj))
+                            return obj;
+                        var extended = extendDeep({}, obj);
+                        var changePropertyName = function (from, to) {
+                            if (extended[LEXICON.hOP](from)) {
+                                extended[to] = extended[from];
+                                delete extended[from];
+                            }
+                        };
+                        changePropertyName('w', _strWidth); //change w to width
+                        changePropertyName('h', _strHeight); //change h to height
+                        delete extended.c; //delete c (the 'changed' prop)
+                        return extended;
+                    };
+                    var obj = {
+                        destroyed: !!prepare(_destroyed),
+                        sleeping: !!prepare(_sleeping),
+                        autoUpdate: prepare(!_mutationObserversConnected),
+                        widthAuto: prepare(_widthAutoCache),
+                        heightAuto: prepare(_heightAutoCache),
+                        padding: prepare(_cssPaddingCache),
+                        overflowAmount: prepare(_overflowAmountCache),
+                        hideOverflow: prepare(_hideOverflowCache),
+                        hasOverflow: prepare(_hasOverflowCache),
+                        contentScrollSize: prepare(_contentScrollSizeCache),
+                        viewportSize: prepare(_viewportSize),
+                        hostSize: prepare(_hostSizeCache),
+                        documentMixed: prepare(_documentMixed)
+                    };
+                    return type(stateProperty) == TYPES.s ? getObjectPropVal(obj, stateProperty) : obj;
+                };
+
+                /**
+                 * Gets all or specific extension instance.
+                 * @param extName The name of the extension from which the instance shall be got.
+                 * @returns {{}} The instance of the extension with the given name or undefined if the instance couldn't be found.
+                 */
+                _base.ext = function (extName) {
+                    var result;
+                    var privateMethods = _extensionsPrivateMethods.split(' ');
+                    var i = 0;
+                    if (type(extName) == TYPES.s) {
+                        if (_extensions[LEXICON.hOP](extName)) {
+                            result = extendDeep({}, _extensions[extName]);
+                            for (; i < privateMethods.length; i++)
+                                delete result[privateMethods[i]];
+                        }
+                    }
+                    else {
+                        result = {};
+                        for (i in _extensions)
+                            result[i] = extendDeep({}, _base.ext(i));
+                    }
+                    return result;
+                };
+
+                /**
+                 * Adds a extension to this instance.
+                 * @param extName The name of the extension which shall be added.
+                 * @param extensionOptions The extension options which shall be used.
+                 * @returns {{}} The instance of the added extension or undefined if the extension couldn't be added properly.
+                 */
+                _base.addExt = function (extName, extensionOptions) {
+                    var registeredExtensionObj = _plugin.extension(extName);
+                    var instance;
+                    var instanceAdded;
+                    var instanceContract;
+                    var contractResult;
+                    var contractFulfilled = true;
+                    if (registeredExtensionObj) {
+                        if (!_extensions[LEXICON.hOP](extName)) {
+                            instance = registeredExtensionObj.extensionFactory.call(_base,
+                                extendDeep({}, registeredExtensionObj.defaultOptions),
+                                FRAMEWORK,
+                                COMPATIBILITY);
+
+                            if (instance) {
+                                instanceContract = instance.contract;
+                                if (type(instanceContract) == TYPES.f) {
+                                    contractResult = instanceContract(window);
+                                    contractFulfilled = type(contractResult) == TYPES.b ? contractResult : contractFulfilled;
+                                }
+                                if (contractFulfilled) {
+                                    _extensions[extName] = instance;
+                                    instanceAdded = instance.added;
+                                    if (type(instanceAdded) == TYPES.f)
+                                        instanceAdded(extensionOptions);
+
+                                    return _base.ext(extName);
+                                }
+                            }
+                        }
+                        else
+                            return _base.ext(extName);
+                    }
+                    else
+                        console.warn("A extension with the name \"" + extName + "\" isn't registered.");
+                };
+
+                /**
+                 * Removes a extension from this instance.
+                 * @param extName The name of the extension which shall be removed.
+                 * @returns {boolean} True if the extension was removed, false otherwise e.g. if the extension wasn't added before.
+                 */
+                _base.removeExt = function (extName) {
+                    var instance = _extensions[extName];
+                    var instanceRemoved;
+                    if (instance) {
+                        delete _extensions[extName];
+
+                        instanceRemoved = instance.removed;
+                        if (type(instanceRemoved) == TYPES.f)
+                            instanceRemoved();
+
+                        return true;
+                    }
+                    return false;
+                };
+
+                /**
+                 * Constructs the plugin.
+                 * @param targetElement The element to which the plugin shall be applied.
+                 * @param options The initial options of the plugin.
+                 * @param extensions The extension(s) which shall be added right after the initialization.
+                 * @returns {boolean} True if the plugin was successfully initialized, false otherwise.
+                 */
+                function construct(targetElement, options, extensions) {
+                    _defaultOptions = globals.defaultOptions;
+                    _nativeScrollbarStyling = globals.nativeScrollbarStyling;
+                    _nativeScrollbarSize = extendDeep({}, globals.nativeScrollbarSize);
+                    _nativeScrollbarIsOverlaid = extendDeep({}, globals.nativeScrollbarIsOverlaid);
+                    _overlayScrollbarDummySize = extendDeep({}, globals.overlayScrollbarDummySize);
+                    _rtlScrollBehavior = extendDeep({}, globals.rtlScrollBehavior);
+
+                    //parse & set options but don't update
+                    setOptions(extendDeep({}, _defaultOptions, options));
+
+                    _cssCalc = globals.cssCalc;
+                    _msieVersion = globals.msie;
+                    _autoUpdateRecommended = globals.autoUpdateRecommended;
+                    _supportTransition = globals.supportTransition;
+                    _supportTransform = globals.supportTransform;
+                    _supportPassiveEvents = globals.supportPassiveEvents;
+                    _supportResizeObserver = globals.supportResizeObserver;
+                    _supportMutationObserver = globals.supportMutationObserver;
+                    _restrictedMeasuring = globals.restrictedMeasuring;
+                    _documentElement = FRAMEWORK(targetElement.ownerDocument);
+                    _documentElementNative = _documentElement[0];
+                    _windowElement = FRAMEWORK(_documentElementNative.defaultView || _documentElementNative.parentWindow);
+                    _windowElementNative = _windowElement[0];
+                    _htmlElement = findFirst(_documentElement, 'html');
+                    _bodyElement = findFirst(_htmlElement, 'body');
+                    _targetElement = FRAMEWORK(targetElement);
+                    _targetElementNative = _targetElement[0];
+                    _isTextarea = _targetElement.is('textarea');
+                    _isBody = _targetElement.is('body');
+                    _documentMixed = _documentElementNative !== document;
+
+                    /* On a div Element The if checks only whether:
+                     * - the targetElement has the class "os-host"
+                     * - the targetElement has a a child with the class "os-padding"
+                     * 
+                     * If that's the case, its assumed the DOM has already the following structure:
+                     * (The ".os-host" element is the targetElement)
+                     *
+                     *  <div class="os-host">
+                     *      <div class="os-resize-observer-host"></div>
+                     *      <div class="os-padding">
+                     *          <div class="os-viewport">
+                     *              <div class="os-content"></div>
+                     *          </div>
+                     *      </div>
+                     *      <div class="os-scrollbar os-scrollbar-horizontal ">
+                     *          <div class="os-scrollbar-track">
+                     *              <div class="os-scrollbar-handle"></div>
+                     *          </div>
+                     *      </div>
+                     *      <div class="os-scrollbar os-scrollbar-vertical">
+                     *          <div class="os-scrollbar-track">
+                     *              <div class="os-scrollbar-handle"></div>
+                     *          </div>
+                     *      </div>
+                     *      <div class="os-scrollbar-corner"></div>
+                     *  </div>
+                     *
+                     * =====================================================================================
+                     * 
+                     * On a Textarea Element The if checks only whether:
+                     * - the targetElement has the class "os-textarea" 
+                     * - the targetElement is inside a element with the class "os-content" 
+                     * 
+                     * If that's the case, its assumed the DOM has already the following structure:
+                     * (The ".os-textarea" (textarea) element is the targetElement)
+                     *
+                     *  <div class="os-host-textarea">
+                     *      <div class="os-resize-observer-host"></div>
+                     *      <div class="os-padding os-text-inherit">
+                     *          <div class="os-viewport os-text-inherit">
+                     *              <div class="os-content os-text-inherit">
+                     *                  <div class="os-textarea-cover"></div>
+                     *                  <textarea class="os-textarea os-text-inherit"></textarea>
+                     *              </div>
+                     *          </div>
+                     *      </div>
+                     *      <div class="os-scrollbar os-scrollbar-horizontal ">
+                     *          <div class="os-scrollbar-track">
+                     *              <div class="os-scrollbar-handle"></div>
+                     *          </div>
+                     *      </div>
+                     *      <div class="os-scrollbar os-scrollbar-vertical">
+                     *          <div class="os-scrollbar-track">
+                     *              <div class="os-scrollbar-handle"></div>
+                     *          </div>
+                     *      </div>
+                     *      <div class="os-scrollbar-corner"></div>
+                     *  </div>
+                     */
+                    _domExists = _isTextarea
+                        ? _targetElement.hasClass(_classNameTextareaElement) && _targetElement.parent().hasClass(_classNameContentElement)
+                        : _targetElement.hasClass(_classNameHostElement) && _targetElement.children(_strDot + _classNamePaddingElement)[LEXICON.l];
+
+                    var initBodyScroll;
+                    var bodyMouseTouchDownListener;
+
+                    //check if the plugin hasn't to be initialized
+                    if (_nativeScrollbarIsOverlaid.x && _nativeScrollbarIsOverlaid.y && !_currentPreparedOptions.nativeScrollbarsOverlaid.initialize) {
+                        dispatchCallback('onInitializationWithdrawn');
+                        if (_domExists) {
+                            setupStructureDOM(true);
+                            setupScrollbarsDOM(true);
+                            setupScrollbarCornerDOM(true);
+                        }
+
+                        _destroyed = true;
+                        _sleeping = true;
+
+                        return _base;
+                    }
+
+                    if (_isBody) {
+                        initBodyScroll = {};
+                        initBodyScroll.l = MATH.max(_targetElement[_strScrollLeft](), _htmlElement[_strScrollLeft](), _windowElement[_strScrollLeft]());
+                        initBodyScroll.t = MATH.max(_targetElement[_strScrollTop](), _htmlElement[_strScrollTop](), _windowElement[_strScrollTop]());
+
+                        bodyMouseTouchDownListener = function () {
+                            _viewportElement.removeAttr(LEXICON.ti);
+                            setupResponsiveEventListener(_viewportElement, _strMouseTouchDownEvent, bodyMouseTouchDownListener, true, true);
+                        }
+                    }
+
+                    //build OverlayScrollbars DOM
+                    setupStructureDOM();
+                    setupScrollbarsDOM();
+                    setupScrollbarCornerDOM();
+
+                    //create OverlayScrollbars events
+                    setupStructureEvents();
+                    setupScrollbarEvents(true);
+                    setupScrollbarEvents(false);
+                    setupScrollbarCornerEvents();
+
+                    //create mutation observers
+                    createMutationObservers();
+
+                    //build resize observer for the host element
+                    setupResizeObserver(_sizeObserverElement, hostOnResized);
+
+                    if (_isBody) {
+                        //apply the body scroll to handle it right in the update method
+                        _viewportElement[_strScrollLeft](initBodyScroll.l)[_strScrollTop](initBodyScroll.t);
+
+                        //set the focus on the viewport element so you dont have to click on the page to use keyboard keys (up / down / space) for scrolling
+                        if (document.activeElement == targetElement && _viewportElementNative.focus) {
+                            //set a tabindex to make the viewportElement focusable
+                            _viewportElement.attr(LEXICON.ti, '-1');
+                            _viewportElementNative.focus();
+
+                            /* the tabindex has to be removed due to;
+                             * If you set the tabindex attribute on an <div>, then its child content cannot be scrolled with the arrow keys unless you set tabindex on the content, too
+                             * https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex
+                             */
+                            setupResponsiveEventListener(_viewportElement, _strMouseTouchDownEvent, bodyMouseTouchDownListener, false, true);
+                        }
+                    }
+
+                    //update for the first time & initialize cache
+                    _base.update(_strAuto);
+
+                    //the plugin is initialized now!
+                    _initialized = true;
+                    dispatchCallback('onInitialized');
+
+                    //call all callbacks which would fire before the initialized was complete
+                    each(_callbacksInitQeueue, function (index, value) { dispatchCallback(value.n, value.a); });
+                    _callbacksInitQeueue = [];
+
+                    //add extensions
+                    if (type(extensions) == TYPES.s)
+                        extensions = [extensions];
+                    if (COMPATIBILITY.isA(extensions))
+                        each(extensions, function (index, value) { _base.addExt(value); });
+                    else if (FRAMEWORK.isPlainObject(extensions))
+                        each(extensions, function (key, value) { _base.addExt(key, value); });
+
+                    //add the transition class for transitions AFTER the first update & AFTER the applied extensions (for preventing unwanted transitions)
+                    setTimeout(function () {
+                        if (_supportTransition && !_destroyed)
+                            addClass(_hostElement, _classNameHostTransition);
+                    }, 333);
+
+                    return _base;
+                }
+
+                if (_plugin.valid(construct(pluginTargetElement, options, extensions))) {
+                    INSTANCES(pluginTargetElement, _base);
+                }
+
+                return _base;
+            }
+
+            /**
+             * Initializes a new OverlayScrollbarsInstance object or changes options if already initialized or returns the current instance.
+             * @param pluginTargetElements The elements to which the Plugin shall be initialized.
+             * @param options The custom options with which the plugin shall be initialized.
+             * @param extensions The extension(s) which shall be added right after initialization.
+             * @returns {*}
+             */
+            _plugin = window[PLUGINNAME] = function (pluginTargetElements, options, extensions) {
+                if (arguments[LEXICON.l] === 0)
+                    return this;
+
+                var arr = [];
+                var optsIsPlainObj = FRAMEWORK.isPlainObject(options);
+                var inst;
+                var result;
+
+                //pluginTargetElements is null or undefined
+                if (!pluginTargetElements)
+                    return optsIsPlainObj || !options ? result : arr;
+
+                /*
+                   pluginTargetElements will be converted to:
+                   1. A jQueryElement Array
+                   2. A HTMLElement Array
+                   3. A Array with a single HTML Element
+                   so pluginTargetElements is always a array.
+                */
+                pluginTargetElements = pluginTargetElements[LEXICON.l] != undefined ? pluginTargetElements : [pluginTargetElements[0] || pluginTargetElements];
+                initOverlayScrollbarsStatics();
+
+                if (pluginTargetElements[LEXICON.l] > 0) {
+                    if (optsIsPlainObj) {
+                        FRAMEWORK.each(pluginTargetElements, function (i, v) {
+                            inst = v;
+                            if (inst !== undefined)
+                                arr.push(OverlayScrollbarsInstance(inst, options, extensions, _pluginsGlobals, _pluginsAutoUpdateLoop));
+                        });
+                    }
+                    else {
+                        FRAMEWORK.each(pluginTargetElements, function (i, v) {
+                            inst = INSTANCES(v);
+                            if ((options === '!' && _plugin.valid(inst)) || (COMPATIBILITY.type(options) == TYPES.f && options(v, inst)))
+                                arr.push(inst);
+                            else if (options === undefined)
+                                arr.push(inst);
+                        });
+                    }
+                    result = arr[LEXICON.l] === 1 ? arr[0] : arr;
+                }
+                return result;
+            };
+
+            /**
+             * Returns a object which contains global information about the plugin and each instance of it.
+             * The returned object is just a copy, that means that changes to the returned object won't have any effect to the original object.
+             */
+            _plugin.globals = function () {
+                initOverlayScrollbarsStatics();
+                var globals = FRAMEWORK.extend(true, {}, _pluginsGlobals);
+                delete globals['msie'];
+                return globals;
+            };
+
+            /**
+             * Gets or Sets the default options for each new plugin initialization.
+             * @param newDefaultOptions The object with which the default options shall be extended.
+             */
+            _plugin.defaultOptions = function (newDefaultOptions) {
+                initOverlayScrollbarsStatics();
+                var currDefaultOptions = _pluginsGlobals.defaultOptions;
+                if (newDefaultOptions === undefined)
+                    return FRAMEWORK.extend(true, {}, currDefaultOptions);
+
+                //set the new default options
+                _pluginsGlobals.defaultOptions = FRAMEWORK.extend(true, {}, currDefaultOptions, _pluginsOptions._validate(newDefaultOptions, _pluginsOptions._template, true, currDefaultOptions)._default);
+            };
+
+            /**
+             * Checks whether the passed instance is a non-destroyed OverlayScrollbars instance.
+             * @param osInstance The potential OverlayScrollbars instance which shall be checked.
+             * @returns {boolean} True if the passed value is a non-destroyed OverlayScrollbars instance, false otherwise.
+             */
+            _plugin.valid = function (osInstance) {
+                return osInstance instanceof _plugin && !osInstance.getState().destroyed;
+            };
+
+            /**
+             * Registers, Unregisters or returns a extension.
+             * Register: Pass the name and the extension. (defaultOptions is optional)
+             * Unregister: Pass the name and anything except a function as extension parameter.
+             * Get extension: Pass the name of the extension which shall be got.
+             * Get all extensions: Pass no arguments.
+             * @param extensionName The name of the extension which shall be registered, unregistered or returned.
+             * @param extension A function which generates the instance of the extension or anything other to remove a already registered extension.
+             * @param defaultOptions The default options which shall be used for the registered extension.
+             */
+            _plugin.extension = function (extensionName, extension, defaultOptions) {
+                var extNameTypeString = COMPATIBILITY.type(extensionName) == TYPES.s;
+                var argLen = arguments[LEXICON.l];
+                var i = 0;
+                if (argLen < 1 || !extNameTypeString) {
+                    //return a copy of all extension objects
+                    return FRAMEWORK.extend(true, { length: _pluginsExtensions[LEXICON.l] }, _pluginsExtensions);
+                }
+                else if (extNameTypeString) {
+                    if (COMPATIBILITY.type(extension) == TYPES.f) {
+                        //register extension
+                        _pluginsExtensions.push({
+                            name: extensionName,
+                            extensionFactory: extension,
+                            defaultOptions: defaultOptions
+                        });
+                    }
+                    else {
+                        for (; i < _pluginsExtensions[LEXICON.l]; i++) {
+                            if (_pluginsExtensions[i].name === extensionName) {
+                                if (argLen > 1)
+                                    _pluginsExtensions.splice(i, 1); //remove extension
+                                else
+                                    return FRAMEWORK.extend(true, {}, _pluginsExtensions[i]); //return extension with the given name
+                            }
+                        }
+                    }
+                }
+            };
+
+            return _plugin;
+        })();
+
+        if (JQUERY && JQUERY.fn) {
+            /**
+             * The jQuery initialization interface.
+             * @param options The initial options for the construction of the plugin. To initialize the plugin, this option has to be a object! If it isn't a object, the instance(s) are returned and the plugin wont be initialized.
+             * @param extensions The extension(s) which shall be added right after initialization.
+             * @returns {*} After initialization it returns the jQuery element array, else it returns the instance(s) of the elements which are selected.
+             */
+            JQUERY.fn.overlayScrollbars = function (options, extensions) {
+                var _elements = this;
+                if (JQUERY.isPlainObject(options)) {
+                    JQUERY.each(_elements, function () { PLUGIN(this, options, extensions); });
+                    return _elements;
+                }
+                else
+                    return PLUGIN(_elements, options);
+            };
+        }
+        return PLUGIN;
+    }
+));
+
+/***/ }),
+
 /***/ "./node_modules/popper.js/dist/esm/popper.js":
 /*!***************************************************!*\
   !*** ./node_modules/popper.js/dist/esm/popper.js ***!
@@ -37236,6 +45433,4576 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
+/***/ "./node_modules/pusher-js/dist/web/pusher.js":
+/*!***************************************************!*\
+  !*** ./node_modules/pusher-js/dist/web/pusher.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*!
+ * Pusher JavaScript Library v7.0.0
+ * https://pusher.com/
+ *
+ * Copyright 2020, Pusher
+ * Released under the MIT licence.
+ */
+
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(true)
+		module.exports = factory();
+	else {}
+})(window, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Copyright (C) 2016 Dmitry Chestnykh
+// MIT License. See LICENSE file for details.
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Package base64 implements Base64 encoding and decoding.
+ */
+// Invalid character used in decoding to indicate
+// that the character to decode is out of range of
+// alphabet and cannot be decoded.
+var INVALID_BYTE = 256;
+/**
+ * Implements standard Base64 encoding.
+ *
+ * Operates in constant time.
+ */
+var Coder = /** @class */ (function () {
+    // TODO(dchest): methods to encode chunk-by-chunk.
+    function Coder(_paddingCharacter) {
+        if (_paddingCharacter === void 0) { _paddingCharacter = "="; }
+        this._paddingCharacter = _paddingCharacter;
+    }
+    Coder.prototype.encodedLength = function (length) {
+        if (!this._paddingCharacter) {
+            return (length * 8 + 5) / 6 | 0;
+        }
+        return (length + 2) / 3 * 4 | 0;
+    };
+    Coder.prototype.encode = function (data) {
+        var out = "";
+        var i = 0;
+        for (; i < data.length - 2; i += 3) {
+            var c = (data[i] << 16) | (data[i + 1] << 8) | (data[i + 2]);
+            out += this._encodeByte((c >>> 3 * 6) & 63);
+            out += this._encodeByte((c >>> 2 * 6) & 63);
+            out += this._encodeByte((c >>> 1 * 6) & 63);
+            out += this._encodeByte((c >>> 0 * 6) & 63);
+        }
+        var left = data.length - i;
+        if (left > 0) {
+            var c = (data[i] << 16) | (left === 2 ? data[i + 1] << 8 : 0);
+            out += this._encodeByte((c >>> 3 * 6) & 63);
+            out += this._encodeByte((c >>> 2 * 6) & 63);
+            if (left === 2) {
+                out += this._encodeByte((c >>> 1 * 6) & 63);
+            }
+            else {
+                out += this._paddingCharacter || "";
+            }
+            out += this._paddingCharacter || "";
+        }
+        return out;
+    };
+    Coder.prototype.maxDecodedLength = function (length) {
+        if (!this._paddingCharacter) {
+            return (length * 6 + 7) / 8 | 0;
+        }
+        return length / 4 * 3 | 0;
+    };
+    Coder.prototype.decodedLength = function (s) {
+        return this.maxDecodedLength(s.length - this._getPaddingLength(s));
+    };
+    Coder.prototype.decode = function (s) {
+        if (s.length === 0) {
+            return new Uint8Array(0);
+        }
+        var paddingLength = this._getPaddingLength(s);
+        var length = s.length - paddingLength;
+        var out = new Uint8Array(this.maxDecodedLength(length));
+        var op = 0;
+        var i = 0;
+        var haveBad = 0;
+        var v0 = 0, v1 = 0, v2 = 0, v3 = 0;
+        for (; i < length - 4; i += 4) {
+            v0 = this._decodeChar(s.charCodeAt(i + 0));
+            v1 = this._decodeChar(s.charCodeAt(i + 1));
+            v2 = this._decodeChar(s.charCodeAt(i + 2));
+            v3 = this._decodeChar(s.charCodeAt(i + 3));
+            out[op++] = (v0 << 2) | (v1 >>> 4);
+            out[op++] = (v1 << 4) | (v2 >>> 2);
+            out[op++] = (v2 << 6) | v3;
+            haveBad |= v0 & INVALID_BYTE;
+            haveBad |= v1 & INVALID_BYTE;
+            haveBad |= v2 & INVALID_BYTE;
+            haveBad |= v3 & INVALID_BYTE;
+        }
+        if (i < length - 1) {
+            v0 = this._decodeChar(s.charCodeAt(i));
+            v1 = this._decodeChar(s.charCodeAt(i + 1));
+            out[op++] = (v0 << 2) | (v1 >>> 4);
+            haveBad |= v0 & INVALID_BYTE;
+            haveBad |= v1 & INVALID_BYTE;
+        }
+        if (i < length - 2) {
+            v2 = this._decodeChar(s.charCodeAt(i + 2));
+            out[op++] = (v1 << 4) | (v2 >>> 2);
+            haveBad |= v2 & INVALID_BYTE;
+        }
+        if (i < length - 3) {
+            v3 = this._decodeChar(s.charCodeAt(i + 3));
+            out[op++] = (v2 << 6) | v3;
+            haveBad |= v3 & INVALID_BYTE;
+        }
+        if (haveBad !== 0) {
+            throw new Error("Base64Coder: incorrect characters for decoding");
+        }
+        return out;
+    };
+    // Standard encoding have the following encoded/decoded ranges,
+    // which we need to convert between.
+    //
+    // ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789  +   /
+    // Index:   0 - 25                    26 - 51              52 - 61   62  63
+    // ASCII:  65 - 90                    97 - 122             48 - 57   43  47
+    //
+    // Encode 6 bits in b into a new character.
+    Coder.prototype._encodeByte = function (b) {
+        // Encoding uses constant time operations as follows:
+        //
+        // 1. Define comparison of A with B using (A - B) >>> 8:
+        //          if A > B, then result is positive integer
+        //          if A <= B, then result is 0
+        //
+        // 2. Define selection of C or 0 using bitwise AND: X & C:
+        //          if X == 0, then result is 0
+        //          if X != 0, then result is C
+        //
+        // 3. Start with the smallest comparison (b >= 0), which is always
+        //    true, so set the result to the starting ASCII value (65).
+        //
+        // 4. Continue comparing b to higher ASCII values, and selecting
+        //    zero if comparison isn't true, otherwise selecting a value
+        //    to add to result, which:
+        //
+        //          a) undoes the previous addition
+        //          b) provides new value to add
+        //
+        var result = b;
+        // b >= 0
+        result += 65;
+        // b > 25
+        result += ((25 - b) >>> 8) & ((0 - 65) - 26 + 97);
+        // b > 51
+        result += ((51 - b) >>> 8) & ((26 - 97) - 52 + 48);
+        // b > 61
+        result += ((61 - b) >>> 8) & ((52 - 48) - 62 + 43);
+        // b > 62
+        result += ((62 - b) >>> 8) & ((62 - 43) - 63 + 47);
+        return String.fromCharCode(result);
+    };
+    // Decode a character code into a byte.
+    // Must return 256 if character is out of alphabet range.
+    Coder.prototype._decodeChar = function (c) {
+        // Decoding works similar to encoding: using the same comparison
+        // function, but now it works on ranges: result is always incremented
+        // by value, but this value becomes zero if the range is not
+        // satisfied.
+        //
+        // Decoding starts with invalid value, 256, which is then
+        // subtracted when the range is satisfied. If none of the ranges
+        // apply, the function returns 256, which is then checked by
+        // the caller to throw error.
+        var result = INVALID_BYTE; // start with invalid character
+        // c == 43 (c > 42 and c < 44)
+        result += (((42 - c) & (c - 44)) >>> 8) & (-INVALID_BYTE + c - 43 + 62);
+        // c == 47 (c > 46 and c < 48)
+        result += (((46 - c) & (c - 48)) >>> 8) & (-INVALID_BYTE + c - 47 + 63);
+        // c > 47 and c < 58
+        result += (((47 - c) & (c - 58)) >>> 8) & (-INVALID_BYTE + c - 48 + 52);
+        // c > 64 and c < 91
+        result += (((64 - c) & (c - 91)) >>> 8) & (-INVALID_BYTE + c - 65 + 0);
+        // c > 96 and c < 123
+        result += (((96 - c) & (c - 123)) >>> 8) & (-INVALID_BYTE + c - 97 + 26);
+        return result;
+    };
+    Coder.prototype._getPaddingLength = function (s) {
+        var paddingLength = 0;
+        if (this._paddingCharacter) {
+            for (var i = s.length - 1; i >= 0; i--) {
+                if (s[i] !== this._paddingCharacter) {
+                    break;
+                }
+                paddingLength++;
+            }
+            if (s.length < 4 || paddingLength > 2) {
+                throw new Error("Base64Coder: incorrect padding");
+            }
+        }
+        return paddingLength;
+    };
+    return Coder;
+}());
+exports.Coder = Coder;
+var stdCoder = new Coder();
+function encode(data) {
+    return stdCoder.encode(data);
+}
+exports.encode = encode;
+function decode(s) {
+    return stdCoder.decode(s);
+}
+exports.decode = decode;
+/**
+ * Implements URL-safe Base64 encoding.
+ * (Same as Base64, but '+' is replaced with '-', and '/' with '_').
+ *
+ * Operates in constant time.
+ */
+var URLSafeCoder = /** @class */ (function (_super) {
+    __extends(URLSafeCoder, _super);
+    function URLSafeCoder() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    // URL-safe encoding have the following encoded/decoded ranges:
+    //
+    // ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789  -   _
+    // Index:   0 - 25                    26 - 51              52 - 61   62  63
+    // ASCII:  65 - 90                    97 - 122             48 - 57   45  95
+    //
+    URLSafeCoder.prototype._encodeByte = function (b) {
+        var result = b;
+        // b >= 0
+        result += 65;
+        // b > 25
+        result += ((25 - b) >>> 8) & ((0 - 65) - 26 + 97);
+        // b > 51
+        result += ((51 - b) >>> 8) & ((26 - 97) - 52 + 48);
+        // b > 61
+        result += ((61 - b) >>> 8) & ((52 - 48) - 62 + 45);
+        // b > 62
+        result += ((62 - b) >>> 8) & ((62 - 45) - 63 + 95);
+        return String.fromCharCode(result);
+    };
+    URLSafeCoder.prototype._decodeChar = function (c) {
+        var result = INVALID_BYTE;
+        // c == 45 (c > 44 and c < 46)
+        result += (((44 - c) & (c - 46)) >>> 8) & (-INVALID_BYTE + c - 45 + 62);
+        // c == 95 (c > 94 and c < 96)
+        result += (((94 - c) & (c - 96)) >>> 8) & (-INVALID_BYTE + c - 95 + 63);
+        // c > 47 and c < 58
+        result += (((47 - c) & (c - 58)) >>> 8) & (-INVALID_BYTE + c - 48 + 52);
+        // c > 64 and c < 91
+        result += (((64 - c) & (c - 91)) >>> 8) & (-INVALID_BYTE + c - 65 + 0);
+        // c > 96 and c < 123
+        result += (((96 - c) & (c - 123)) >>> 8) & (-INVALID_BYTE + c - 97 + 26);
+        return result;
+    };
+    return URLSafeCoder;
+}(Coder));
+exports.URLSafeCoder = URLSafeCoder;
+var urlSafeCoder = new URLSafeCoder();
+function encodeURLSafe(data) {
+    return urlSafeCoder.encode(data);
+}
+exports.encodeURLSafe = encodeURLSafe;
+function decodeURLSafe(s) {
+    return urlSafeCoder.decode(s);
+}
+exports.decodeURLSafe = decodeURLSafe;
+exports.encodedLength = function (length) {
+    return stdCoder.encodedLength(length);
+};
+exports.maxDecodedLength = function (length) {
+    return stdCoder.maxDecodedLength(length);
+};
+exports.decodedLength = function (s) {
+    return stdCoder.decodedLength(s);
+};
+//# sourceMappingURL=base64.js.map
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// Copyright (C) 2016 Dmitry Chestnykh
+// MIT License. See LICENSE file for details.
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Package utf8 implements UTF-8 encoding and decoding.
+ */
+var INVALID_UTF16 = "utf8: invalid string";
+var INVALID_UTF8 = "utf8: invalid source encoding";
+/**
+ * Encodes the given string into UTF-8 byte array.
+ * Throws if the source string has invalid UTF-16 encoding.
+ */
+function encode(s) {
+    // Calculate result length and allocate output array.
+    // encodedLength() also validates string and throws errors,
+    // so we don't need repeat validation here.
+    var arr = new Uint8Array(encodedLength(s));
+    var pos = 0;
+    for (var i = 0; i < s.length; i++) {
+        var c = s.charCodeAt(i);
+        if (c < 0x80) {
+            arr[pos++] = c;
+        }
+        else if (c < 0x800) {
+            arr[pos++] = 0xc0 | c >> 6;
+            arr[pos++] = 0x80 | c & 0x3f;
+        }
+        else if (c < 0xd800) {
+            arr[pos++] = 0xe0 | c >> 12;
+            arr[pos++] = 0x80 | (c >> 6) & 0x3f;
+            arr[pos++] = 0x80 | c & 0x3f;
+        }
+        else {
+            i++; // get one more character
+            c = (c & 0x3ff) << 10;
+            c |= s.charCodeAt(i) & 0x3ff;
+            c += 0x10000;
+            arr[pos++] = 0xf0 | c >> 18;
+            arr[pos++] = 0x80 | (c >> 12) & 0x3f;
+            arr[pos++] = 0x80 | (c >> 6) & 0x3f;
+            arr[pos++] = 0x80 | c & 0x3f;
+        }
+    }
+    return arr;
+}
+exports.encode = encode;
+/**
+ * Returns the number of bytes required to encode the given string into UTF-8.
+ * Throws if the source string has invalid UTF-16 encoding.
+ */
+function encodedLength(s) {
+    var result = 0;
+    for (var i = 0; i < s.length; i++) {
+        var c = s.charCodeAt(i);
+        if (c < 0x80) {
+            result += 1;
+        }
+        else if (c < 0x800) {
+            result += 2;
+        }
+        else if (c < 0xd800) {
+            result += 3;
+        }
+        else if (c <= 0xdfff) {
+            if (i >= s.length - 1) {
+                throw new Error(INVALID_UTF16);
+            }
+            i++; // "eat" next character
+            result += 4;
+        }
+        else {
+            throw new Error(INVALID_UTF16);
+        }
+    }
+    return result;
+}
+exports.encodedLength = encodedLength;
+/**
+ * Decodes the given byte array from UTF-8 into a string.
+ * Throws if encoding is invalid.
+ */
+function decode(arr) {
+    var chars = [];
+    for (var i = 0; i < arr.length; i++) {
+        var b = arr[i];
+        if (b & 0x80) {
+            var min = void 0;
+            if (b < 0xe0) {
+                // Need 1 more byte.
+                if (i >= arr.length) {
+                    throw new Error(INVALID_UTF8);
+                }
+                var n1 = arr[++i];
+                if ((n1 & 0xc0) !== 0x80) {
+                    throw new Error(INVALID_UTF8);
+                }
+                b = (b & 0x1f) << 6 | (n1 & 0x3f);
+                min = 0x80;
+            }
+            else if (b < 0xf0) {
+                // Need 2 more bytes.
+                if (i >= arr.length - 1) {
+                    throw new Error(INVALID_UTF8);
+                }
+                var n1 = arr[++i];
+                var n2 = arr[++i];
+                if ((n1 & 0xc0) !== 0x80 || (n2 & 0xc0) !== 0x80) {
+                    throw new Error(INVALID_UTF8);
+                }
+                b = (b & 0x0f) << 12 | (n1 & 0x3f) << 6 | (n2 & 0x3f);
+                min = 0x800;
+            }
+            else if (b < 0xf8) {
+                // Need 3 more bytes.
+                if (i >= arr.length - 2) {
+                    throw new Error(INVALID_UTF8);
+                }
+                var n1 = arr[++i];
+                var n2 = arr[++i];
+                var n3 = arr[++i];
+                if ((n1 & 0xc0) !== 0x80 || (n2 & 0xc0) !== 0x80 || (n3 & 0xc0) !== 0x80) {
+                    throw new Error(INVALID_UTF8);
+                }
+                b = (b & 0x0f) << 18 | (n1 & 0x3f) << 12 | (n2 & 0x3f) << 6 | (n3 & 0x3f);
+                min = 0x10000;
+            }
+            else {
+                throw new Error(INVALID_UTF8);
+            }
+            if (b < min || (b >= 0xd800 && b <= 0xdfff)) {
+                throw new Error(INVALID_UTF8);
+            }
+            if (b >= 0x10000) {
+                // Surrogate pair.
+                if (b > 0x10ffff) {
+                    throw new Error(INVALID_UTF8);
+                }
+                b -= 0x10000;
+                chars.push(String.fromCharCode(0xd800 | (b >> 10)));
+                b = 0xdc00 | (b & 0x3ff);
+            }
+        }
+        chars.push(String.fromCharCode(b));
+    }
+    return chars.join("");
+}
+exports.decode = decode;
+//# sourceMappingURL=utf8.js.map
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// required so we don't have to do require('pusher').default etc.
+module.exports = __webpack_require__(3).default;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+// CONCATENATED MODULE: ./src/runtimes/web/dom/script_receiver_factory.ts
+var ScriptReceiverFactory = (function () {
+    function ScriptReceiverFactory(prefix, name) {
+        this.lastId = 0;
+        this.prefix = prefix;
+        this.name = name;
+    }
+    ScriptReceiverFactory.prototype.create = function (callback) {
+        this.lastId++;
+        var number = this.lastId;
+        var id = this.prefix + number;
+        var name = this.name + '[' + number + ']';
+        var called = false;
+        var callbackWrapper = function () {
+            if (!called) {
+                callback.apply(null, arguments);
+                called = true;
+            }
+        };
+        this[number] = callbackWrapper;
+        return { number: number, id: id, name: name, callback: callbackWrapper };
+    };
+    ScriptReceiverFactory.prototype.remove = function (receiver) {
+        delete this[receiver.number];
+    };
+    return ScriptReceiverFactory;
+}());
+
+var ScriptReceivers = new ScriptReceiverFactory('_pusher_script_', 'Pusher.ScriptReceivers');
+
+// CONCATENATED MODULE: ./src/core/defaults.ts
+var Defaults = {
+    VERSION: "7.0.0",
+    PROTOCOL: 7,
+    wsPort: 80,
+    wssPort: 443,
+    wsPath: '',
+    httpHost: 'sockjs.pusher.com',
+    httpPort: 80,
+    httpsPort: 443,
+    httpPath: '/pusher',
+    stats_host: 'stats.pusher.com',
+    authEndpoint: '/pusher/auth',
+    authTransport: 'ajax',
+    activityTimeout: 120000,
+    pongTimeout: 30000,
+    unavailableTimeout: 10000,
+    cluster: 'mt1',
+    cdn_http: "http://js.pusher.com",
+    cdn_https: "https://js.pusher.com",
+    dependency_suffix: ""
+};
+/* harmony default export */ var defaults = (Defaults);
+
+// CONCATENATED MODULE: ./src/runtimes/web/dom/dependency_loader.ts
+
+
+var dependency_loader_DependencyLoader = (function () {
+    function DependencyLoader(options) {
+        this.options = options;
+        this.receivers = options.receivers || ScriptReceivers;
+        this.loading = {};
+    }
+    DependencyLoader.prototype.load = function (name, options, callback) {
+        var self = this;
+        if (self.loading[name] && self.loading[name].length > 0) {
+            self.loading[name].push(callback);
+        }
+        else {
+            self.loading[name] = [callback];
+            var request = runtime.createScriptRequest(self.getPath(name, options));
+            var receiver = self.receivers.create(function (error) {
+                self.receivers.remove(receiver);
+                if (self.loading[name]) {
+                    var callbacks = self.loading[name];
+                    delete self.loading[name];
+                    var successCallback = function (wasSuccessful) {
+                        if (!wasSuccessful) {
+                            request.cleanup();
+                        }
+                    };
+                    for (var i = 0; i < callbacks.length; i++) {
+                        callbacks[i](error, successCallback);
+                    }
+                }
+            });
+            request.send(receiver);
+        }
+    };
+    DependencyLoader.prototype.getRoot = function (options) {
+        var cdn;
+        var protocol = runtime.getDocument().location.protocol;
+        if ((options && options.useTLS) || protocol === 'https:') {
+            cdn = this.options.cdn_https;
+        }
+        else {
+            cdn = this.options.cdn_http;
+        }
+        return cdn.replace(/\/*$/, '') + '/' + this.options.version;
+    };
+    DependencyLoader.prototype.getPath = function (name, options) {
+        return this.getRoot(options) + '/' + name + this.options.suffix + '.js';
+    };
+    return DependencyLoader;
+}());
+/* harmony default export */ var dependency_loader = (dependency_loader_DependencyLoader);
+
+// CONCATENATED MODULE: ./src/runtimes/web/dom/dependencies.ts
+
+
+
+var DependenciesReceivers = new ScriptReceiverFactory('_pusher_dependencies', 'Pusher.DependenciesReceivers');
+var Dependencies = new dependency_loader({
+    cdn_http: defaults.cdn_http,
+    cdn_https: defaults.cdn_https,
+    version: defaults.VERSION,
+    suffix: defaults.dependency_suffix,
+    receivers: DependenciesReceivers
+});
+
+// CONCATENATED MODULE: ./src/core/utils/url_store.ts
+var urlStore = {
+    baseUrl: 'https://pusher.com',
+    urls: {
+        authenticationEndpoint: {
+            path: '/docs/authenticating_users'
+        },
+        javascriptQuickStart: {
+            path: '/docs/javascript_quick_start'
+        },
+        triggeringClientEvents: {
+            path: '/docs/client_api_guide/client_events#trigger-events'
+        },
+        encryptedChannelSupport: {
+            fullUrl: 'https://github.com/pusher/pusher-js/tree/cc491015371a4bde5743d1c87a0fbac0feb53195#encrypted-channel-support'
+        }
+    }
+};
+var buildLogSuffix = function (key) {
+    var urlPrefix = 'See:';
+    var urlObj = urlStore.urls[key];
+    if (!urlObj)
+        return '';
+    var url;
+    if (urlObj.fullUrl) {
+        url = urlObj.fullUrl;
+    }
+    else if (urlObj.path) {
+        url = urlStore.baseUrl + urlObj.path;
+    }
+    if (!url)
+        return '';
+    return urlPrefix + " " + url;
+};
+/* harmony default export */ var url_store = ({ buildLogSuffix: buildLogSuffix });
+
+// CONCATENATED MODULE: ./src/core/errors.ts
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var BadEventName = (function (_super) {
+    __extends(BadEventName, _super);
+    function BadEventName(msg) {
+        var _newTarget = this.constructor;
+        var _this = _super.call(this, msg) || this;
+        Object.setPrototypeOf(_this, _newTarget.prototype);
+        return _this;
+    }
+    return BadEventName;
+}(Error));
+
+var RequestTimedOut = (function (_super) {
+    __extends(RequestTimedOut, _super);
+    function RequestTimedOut(msg) {
+        var _newTarget = this.constructor;
+        var _this = _super.call(this, msg) || this;
+        Object.setPrototypeOf(_this, _newTarget.prototype);
+        return _this;
+    }
+    return RequestTimedOut;
+}(Error));
+
+var TransportPriorityTooLow = (function (_super) {
+    __extends(TransportPriorityTooLow, _super);
+    function TransportPriorityTooLow(msg) {
+        var _newTarget = this.constructor;
+        var _this = _super.call(this, msg) || this;
+        Object.setPrototypeOf(_this, _newTarget.prototype);
+        return _this;
+    }
+    return TransportPriorityTooLow;
+}(Error));
+
+var TransportClosed = (function (_super) {
+    __extends(TransportClosed, _super);
+    function TransportClosed(msg) {
+        var _newTarget = this.constructor;
+        var _this = _super.call(this, msg) || this;
+        Object.setPrototypeOf(_this, _newTarget.prototype);
+        return _this;
+    }
+    return TransportClosed;
+}(Error));
+
+var UnsupportedFeature = (function (_super) {
+    __extends(UnsupportedFeature, _super);
+    function UnsupportedFeature(msg) {
+        var _newTarget = this.constructor;
+        var _this = _super.call(this, msg) || this;
+        Object.setPrototypeOf(_this, _newTarget.prototype);
+        return _this;
+    }
+    return UnsupportedFeature;
+}(Error));
+
+var UnsupportedTransport = (function (_super) {
+    __extends(UnsupportedTransport, _super);
+    function UnsupportedTransport(msg) {
+        var _newTarget = this.constructor;
+        var _this = _super.call(this, msg) || this;
+        Object.setPrototypeOf(_this, _newTarget.prototype);
+        return _this;
+    }
+    return UnsupportedTransport;
+}(Error));
+
+var UnsupportedStrategy = (function (_super) {
+    __extends(UnsupportedStrategy, _super);
+    function UnsupportedStrategy(msg) {
+        var _newTarget = this.constructor;
+        var _this = _super.call(this, msg) || this;
+        Object.setPrototypeOf(_this, _newTarget.prototype);
+        return _this;
+    }
+    return UnsupportedStrategy;
+}(Error));
+
+var HTTPAuthError = (function (_super) {
+    __extends(HTTPAuthError, _super);
+    function HTTPAuthError(status, msg) {
+        var _newTarget = this.constructor;
+        var _this = _super.call(this, msg) || this;
+        _this.status = status;
+        Object.setPrototypeOf(_this, _newTarget.prototype);
+        return _this;
+    }
+    return HTTPAuthError;
+}(Error));
+
+
+// CONCATENATED MODULE: ./src/runtimes/isomorphic/auth/xhr_auth.ts
+
+
+
+var ajax = function (context, socketId, callback) {
+    var self = this, xhr;
+    xhr = runtime.createXHR();
+    xhr.open('POST', self.options.authEndpoint, true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    for (var headerName in this.authOptions.headers) {
+        xhr.setRequestHeader(headerName, this.authOptions.headers[headerName]);
+    }
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                var data = void 0;
+                var parsed = false;
+                try {
+                    data = JSON.parse(xhr.responseText);
+                    parsed = true;
+                }
+                catch (e) {
+                    callback(new HTTPAuthError(200, 'JSON returned from auth endpoint was invalid, yet status code was 200. Data was: ' +
+                        xhr.responseText), { auth: '' });
+                }
+                if (parsed) {
+                    callback(null, data);
+                }
+            }
+            else {
+                var suffix = url_store.buildLogSuffix('authenticationEndpoint');
+                callback(new HTTPAuthError(xhr.status, 'Unable to retrieve auth string from auth endpoint - ' +
+                    ("received status: " + xhr.status + " from " + self.options.authEndpoint + ". ") +
+                    ("Clients must be authenticated to join private or presence channels. " + suffix)), { auth: '' });
+            }
+        }
+    };
+    xhr.send(this.composeQuery(socketId));
+    return xhr;
+};
+/* harmony default export */ var xhr_auth = (ajax);
+
+// CONCATENATED MODULE: ./src/core/base64.ts
+function encode(s) {
+    return btoa(utob(s));
+}
+var fromCharCode = String.fromCharCode;
+var b64chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+var b64tab = {};
+for (var base64_i = 0, l = b64chars.length; base64_i < l; base64_i++) {
+    b64tab[b64chars.charAt(base64_i)] = base64_i;
+}
+var cb_utob = function (c) {
+    var cc = c.charCodeAt(0);
+    return cc < 0x80
+        ? c
+        : cc < 0x800
+            ? fromCharCode(0xc0 | (cc >>> 6)) + fromCharCode(0x80 | (cc & 0x3f))
+            : fromCharCode(0xe0 | ((cc >>> 12) & 0x0f)) +
+                fromCharCode(0x80 | ((cc >>> 6) & 0x3f)) +
+                fromCharCode(0x80 | (cc & 0x3f));
+};
+var utob = function (u) {
+    return u.replace(/[^\x00-\x7F]/g, cb_utob);
+};
+var cb_encode = function (ccc) {
+    var padlen = [0, 2, 1][ccc.length % 3];
+    var ord = (ccc.charCodeAt(0) << 16) |
+        ((ccc.length > 1 ? ccc.charCodeAt(1) : 0) << 8) |
+        (ccc.length > 2 ? ccc.charCodeAt(2) : 0);
+    var chars = [
+        b64chars.charAt(ord >>> 18),
+        b64chars.charAt((ord >>> 12) & 63),
+        padlen >= 2 ? '=' : b64chars.charAt((ord >>> 6) & 63),
+        padlen >= 1 ? '=' : b64chars.charAt(ord & 63)
+    ];
+    return chars.join('');
+};
+var btoa = window.btoa ||
+    function (b) {
+        return b.replace(/[\s\S]{1,3}/g, cb_encode);
+    };
+
+// CONCATENATED MODULE: ./src/core/utils/timers/abstract_timer.ts
+var Timer = (function () {
+    function Timer(set, clear, delay, callback) {
+        var _this = this;
+        this.clear = clear;
+        this.timer = set(function () {
+            if (_this.timer) {
+                _this.timer = callback(_this.timer);
+            }
+        }, delay);
+    }
+    Timer.prototype.isRunning = function () {
+        return this.timer !== null;
+    };
+    Timer.prototype.ensureAborted = function () {
+        if (this.timer) {
+            this.clear(this.timer);
+            this.timer = null;
+        }
+    };
+    return Timer;
+}());
+/* harmony default export */ var abstract_timer = (Timer);
+
+// CONCATENATED MODULE: ./src/core/utils/timers/index.ts
+var timers_extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+function timers_clearTimeout(timer) {
+    window.clearTimeout(timer);
+}
+function timers_clearInterval(timer) {
+    window.clearInterval(timer);
+}
+var OneOffTimer = (function (_super) {
+    timers_extends(OneOffTimer, _super);
+    function OneOffTimer(delay, callback) {
+        return _super.call(this, setTimeout, timers_clearTimeout, delay, function (timer) {
+            callback();
+            return null;
+        }) || this;
+    }
+    return OneOffTimer;
+}(abstract_timer));
+
+var PeriodicTimer = (function (_super) {
+    timers_extends(PeriodicTimer, _super);
+    function PeriodicTimer(delay, callback) {
+        return _super.call(this, setInterval, timers_clearInterval, delay, function (timer) {
+            callback();
+            return timer;
+        }) || this;
+    }
+    return PeriodicTimer;
+}(abstract_timer));
+
+
+// CONCATENATED MODULE: ./src/core/util.ts
+
+var Util = {
+    now: function () {
+        if (Date.now) {
+            return Date.now();
+        }
+        else {
+            return new Date().valueOf();
+        }
+    },
+    defer: function (callback) {
+        return new OneOffTimer(0, callback);
+    },
+    method: function (name) {
+        var args = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            args[_i - 1] = arguments[_i];
+        }
+        var boundArguments = Array.prototype.slice.call(arguments, 1);
+        return function (object) {
+            return object[name].apply(object, boundArguments.concat(arguments));
+        };
+    }
+};
+/* harmony default export */ var util = (Util);
+
+// CONCATENATED MODULE: ./src/core/utils/collections.ts
+
+
+function extend(target) {
+    var sources = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        sources[_i - 1] = arguments[_i];
+    }
+    for (var i = 0; i < sources.length; i++) {
+        var extensions = sources[i];
+        for (var property in extensions) {
+            if (extensions[property] &&
+                extensions[property].constructor &&
+                extensions[property].constructor === Object) {
+                target[property] = extend(target[property] || {}, extensions[property]);
+            }
+            else {
+                target[property] = extensions[property];
+            }
+        }
+    }
+    return target;
+}
+function stringify() {
+    var m = ['Pusher'];
+    for (var i = 0; i < arguments.length; i++) {
+        if (typeof arguments[i] === 'string') {
+            m.push(arguments[i]);
+        }
+        else {
+            m.push(safeJSONStringify(arguments[i]));
+        }
+    }
+    return m.join(' : ');
+}
+function arrayIndexOf(array, item) {
+    var nativeIndexOf = Array.prototype.indexOf;
+    if (array === null) {
+        return -1;
+    }
+    if (nativeIndexOf && array.indexOf === nativeIndexOf) {
+        return array.indexOf(item);
+    }
+    for (var i = 0, l = array.length; i < l; i++) {
+        if (array[i] === item) {
+            return i;
+        }
+    }
+    return -1;
+}
+function objectApply(object, f) {
+    for (var key in object) {
+        if (Object.prototype.hasOwnProperty.call(object, key)) {
+            f(object[key], key, object);
+        }
+    }
+}
+function keys(object) {
+    var keys = [];
+    objectApply(object, function (_, key) {
+        keys.push(key);
+    });
+    return keys;
+}
+function values(object) {
+    var values = [];
+    objectApply(object, function (value) {
+        values.push(value);
+    });
+    return values;
+}
+function apply(array, f, context) {
+    for (var i = 0; i < array.length; i++) {
+        f.call(context || window, array[i], i, array);
+    }
+}
+function map(array, f) {
+    var result = [];
+    for (var i = 0; i < array.length; i++) {
+        result.push(f(array[i], i, array, result));
+    }
+    return result;
+}
+function mapObject(object, f) {
+    var result = {};
+    objectApply(object, function (value, key) {
+        result[key] = f(value);
+    });
+    return result;
+}
+function filter(array, test) {
+    test =
+        test ||
+            function (value) {
+                return !!value;
+            };
+    var result = [];
+    for (var i = 0; i < array.length; i++) {
+        if (test(array[i], i, array, result)) {
+            result.push(array[i]);
+        }
+    }
+    return result;
+}
+function filterObject(object, test) {
+    var result = {};
+    objectApply(object, function (value, key) {
+        if ((test && test(value, key, object, result)) || Boolean(value)) {
+            result[key] = value;
+        }
+    });
+    return result;
+}
+function flatten(object) {
+    var result = [];
+    objectApply(object, function (value, key) {
+        result.push([key, value]);
+    });
+    return result;
+}
+function any(array, test) {
+    for (var i = 0; i < array.length; i++) {
+        if (test(array[i], i, array)) {
+            return true;
+        }
+    }
+    return false;
+}
+function collections_all(array, test) {
+    for (var i = 0; i < array.length; i++) {
+        if (!test(array[i], i, array)) {
+            return false;
+        }
+    }
+    return true;
+}
+function encodeParamsObject(data) {
+    return mapObject(data, function (value) {
+        if (typeof value === 'object') {
+            value = safeJSONStringify(value);
+        }
+        return encodeURIComponent(encode(value.toString()));
+    });
+}
+function buildQueryString(data) {
+    var params = filterObject(data, function (value) {
+        return value !== undefined;
+    });
+    var query = map(flatten(encodeParamsObject(params)), util.method('join', '=')).join('&');
+    return query;
+}
+function decycleObject(object) {
+    var objects = [], paths = [];
+    return (function derez(value, path) {
+        var i, name, nu;
+        switch (typeof value) {
+            case 'object':
+                if (!value) {
+                    return null;
+                }
+                for (i = 0; i < objects.length; i += 1) {
+                    if (objects[i] === value) {
+                        return { $ref: paths[i] };
+                    }
+                }
+                objects.push(value);
+                paths.push(path);
+                if (Object.prototype.toString.apply(value) === '[object Array]') {
+                    nu = [];
+                    for (i = 0; i < value.length; i += 1) {
+                        nu[i] = derez(value[i], path + '[' + i + ']');
+                    }
+                }
+                else {
+                    nu = {};
+                    for (name in value) {
+                        if (Object.prototype.hasOwnProperty.call(value, name)) {
+                            nu[name] = derez(value[name], path + '[' + JSON.stringify(name) + ']');
+                        }
+                    }
+                }
+                return nu;
+            case 'number':
+            case 'string':
+            case 'boolean':
+                return value;
+        }
+    })(object, '$');
+}
+function safeJSONStringify(source) {
+    try {
+        return JSON.stringify(source);
+    }
+    catch (e) {
+        return JSON.stringify(decycleObject(source));
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/logger.ts
+
+
+var logger_Logger = (function () {
+    function Logger() {
+        this.globalLog = function (message) {
+            if (window.console && window.console.log) {
+                window.console.log(message);
+            }
+        };
+    }
+    Logger.prototype.debug = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        this.log(this.globalLog, args);
+    };
+    Logger.prototype.warn = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        this.log(this.globalLogWarn, args);
+    };
+    Logger.prototype.error = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        this.log(this.globalLogError, args);
+    };
+    Logger.prototype.globalLogWarn = function (message) {
+        if (window.console && window.console.warn) {
+            window.console.warn(message);
+        }
+        else {
+            this.globalLog(message);
+        }
+    };
+    Logger.prototype.globalLogError = function (message) {
+        if (window.console && window.console.error) {
+            window.console.error(message);
+        }
+        else {
+            this.globalLogWarn(message);
+        }
+    };
+    Logger.prototype.log = function (defaultLoggingFunction) {
+        var args = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            args[_i - 1] = arguments[_i];
+        }
+        var message = stringify.apply(this, arguments);
+        if (core_pusher.log) {
+            core_pusher.log(message);
+        }
+        else if (core_pusher.logToConsole) {
+            var log = defaultLoggingFunction.bind(this);
+            log(message);
+        }
+    };
+    return Logger;
+}());
+/* harmony default export */ var logger = (new logger_Logger());
+
+// CONCATENATED MODULE: ./src/runtimes/web/auth/jsonp_auth.ts
+
+var jsonp = function (context, socketId, callback) {
+    if (this.authOptions.headers !== undefined) {
+        logger.warn('To send headers with the auth request, you must use AJAX, rather than JSONP.');
+    }
+    var callbackName = context.nextAuthCallbackID.toString();
+    context.nextAuthCallbackID++;
+    var document = context.getDocument();
+    var script = document.createElement('script');
+    context.auth_callbacks[callbackName] = function (data) {
+        callback(null, data);
+    };
+    var callback_name = "Pusher.auth_callbacks['" + callbackName + "']";
+    script.src =
+        this.options.authEndpoint +
+            '?callback=' +
+            encodeURIComponent(callback_name) +
+            '&' +
+            this.composeQuery(socketId);
+    var head = document.getElementsByTagName('head')[0] || document.documentElement;
+    head.insertBefore(script, head.firstChild);
+};
+/* harmony default export */ var jsonp_auth = (jsonp);
+
+// CONCATENATED MODULE: ./src/runtimes/web/dom/script_request.ts
+var ScriptRequest = (function () {
+    function ScriptRequest(src) {
+        this.src = src;
+    }
+    ScriptRequest.prototype.send = function (receiver) {
+        var self = this;
+        var errorString = 'Error loading ' + self.src;
+        self.script = document.createElement('script');
+        self.script.id = receiver.id;
+        self.script.src = self.src;
+        self.script.type = 'text/javascript';
+        self.script.charset = 'UTF-8';
+        if (self.script.addEventListener) {
+            self.script.onerror = function () {
+                receiver.callback(errorString);
+            };
+            self.script.onload = function () {
+                receiver.callback(null);
+            };
+        }
+        else {
+            self.script.onreadystatechange = function () {
+                if (self.script.readyState === 'loaded' ||
+                    self.script.readyState === 'complete') {
+                    receiver.callback(null);
+                }
+            };
+        }
+        if (self.script.async === undefined &&
+            document.attachEvent &&
+            /opera/i.test(navigator.userAgent)) {
+            self.errorScript = document.createElement('script');
+            self.errorScript.id = receiver.id + '_error';
+            self.errorScript.text = receiver.name + "('" + errorString + "');";
+            self.script.async = self.errorScript.async = false;
+        }
+        else {
+            self.script.async = true;
+        }
+        var head = document.getElementsByTagName('head')[0];
+        head.insertBefore(self.script, head.firstChild);
+        if (self.errorScript) {
+            head.insertBefore(self.errorScript, self.script.nextSibling);
+        }
+    };
+    ScriptRequest.prototype.cleanup = function () {
+        if (this.script) {
+            this.script.onload = this.script.onerror = null;
+            this.script.onreadystatechange = null;
+        }
+        if (this.script && this.script.parentNode) {
+            this.script.parentNode.removeChild(this.script);
+        }
+        if (this.errorScript && this.errorScript.parentNode) {
+            this.errorScript.parentNode.removeChild(this.errorScript);
+        }
+        this.script = null;
+        this.errorScript = null;
+    };
+    return ScriptRequest;
+}());
+/* harmony default export */ var script_request = (ScriptRequest);
+
+// CONCATENATED MODULE: ./src/runtimes/web/dom/jsonp_request.ts
+
+
+var jsonp_request_JSONPRequest = (function () {
+    function JSONPRequest(url, data) {
+        this.url = url;
+        this.data = data;
+    }
+    JSONPRequest.prototype.send = function (receiver) {
+        if (this.request) {
+            return;
+        }
+        var query = buildQueryString(this.data);
+        var url = this.url + '/' + receiver.number + '?' + query;
+        this.request = runtime.createScriptRequest(url);
+        this.request.send(receiver);
+    };
+    JSONPRequest.prototype.cleanup = function () {
+        if (this.request) {
+            this.request.cleanup();
+        }
+    };
+    return JSONPRequest;
+}());
+/* harmony default export */ var jsonp_request = (jsonp_request_JSONPRequest);
+
+// CONCATENATED MODULE: ./src/runtimes/web/timeline/jsonp_timeline.ts
+
+
+var getAgent = function (sender, useTLS) {
+    return function (data, callback) {
+        var scheme = 'http' + (useTLS ? 's' : '') + '://';
+        var url = scheme + (sender.host || sender.options.host) + sender.options.path;
+        var request = runtime.createJSONPRequest(url, data);
+        var receiver = runtime.ScriptReceivers.create(function (error, result) {
+            ScriptReceivers.remove(receiver);
+            request.cleanup();
+            if (result && result.host) {
+                sender.host = result.host;
+            }
+            if (callback) {
+                callback(error, result);
+            }
+        });
+        request.send(receiver);
+    };
+};
+var jsonp_timeline_jsonp = {
+    name: 'jsonp',
+    getAgent: getAgent
+};
+/* harmony default export */ var jsonp_timeline = (jsonp_timeline_jsonp);
+
+// CONCATENATED MODULE: ./src/core/transports/url_schemes.ts
+
+function getGenericURL(baseScheme, params, path) {
+    var scheme = baseScheme + (params.useTLS ? 's' : '');
+    var host = params.useTLS ? params.hostTLS : params.hostNonTLS;
+    return scheme + '://' + host + path;
+}
+function getGenericPath(key, queryString) {
+    var path = '/app/' + key;
+    var query = '?protocol=' +
+        defaults.PROTOCOL +
+        '&client=js' +
+        '&version=' +
+        defaults.VERSION +
+        (queryString ? '&' + queryString : '');
+    return path + query;
+}
+var ws = {
+    getInitial: function (key, params) {
+        var path = (params.httpPath || '') + getGenericPath(key, 'flash=false');
+        return getGenericURL('ws', params, path);
+    }
+};
+var http = {
+    getInitial: function (key, params) {
+        var path = (params.httpPath || '/pusher') + getGenericPath(key);
+        return getGenericURL('http', params, path);
+    }
+};
+var sockjs = {
+    getInitial: function (key, params) {
+        return getGenericURL('http', params, params.httpPath || '/pusher');
+    },
+    getPath: function (key, params) {
+        return getGenericPath(key);
+    }
+};
+
+// CONCATENATED MODULE: ./src/core/events/callback_registry.ts
+
+var callback_registry_CallbackRegistry = (function () {
+    function CallbackRegistry() {
+        this._callbacks = {};
+    }
+    CallbackRegistry.prototype.get = function (name) {
+        return this._callbacks[prefix(name)];
+    };
+    CallbackRegistry.prototype.add = function (name, callback, context) {
+        var prefixedEventName = prefix(name);
+        this._callbacks[prefixedEventName] =
+            this._callbacks[prefixedEventName] || [];
+        this._callbacks[prefixedEventName].push({
+            fn: callback,
+            context: context
+        });
+    };
+    CallbackRegistry.prototype.remove = function (name, callback, context) {
+        if (!name && !callback && !context) {
+            this._callbacks = {};
+            return;
+        }
+        var names = name ? [prefix(name)] : keys(this._callbacks);
+        if (callback || context) {
+            this.removeCallback(names, callback, context);
+        }
+        else {
+            this.removeAllCallbacks(names);
+        }
+    };
+    CallbackRegistry.prototype.removeCallback = function (names, callback, context) {
+        apply(names, function (name) {
+            this._callbacks[name] = filter(this._callbacks[name] || [], function (binding) {
+                return ((callback && callback !== binding.fn) ||
+                    (context && context !== binding.context));
+            });
+            if (this._callbacks[name].length === 0) {
+                delete this._callbacks[name];
+            }
+        }, this);
+    };
+    CallbackRegistry.prototype.removeAllCallbacks = function (names) {
+        apply(names, function (name) {
+            delete this._callbacks[name];
+        }, this);
+    };
+    return CallbackRegistry;
+}());
+/* harmony default export */ var callback_registry = (callback_registry_CallbackRegistry);
+function prefix(name) {
+    return '_' + name;
+}
+
+// CONCATENATED MODULE: ./src/core/events/dispatcher.ts
+
+
+var dispatcher_Dispatcher = (function () {
+    function Dispatcher(failThrough) {
+        this.callbacks = new callback_registry();
+        this.global_callbacks = [];
+        this.failThrough = failThrough;
+    }
+    Dispatcher.prototype.bind = function (eventName, callback, context) {
+        this.callbacks.add(eventName, callback, context);
+        return this;
+    };
+    Dispatcher.prototype.bind_global = function (callback) {
+        this.global_callbacks.push(callback);
+        return this;
+    };
+    Dispatcher.prototype.unbind = function (eventName, callback, context) {
+        this.callbacks.remove(eventName, callback, context);
+        return this;
+    };
+    Dispatcher.prototype.unbind_global = function (callback) {
+        if (!callback) {
+            this.global_callbacks = [];
+            return this;
+        }
+        this.global_callbacks = filter(this.global_callbacks || [], function (c) { return c !== callback; });
+        return this;
+    };
+    Dispatcher.prototype.unbind_all = function () {
+        this.unbind();
+        this.unbind_global();
+        return this;
+    };
+    Dispatcher.prototype.emit = function (eventName, data, metadata) {
+        for (var i = 0; i < this.global_callbacks.length; i++) {
+            this.global_callbacks[i](eventName, data);
+        }
+        var callbacks = this.callbacks.get(eventName);
+        var args = [];
+        if (metadata) {
+            args.push(data, metadata);
+        }
+        else if (data) {
+            args.push(data);
+        }
+        if (callbacks && callbacks.length > 0) {
+            for (var i = 0; i < callbacks.length; i++) {
+                callbacks[i].fn.apply(callbacks[i].context || window, args);
+            }
+        }
+        else if (this.failThrough) {
+            this.failThrough(eventName, data);
+        }
+        return this;
+    };
+    return Dispatcher;
+}());
+/* harmony default export */ var dispatcher = (dispatcher_Dispatcher);
+
+// CONCATENATED MODULE: ./src/core/transports/transport_connection.ts
+var transport_connection_extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+
+
+
+
+var transport_connection_TransportConnection = (function (_super) {
+    transport_connection_extends(TransportConnection, _super);
+    function TransportConnection(hooks, name, priority, key, options) {
+        var _this = _super.call(this) || this;
+        _this.initialize = runtime.transportConnectionInitializer;
+        _this.hooks = hooks;
+        _this.name = name;
+        _this.priority = priority;
+        _this.key = key;
+        _this.options = options;
+        _this.state = 'new';
+        _this.timeline = options.timeline;
+        _this.activityTimeout = options.activityTimeout;
+        _this.id = _this.timeline.generateUniqueID();
+        return _this;
+    }
+    TransportConnection.prototype.handlesActivityChecks = function () {
+        return Boolean(this.hooks.handlesActivityChecks);
+    };
+    TransportConnection.prototype.supportsPing = function () {
+        return Boolean(this.hooks.supportsPing);
+    };
+    TransportConnection.prototype.connect = function () {
+        var _this = this;
+        if (this.socket || this.state !== 'initialized') {
+            return false;
+        }
+        var url = this.hooks.urls.getInitial(this.key, this.options);
+        try {
+            this.socket = this.hooks.getSocket(url, this.options);
+        }
+        catch (e) {
+            util.defer(function () {
+                _this.onError(e);
+                _this.changeState('closed');
+            });
+            return false;
+        }
+        this.bindListeners();
+        logger.debug('Connecting', { transport: this.name, url: url });
+        this.changeState('connecting');
+        return true;
+    };
+    TransportConnection.prototype.close = function () {
+        if (this.socket) {
+            this.socket.close();
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+    TransportConnection.prototype.send = function (data) {
+        var _this = this;
+        if (this.state === 'open') {
+            util.defer(function () {
+                if (_this.socket) {
+                    _this.socket.send(data);
+                }
+            });
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+    TransportConnection.prototype.ping = function () {
+        if (this.state === 'open' && this.supportsPing()) {
+            this.socket.ping();
+        }
+    };
+    TransportConnection.prototype.onOpen = function () {
+        if (this.hooks.beforeOpen) {
+            this.hooks.beforeOpen(this.socket, this.hooks.urls.getPath(this.key, this.options));
+        }
+        this.changeState('open');
+        this.socket.onopen = undefined;
+    };
+    TransportConnection.prototype.onError = function (error) {
+        this.emit('error', { type: 'WebSocketError', error: error });
+        this.timeline.error(this.buildTimelineMessage({ error: error.toString() }));
+    };
+    TransportConnection.prototype.onClose = function (closeEvent) {
+        if (closeEvent) {
+            this.changeState('closed', {
+                code: closeEvent.code,
+                reason: closeEvent.reason,
+                wasClean: closeEvent.wasClean
+            });
+        }
+        else {
+            this.changeState('closed');
+        }
+        this.unbindListeners();
+        this.socket = undefined;
+    };
+    TransportConnection.prototype.onMessage = function (message) {
+        this.emit('message', message);
+    };
+    TransportConnection.prototype.onActivity = function () {
+        this.emit('activity');
+    };
+    TransportConnection.prototype.bindListeners = function () {
+        var _this = this;
+        this.socket.onopen = function () {
+            _this.onOpen();
+        };
+        this.socket.onerror = function (error) {
+            _this.onError(error);
+        };
+        this.socket.onclose = function (closeEvent) {
+            _this.onClose(closeEvent);
+        };
+        this.socket.onmessage = function (message) {
+            _this.onMessage(message);
+        };
+        if (this.supportsPing()) {
+            this.socket.onactivity = function () {
+                _this.onActivity();
+            };
+        }
+    };
+    TransportConnection.prototype.unbindListeners = function () {
+        if (this.socket) {
+            this.socket.onopen = undefined;
+            this.socket.onerror = undefined;
+            this.socket.onclose = undefined;
+            this.socket.onmessage = undefined;
+            if (this.supportsPing()) {
+                this.socket.onactivity = undefined;
+            }
+        }
+    };
+    TransportConnection.prototype.changeState = function (state, params) {
+        this.state = state;
+        this.timeline.info(this.buildTimelineMessage({
+            state: state,
+            params: params
+        }));
+        this.emit(state, params);
+    };
+    TransportConnection.prototype.buildTimelineMessage = function (message) {
+        return extend({ cid: this.id }, message);
+    };
+    return TransportConnection;
+}(dispatcher));
+/* harmony default export */ var transport_connection = (transport_connection_TransportConnection);
+
+// CONCATENATED MODULE: ./src/core/transports/transport.ts
+
+var transport_Transport = (function () {
+    function Transport(hooks) {
+        this.hooks = hooks;
+    }
+    Transport.prototype.isSupported = function (environment) {
+        return this.hooks.isSupported(environment);
+    };
+    Transport.prototype.createConnection = function (name, priority, key, options) {
+        return new transport_connection(this.hooks, name, priority, key, options);
+    };
+    return Transport;
+}());
+/* harmony default export */ var transports_transport = (transport_Transport);
+
+// CONCATENATED MODULE: ./src/runtimes/isomorphic/transports/transports.ts
+
+
+
+
+var WSTransport = new transports_transport({
+    urls: ws,
+    handlesActivityChecks: false,
+    supportsPing: false,
+    isInitialized: function () {
+        return Boolean(runtime.getWebSocketAPI());
+    },
+    isSupported: function () {
+        return Boolean(runtime.getWebSocketAPI());
+    },
+    getSocket: function (url) {
+        return runtime.createWebSocket(url);
+    }
+});
+var httpConfiguration = {
+    urls: http,
+    handlesActivityChecks: false,
+    supportsPing: true,
+    isInitialized: function () {
+        return true;
+    }
+};
+var streamingConfiguration = extend({
+    getSocket: function (url) {
+        return runtime.HTTPFactory.createStreamingSocket(url);
+    }
+}, httpConfiguration);
+var pollingConfiguration = extend({
+    getSocket: function (url) {
+        return runtime.HTTPFactory.createPollingSocket(url);
+    }
+}, httpConfiguration);
+var xhrConfiguration = {
+    isSupported: function () {
+        return runtime.isXHRSupported();
+    }
+};
+var XHRStreamingTransport = new transports_transport((extend({}, streamingConfiguration, xhrConfiguration)));
+var XHRPollingTransport = new transports_transport(extend({}, pollingConfiguration, xhrConfiguration));
+var Transports = {
+    ws: WSTransport,
+    xhr_streaming: XHRStreamingTransport,
+    xhr_polling: XHRPollingTransport
+};
+/* harmony default export */ var transports = (Transports);
+
+// CONCATENATED MODULE: ./src/runtimes/web/transports/transports.ts
+
+
+
+
+
+
+var SockJSTransport = new transports_transport({
+    file: 'sockjs',
+    urls: sockjs,
+    handlesActivityChecks: true,
+    supportsPing: false,
+    isSupported: function () {
+        return true;
+    },
+    isInitialized: function () {
+        return window.SockJS !== undefined;
+    },
+    getSocket: function (url, options) {
+        return new window.SockJS(url, null, {
+            js_path: Dependencies.getPath('sockjs', {
+                useTLS: options.useTLS
+            }),
+            ignore_null_origin: options.ignoreNullOrigin
+        });
+    },
+    beforeOpen: function (socket, path) {
+        socket.send(JSON.stringify({
+            path: path
+        }));
+    }
+});
+var xdrConfiguration = {
+    isSupported: function (environment) {
+        var yes = runtime.isXDRSupported(environment.useTLS);
+        return yes;
+    }
+};
+var XDRStreamingTransport = new transports_transport((extend({}, streamingConfiguration, xdrConfiguration)));
+var XDRPollingTransport = new transports_transport(extend({}, pollingConfiguration, xdrConfiguration));
+transports.xdr_streaming = XDRStreamingTransport;
+transports.xdr_polling = XDRPollingTransport;
+transports.sockjs = SockJSTransport;
+/* harmony default export */ var transports_transports = (transports);
+
+// CONCATENATED MODULE: ./src/runtimes/web/net_info.ts
+var net_info_extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+var NetInfo = (function (_super) {
+    net_info_extends(NetInfo, _super);
+    function NetInfo() {
+        var _this = _super.call(this) || this;
+        var self = _this;
+        if (window.addEventListener !== undefined) {
+            window.addEventListener('online', function () {
+                self.emit('online');
+            }, false);
+            window.addEventListener('offline', function () {
+                self.emit('offline');
+            }, false);
+        }
+        return _this;
+    }
+    NetInfo.prototype.isOnline = function () {
+        if (window.navigator.onLine === undefined) {
+            return true;
+        }
+        else {
+            return window.navigator.onLine;
+        }
+    };
+    return NetInfo;
+}(dispatcher));
+
+var net_info_Network = new NetInfo();
+
+// CONCATENATED MODULE: ./src/core/transports/assistant_to_the_transport_manager.ts
+
+
+var assistant_to_the_transport_manager_AssistantToTheTransportManager = (function () {
+    function AssistantToTheTransportManager(manager, transport, options) {
+        this.manager = manager;
+        this.transport = transport;
+        this.minPingDelay = options.minPingDelay;
+        this.maxPingDelay = options.maxPingDelay;
+        this.pingDelay = undefined;
+    }
+    AssistantToTheTransportManager.prototype.createConnection = function (name, priority, key, options) {
+        var _this = this;
+        options = extend({}, options, {
+            activityTimeout: this.pingDelay
+        });
+        var connection = this.transport.createConnection(name, priority, key, options);
+        var openTimestamp = null;
+        var onOpen = function () {
+            connection.unbind('open', onOpen);
+            connection.bind('closed', onClosed);
+            openTimestamp = util.now();
+        };
+        var onClosed = function (closeEvent) {
+            connection.unbind('closed', onClosed);
+            if (closeEvent.code === 1002 || closeEvent.code === 1003) {
+                _this.manager.reportDeath();
+            }
+            else if (!closeEvent.wasClean && openTimestamp) {
+                var lifespan = util.now() - openTimestamp;
+                if (lifespan < 2 * _this.maxPingDelay) {
+                    _this.manager.reportDeath();
+                    _this.pingDelay = Math.max(lifespan / 2, _this.minPingDelay);
+                }
+            }
+        };
+        connection.bind('open', onOpen);
+        return connection;
+    };
+    AssistantToTheTransportManager.prototype.isSupported = function (environment) {
+        return this.manager.isAlive() && this.transport.isSupported(environment);
+    };
+    return AssistantToTheTransportManager;
+}());
+/* harmony default export */ var assistant_to_the_transport_manager = (assistant_to_the_transport_manager_AssistantToTheTransportManager);
+
+// CONCATENATED MODULE: ./src/core/connection/protocol/protocol.ts
+var Protocol = {
+    decodeMessage: function (messageEvent) {
+        try {
+            var messageData = JSON.parse(messageEvent.data);
+            var pusherEventData = messageData.data;
+            if (typeof pusherEventData === 'string') {
+                try {
+                    pusherEventData = JSON.parse(messageData.data);
+                }
+                catch (e) { }
+            }
+            var pusherEvent = {
+                event: messageData.event,
+                channel: messageData.channel,
+                data: pusherEventData
+            };
+            if (messageData.user_id) {
+                pusherEvent.user_id = messageData.user_id;
+            }
+            return pusherEvent;
+        }
+        catch (e) {
+            throw { type: 'MessageParseError', error: e, data: messageEvent.data };
+        }
+    },
+    encodeMessage: function (event) {
+        return JSON.stringify(event);
+    },
+    processHandshake: function (messageEvent) {
+        var message = Protocol.decodeMessage(messageEvent);
+        if (message.event === 'pusher:connection_established') {
+            if (!message.data.activity_timeout) {
+                throw 'No activity timeout specified in handshake';
+            }
+            return {
+                action: 'connected',
+                id: message.data.socket_id,
+                activityTimeout: message.data.activity_timeout * 1000
+            };
+        }
+        else if (message.event === 'pusher:error') {
+            return {
+                action: this.getCloseAction(message.data),
+                error: this.getCloseError(message.data)
+            };
+        }
+        else {
+            throw 'Invalid handshake';
+        }
+    },
+    getCloseAction: function (closeEvent) {
+        if (closeEvent.code < 4000) {
+            if (closeEvent.code >= 1002 && closeEvent.code <= 1004) {
+                return 'backoff';
+            }
+            else {
+                return null;
+            }
+        }
+        else if (closeEvent.code === 4000) {
+            return 'tls_only';
+        }
+        else if (closeEvent.code < 4100) {
+            return 'refused';
+        }
+        else if (closeEvent.code < 4200) {
+            return 'backoff';
+        }
+        else if (closeEvent.code < 4300) {
+            return 'retry';
+        }
+        else {
+            return 'refused';
+        }
+    },
+    getCloseError: function (closeEvent) {
+        if (closeEvent.code !== 1000 && closeEvent.code !== 1001) {
+            return {
+                type: 'PusherError',
+                data: {
+                    code: closeEvent.code,
+                    message: closeEvent.reason || closeEvent.message
+                }
+            };
+        }
+        else {
+            return null;
+        }
+    }
+};
+/* harmony default export */ var protocol_protocol = (Protocol);
+
+// CONCATENATED MODULE: ./src/core/connection/connection.ts
+var connection_extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+
+
+
+var connection_Connection = (function (_super) {
+    connection_extends(Connection, _super);
+    function Connection(id, transport) {
+        var _this = _super.call(this) || this;
+        _this.id = id;
+        _this.transport = transport;
+        _this.activityTimeout = transport.activityTimeout;
+        _this.bindListeners();
+        return _this;
+    }
+    Connection.prototype.handlesActivityChecks = function () {
+        return this.transport.handlesActivityChecks();
+    };
+    Connection.prototype.send = function (data) {
+        return this.transport.send(data);
+    };
+    Connection.prototype.send_event = function (name, data, channel) {
+        var event = { event: name, data: data };
+        if (channel) {
+            event.channel = channel;
+        }
+        logger.debug('Event sent', event);
+        return this.send(protocol_protocol.encodeMessage(event));
+    };
+    Connection.prototype.ping = function () {
+        if (this.transport.supportsPing()) {
+            this.transport.ping();
+        }
+        else {
+            this.send_event('pusher:ping', {});
+        }
+    };
+    Connection.prototype.close = function () {
+        this.transport.close();
+    };
+    Connection.prototype.bindListeners = function () {
+        var _this = this;
+        var listeners = {
+            message: function (messageEvent) {
+                var pusherEvent;
+                try {
+                    pusherEvent = protocol_protocol.decodeMessage(messageEvent);
+                }
+                catch (e) {
+                    _this.emit('error', {
+                        type: 'MessageParseError',
+                        error: e,
+                        data: messageEvent.data
+                    });
+                }
+                if (pusherEvent !== undefined) {
+                    logger.debug('Event recd', pusherEvent);
+                    switch (pusherEvent.event) {
+                        case 'pusher:error':
+                            _this.emit('error', {
+                                type: 'PusherError',
+                                data: pusherEvent.data
+                            });
+                            break;
+                        case 'pusher:ping':
+                            _this.emit('ping');
+                            break;
+                        case 'pusher:pong':
+                            _this.emit('pong');
+                            break;
+                    }
+                    _this.emit('message', pusherEvent);
+                }
+            },
+            activity: function () {
+                _this.emit('activity');
+            },
+            error: function (error) {
+                _this.emit('error', error);
+            },
+            closed: function (closeEvent) {
+                unbindListeners();
+                if (closeEvent && closeEvent.code) {
+                    _this.handleCloseEvent(closeEvent);
+                }
+                _this.transport = null;
+                _this.emit('closed');
+            }
+        };
+        var unbindListeners = function () {
+            objectApply(listeners, function (listener, event) {
+                _this.transport.unbind(event, listener);
+            });
+        };
+        objectApply(listeners, function (listener, event) {
+            _this.transport.bind(event, listener);
+        });
+    };
+    Connection.prototype.handleCloseEvent = function (closeEvent) {
+        var action = protocol_protocol.getCloseAction(closeEvent);
+        var error = protocol_protocol.getCloseError(closeEvent);
+        if (error) {
+            this.emit('error', error);
+        }
+        if (action) {
+            this.emit(action, { action: action, error: error });
+        }
+    };
+    return Connection;
+}(dispatcher));
+/* harmony default export */ var connection_connection = (connection_Connection);
+
+// CONCATENATED MODULE: ./src/core/connection/handshake/index.ts
+
+
+
+var handshake_Handshake = (function () {
+    function Handshake(transport, callback) {
+        this.transport = transport;
+        this.callback = callback;
+        this.bindListeners();
+    }
+    Handshake.prototype.close = function () {
+        this.unbindListeners();
+        this.transport.close();
+    };
+    Handshake.prototype.bindListeners = function () {
+        var _this = this;
+        this.onMessage = function (m) {
+            _this.unbindListeners();
+            var result;
+            try {
+                result = protocol_protocol.processHandshake(m);
+            }
+            catch (e) {
+                _this.finish('error', { error: e });
+                _this.transport.close();
+                return;
+            }
+            if (result.action === 'connected') {
+                _this.finish('connected', {
+                    connection: new connection_connection(result.id, _this.transport),
+                    activityTimeout: result.activityTimeout
+                });
+            }
+            else {
+                _this.finish(result.action, { error: result.error });
+                _this.transport.close();
+            }
+        };
+        this.onClosed = function (closeEvent) {
+            _this.unbindListeners();
+            var action = protocol_protocol.getCloseAction(closeEvent) || 'backoff';
+            var error = protocol_protocol.getCloseError(closeEvent);
+            _this.finish(action, { error: error });
+        };
+        this.transport.bind('message', this.onMessage);
+        this.transport.bind('closed', this.onClosed);
+    };
+    Handshake.prototype.unbindListeners = function () {
+        this.transport.unbind('message', this.onMessage);
+        this.transport.unbind('closed', this.onClosed);
+    };
+    Handshake.prototype.finish = function (action, params) {
+        this.callback(extend({ transport: this.transport, action: action }, params));
+    };
+    return Handshake;
+}());
+/* harmony default export */ var connection_handshake = (handshake_Handshake);
+
+// CONCATENATED MODULE: ./src/core/auth/pusher_authorizer.ts
+
+var pusher_authorizer_PusherAuthorizer = (function () {
+    function PusherAuthorizer(channel, options) {
+        this.channel = channel;
+        var authTransport = options.authTransport;
+        if (typeof runtime.getAuthorizers()[authTransport] === 'undefined') {
+            throw "'" + authTransport + "' is not a recognized auth transport";
+        }
+        this.type = authTransport;
+        this.options = options;
+        this.authOptions = options.auth || {};
+    }
+    PusherAuthorizer.prototype.composeQuery = function (socketId) {
+        var query = 'socket_id=' +
+            encodeURIComponent(socketId) +
+            '&channel_name=' +
+            encodeURIComponent(this.channel.name);
+        for (var i in this.authOptions.params) {
+            query +=
+                '&' +
+                    encodeURIComponent(i) +
+                    '=' +
+                    encodeURIComponent(this.authOptions.params[i]);
+        }
+        return query;
+    };
+    PusherAuthorizer.prototype.authorize = function (socketId, callback) {
+        PusherAuthorizer.authorizers =
+            PusherAuthorizer.authorizers || runtime.getAuthorizers();
+        PusherAuthorizer.authorizers[this.type].call(this, runtime, socketId, callback);
+    };
+    return PusherAuthorizer;
+}());
+/* harmony default export */ var pusher_authorizer = (pusher_authorizer_PusherAuthorizer);
+
+// CONCATENATED MODULE: ./src/core/timeline/timeline_sender.ts
+
+var timeline_sender_TimelineSender = (function () {
+    function TimelineSender(timeline, options) {
+        this.timeline = timeline;
+        this.options = options || {};
+    }
+    TimelineSender.prototype.send = function (useTLS, callback) {
+        if (this.timeline.isEmpty()) {
+            return;
+        }
+        this.timeline.send(runtime.TimelineTransport.getAgent(this, useTLS), callback);
+    };
+    return TimelineSender;
+}());
+/* harmony default export */ var timeline_sender = (timeline_sender_TimelineSender);
+
+// CONCATENATED MODULE: ./src/core/channels/channel.ts
+var channel_extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+
+
+
+
+var channel_Channel = (function (_super) {
+    channel_extends(Channel, _super);
+    function Channel(name, pusher) {
+        var _this = _super.call(this, function (event, data) {
+            logger.debug('No callbacks on ' + name + ' for ' + event);
+        }) || this;
+        _this.name = name;
+        _this.pusher = pusher;
+        _this.subscribed = false;
+        _this.subscriptionPending = false;
+        _this.subscriptionCancelled = false;
+        return _this;
+    }
+    Channel.prototype.authorize = function (socketId, callback) {
+        return callback(null, { auth: '' });
+    };
+    Channel.prototype.trigger = function (event, data) {
+        if (event.indexOf('client-') !== 0) {
+            throw new BadEventName("Event '" + event + "' does not start with 'client-'");
+        }
+        if (!this.subscribed) {
+            var suffix = url_store.buildLogSuffix('triggeringClientEvents');
+            logger.warn("Client event triggered before channel 'subscription_succeeded' event . " + suffix);
+        }
+        return this.pusher.send_event(event, data, this.name);
+    };
+    Channel.prototype.disconnect = function () {
+        this.subscribed = false;
+        this.subscriptionPending = false;
+    };
+    Channel.prototype.handleEvent = function (event) {
+        var eventName = event.event;
+        var data = event.data;
+        if (eventName === 'pusher_internal:subscription_succeeded') {
+            this.handleSubscriptionSucceededEvent(event);
+        }
+        else if (eventName.indexOf('pusher_internal:') !== 0) {
+            var metadata = {};
+            this.emit(eventName, data, metadata);
+        }
+    };
+    Channel.prototype.handleSubscriptionSucceededEvent = function (event) {
+        this.subscriptionPending = false;
+        this.subscribed = true;
+        if (this.subscriptionCancelled) {
+            this.pusher.unsubscribe(this.name);
+        }
+        else {
+            this.emit('pusher:subscription_succeeded', event.data);
+        }
+    };
+    Channel.prototype.subscribe = function () {
+        var _this = this;
+        if (this.subscribed) {
+            return;
+        }
+        this.subscriptionPending = true;
+        this.subscriptionCancelled = false;
+        this.authorize(this.pusher.connection.socket_id, function (error, data) {
+            if (error) {
+                logger.error(error.toString());
+                _this.emit('pusher:subscription_error', Object.assign({}, {
+                    type: 'AuthError',
+                    error: error.message
+                }, error instanceof HTTPAuthError ? { status: error.status } : {}));
+            }
+            else {
+                _this.pusher.send_event('pusher:subscribe', {
+                    auth: data.auth,
+                    channel_data: data.channel_data,
+                    channel: _this.name
+                });
+            }
+        });
+    };
+    Channel.prototype.unsubscribe = function () {
+        this.subscribed = false;
+        this.pusher.send_event('pusher:unsubscribe', {
+            channel: this.name
+        });
+    };
+    Channel.prototype.cancelSubscription = function () {
+        this.subscriptionCancelled = true;
+    };
+    Channel.prototype.reinstateSubscription = function () {
+        this.subscriptionCancelled = false;
+    };
+    return Channel;
+}(dispatcher));
+/* harmony default export */ var channels_channel = (channel_Channel);
+
+// CONCATENATED MODULE: ./src/core/channels/private_channel.ts
+var private_channel_extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+
+var private_channel_PrivateChannel = (function (_super) {
+    private_channel_extends(PrivateChannel, _super);
+    function PrivateChannel() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    PrivateChannel.prototype.authorize = function (socketId, callback) {
+        var authorizer = factory.createAuthorizer(this, this.pusher.config);
+        return authorizer.authorize(socketId, callback);
+    };
+    return PrivateChannel;
+}(channels_channel));
+/* harmony default export */ var private_channel = (private_channel_PrivateChannel);
+
+// CONCATENATED MODULE: ./src/core/channels/members.ts
+
+var members_Members = (function () {
+    function Members() {
+        this.reset();
+    }
+    Members.prototype.get = function (id) {
+        if (Object.prototype.hasOwnProperty.call(this.members, id)) {
+            return {
+                id: id,
+                info: this.members[id]
+            };
+        }
+        else {
+            return null;
+        }
+    };
+    Members.prototype.each = function (callback) {
+        var _this = this;
+        objectApply(this.members, function (member, id) {
+            callback(_this.get(id));
+        });
+    };
+    Members.prototype.setMyID = function (id) {
+        this.myID = id;
+    };
+    Members.prototype.onSubscription = function (subscriptionData) {
+        this.members = subscriptionData.presence.hash;
+        this.count = subscriptionData.presence.count;
+        this.me = this.get(this.myID);
+    };
+    Members.prototype.addMember = function (memberData) {
+        if (this.get(memberData.user_id) === null) {
+            this.count++;
+        }
+        this.members[memberData.user_id] = memberData.user_info;
+        return this.get(memberData.user_id);
+    };
+    Members.prototype.removeMember = function (memberData) {
+        var member = this.get(memberData.user_id);
+        if (member) {
+            delete this.members[memberData.user_id];
+            this.count--;
+        }
+        return member;
+    };
+    Members.prototype.reset = function () {
+        this.members = {};
+        this.count = 0;
+        this.myID = null;
+        this.me = null;
+    };
+    return Members;
+}());
+/* harmony default export */ var members = (members_Members);
+
+// CONCATENATED MODULE: ./src/core/channels/presence_channel.ts
+var presence_channel_extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+
+
+
+var presence_channel_PresenceChannel = (function (_super) {
+    presence_channel_extends(PresenceChannel, _super);
+    function PresenceChannel(name, pusher) {
+        var _this = _super.call(this, name, pusher) || this;
+        _this.members = new members();
+        return _this;
+    }
+    PresenceChannel.prototype.authorize = function (socketId, callback) {
+        var _this = this;
+        _super.prototype.authorize.call(this, socketId, function (error, authData) {
+            if (!error) {
+                authData = authData;
+                if (authData.channel_data === undefined) {
+                    var suffix = url_store.buildLogSuffix('authenticationEndpoint');
+                    logger.error("Invalid auth response for channel '" + _this.name + "'," +
+                        ("expected 'channel_data' field. " + suffix));
+                    callback('Invalid auth response');
+                    return;
+                }
+                var channelData = JSON.parse(authData.channel_data);
+                _this.members.setMyID(channelData.user_id);
+            }
+            callback(error, authData);
+        });
+    };
+    PresenceChannel.prototype.handleEvent = function (event) {
+        var eventName = event.event;
+        if (eventName.indexOf('pusher_internal:') === 0) {
+            this.handleInternalEvent(event);
+        }
+        else {
+            var data = event.data;
+            var metadata = {};
+            if (event.user_id) {
+                metadata.user_id = event.user_id;
+            }
+            this.emit(eventName, data, metadata);
+        }
+    };
+    PresenceChannel.prototype.handleInternalEvent = function (event) {
+        var eventName = event.event;
+        var data = event.data;
+        switch (eventName) {
+            case 'pusher_internal:subscription_succeeded':
+                this.handleSubscriptionSucceededEvent(event);
+                break;
+            case 'pusher_internal:member_added':
+                var addedMember = this.members.addMember(data);
+                this.emit('pusher:member_added', addedMember);
+                break;
+            case 'pusher_internal:member_removed':
+                var removedMember = this.members.removeMember(data);
+                if (removedMember) {
+                    this.emit('pusher:member_removed', removedMember);
+                }
+                break;
+        }
+    };
+    PresenceChannel.prototype.handleSubscriptionSucceededEvent = function (event) {
+        this.subscriptionPending = false;
+        this.subscribed = true;
+        if (this.subscriptionCancelled) {
+            this.pusher.unsubscribe(this.name);
+        }
+        else {
+            this.members.onSubscription(event.data);
+            this.emit('pusher:subscription_succeeded', this.members);
+        }
+    };
+    PresenceChannel.prototype.disconnect = function () {
+        this.members.reset();
+        _super.prototype.disconnect.call(this);
+    };
+    return PresenceChannel;
+}(private_channel));
+/* harmony default export */ var presence_channel = (presence_channel_PresenceChannel);
+
+// EXTERNAL MODULE: ./node_modules/@stablelib/utf8/lib/utf8.js
+var utf8 = __webpack_require__(1);
+
+// EXTERNAL MODULE: ./node_modules/@stablelib/base64/lib/base64.js
+var base64 = __webpack_require__(0);
+
+// CONCATENATED MODULE: ./src/core/channels/encrypted_channel.ts
+var encrypted_channel_extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+
+
+
+
+var encrypted_channel_EncryptedChannel = (function (_super) {
+    encrypted_channel_extends(EncryptedChannel, _super);
+    function EncryptedChannel(name, pusher, nacl) {
+        var _this = _super.call(this, name, pusher) || this;
+        _this.key = null;
+        _this.nacl = nacl;
+        return _this;
+    }
+    EncryptedChannel.prototype.authorize = function (socketId, callback) {
+        var _this = this;
+        _super.prototype.authorize.call(this, socketId, function (error, authData) {
+            if (error) {
+                callback(error, authData);
+                return;
+            }
+            var sharedSecret = authData['shared_secret'];
+            if (!sharedSecret) {
+                callback(new Error("No shared_secret key in auth payload for encrypted channel: " + _this.name), null);
+                return;
+            }
+            _this.key = Object(base64["decode"])(sharedSecret);
+            delete authData['shared_secret'];
+            callback(null, authData);
+        });
+    };
+    EncryptedChannel.prototype.trigger = function (event, data) {
+        throw new UnsupportedFeature('Client events are not currently supported for encrypted channels');
+    };
+    EncryptedChannel.prototype.handleEvent = function (event) {
+        var eventName = event.event;
+        var data = event.data;
+        if (eventName.indexOf('pusher_internal:') === 0 ||
+            eventName.indexOf('pusher:') === 0) {
+            _super.prototype.handleEvent.call(this, event);
+            return;
+        }
+        this.handleEncryptedEvent(eventName, data);
+    };
+    EncryptedChannel.prototype.handleEncryptedEvent = function (event, data) {
+        var _this = this;
+        if (!this.key) {
+            logger.debug('Received encrypted event before key has been retrieved from the authEndpoint');
+            return;
+        }
+        if (!data.ciphertext || !data.nonce) {
+            logger.error('Unexpected format for encrypted event, expected object with `ciphertext` and `nonce` fields, got: ' +
+                data);
+            return;
+        }
+        var cipherText = Object(base64["decode"])(data.ciphertext);
+        if (cipherText.length < this.nacl.secretbox.overheadLength) {
+            logger.error("Expected encrypted event ciphertext length to be " + this.nacl.secretbox.overheadLength + ", got: " + cipherText.length);
+            return;
+        }
+        var nonce = Object(base64["decode"])(data.nonce);
+        if (nonce.length < this.nacl.secretbox.nonceLength) {
+            logger.error("Expected encrypted event nonce length to be " + this.nacl.secretbox.nonceLength + ", got: " + nonce.length);
+            return;
+        }
+        var bytes = this.nacl.secretbox.open(cipherText, nonce, this.key);
+        if (bytes === null) {
+            logger.debug('Failed to decrypt an event, probably because it was encrypted with a different key. Fetching a new key from the authEndpoint...');
+            this.authorize(this.pusher.connection.socket_id, function (error, authData) {
+                if (error) {
+                    logger.error("Failed to make a request to the authEndpoint: " + authData + ". Unable to fetch new key, so dropping encrypted event");
+                    return;
+                }
+                bytes = _this.nacl.secretbox.open(cipherText, nonce, _this.key);
+                if (bytes === null) {
+                    logger.error("Failed to decrypt event with new key. Dropping encrypted event");
+                    return;
+                }
+                _this.emit(event, _this.getDataToEmit(bytes));
+                return;
+            });
+            return;
+        }
+        this.emit(event, this.getDataToEmit(bytes));
+    };
+    EncryptedChannel.prototype.getDataToEmit = function (bytes) {
+        var raw = Object(utf8["decode"])(bytes);
+        try {
+            return JSON.parse(raw);
+        }
+        catch (_a) {
+            return raw;
+        }
+    };
+    return EncryptedChannel;
+}(private_channel));
+/* harmony default export */ var encrypted_channel = (encrypted_channel_EncryptedChannel);
+
+// CONCATENATED MODULE: ./src/core/connection/connection_manager.ts
+var connection_manager_extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+
+
+
+
+var connection_manager_ConnectionManager = (function (_super) {
+    connection_manager_extends(ConnectionManager, _super);
+    function ConnectionManager(key, options) {
+        var _this = _super.call(this) || this;
+        _this.state = 'initialized';
+        _this.connection = null;
+        _this.key = key;
+        _this.options = options;
+        _this.timeline = _this.options.timeline;
+        _this.usingTLS = _this.options.useTLS;
+        _this.errorCallbacks = _this.buildErrorCallbacks();
+        _this.connectionCallbacks = _this.buildConnectionCallbacks(_this.errorCallbacks);
+        _this.handshakeCallbacks = _this.buildHandshakeCallbacks(_this.errorCallbacks);
+        var Network = runtime.getNetwork();
+        Network.bind('online', function () {
+            _this.timeline.info({ netinfo: 'online' });
+            if (_this.state === 'connecting' || _this.state === 'unavailable') {
+                _this.retryIn(0);
+            }
+        });
+        Network.bind('offline', function () {
+            _this.timeline.info({ netinfo: 'offline' });
+            if (_this.connection) {
+                _this.sendActivityCheck();
+            }
+        });
+        _this.updateStrategy();
+        return _this;
+    }
+    ConnectionManager.prototype.connect = function () {
+        if (this.connection || this.runner) {
+            return;
+        }
+        if (!this.strategy.isSupported()) {
+            this.updateState('failed');
+            return;
+        }
+        this.updateState('connecting');
+        this.startConnecting();
+        this.setUnavailableTimer();
+    };
+    ConnectionManager.prototype.send = function (data) {
+        if (this.connection) {
+            return this.connection.send(data);
+        }
+        else {
+            return false;
+        }
+    };
+    ConnectionManager.prototype.send_event = function (name, data, channel) {
+        if (this.connection) {
+            return this.connection.send_event(name, data, channel);
+        }
+        else {
+            return false;
+        }
+    };
+    ConnectionManager.prototype.disconnect = function () {
+        this.disconnectInternally();
+        this.updateState('disconnected');
+    };
+    ConnectionManager.prototype.isUsingTLS = function () {
+        return this.usingTLS;
+    };
+    ConnectionManager.prototype.startConnecting = function () {
+        var _this = this;
+        var callback = function (error, handshake) {
+            if (error) {
+                _this.runner = _this.strategy.connect(0, callback);
+            }
+            else {
+                if (handshake.action === 'error') {
+                    _this.emit('error', {
+                        type: 'HandshakeError',
+                        error: handshake.error
+                    });
+                    _this.timeline.error({ handshakeError: handshake.error });
+                }
+                else {
+                    _this.abortConnecting();
+                    _this.handshakeCallbacks[handshake.action](handshake);
+                }
+            }
+        };
+        this.runner = this.strategy.connect(0, callback);
+    };
+    ConnectionManager.prototype.abortConnecting = function () {
+        if (this.runner) {
+            this.runner.abort();
+            this.runner = null;
+        }
+    };
+    ConnectionManager.prototype.disconnectInternally = function () {
+        this.abortConnecting();
+        this.clearRetryTimer();
+        this.clearUnavailableTimer();
+        if (this.connection) {
+            var connection = this.abandonConnection();
+            connection.close();
+        }
+    };
+    ConnectionManager.prototype.updateStrategy = function () {
+        this.strategy = this.options.getStrategy({
+            key: this.key,
+            timeline: this.timeline,
+            useTLS: this.usingTLS
+        });
+    };
+    ConnectionManager.prototype.retryIn = function (delay) {
+        var _this = this;
+        this.timeline.info({ action: 'retry', delay: delay });
+        if (delay > 0) {
+            this.emit('connecting_in', Math.round(delay / 1000));
+        }
+        this.retryTimer = new OneOffTimer(delay || 0, function () {
+            _this.disconnectInternally();
+            _this.connect();
+        });
+    };
+    ConnectionManager.prototype.clearRetryTimer = function () {
+        if (this.retryTimer) {
+            this.retryTimer.ensureAborted();
+            this.retryTimer = null;
+        }
+    };
+    ConnectionManager.prototype.setUnavailableTimer = function () {
+        var _this = this;
+        this.unavailableTimer = new OneOffTimer(this.options.unavailableTimeout, function () {
+            _this.updateState('unavailable');
+        });
+    };
+    ConnectionManager.prototype.clearUnavailableTimer = function () {
+        if (this.unavailableTimer) {
+            this.unavailableTimer.ensureAborted();
+        }
+    };
+    ConnectionManager.prototype.sendActivityCheck = function () {
+        var _this = this;
+        this.stopActivityCheck();
+        this.connection.ping();
+        this.activityTimer = new OneOffTimer(this.options.pongTimeout, function () {
+            _this.timeline.error({ pong_timed_out: _this.options.pongTimeout });
+            _this.retryIn(0);
+        });
+    };
+    ConnectionManager.prototype.resetActivityCheck = function () {
+        var _this = this;
+        this.stopActivityCheck();
+        if (this.connection && !this.connection.handlesActivityChecks()) {
+            this.activityTimer = new OneOffTimer(this.activityTimeout, function () {
+                _this.sendActivityCheck();
+            });
+        }
+    };
+    ConnectionManager.prototype.stopActivityCheck = function () {
+        if (this.activityTimer) {
+            this.activityTimer.ensureAborted();
+        }
+    };
+    ConnectionManager.prototype.buildConnectionCallbacks = function (errorCallbacks) {
+        var _this = this;
+        return extend({}, errorCallbacks, {
+            message: function (message) {
+                _this.resetActivityCheck();
+                _this.emit('message', message);
+            },
+            ping: function () {
+                _this.send_event('pusher:pong', {});
+            },
+            activity: function () {
+                _this.resetActivityCheck();
+            },
+            error: function (error) {
+                _this.emit('error', error);
+            },
+            closed: function () {
+                _this.abandonConnection();
+                if (_this.shouldRetry()) {
+                    _this.retryIn(1000);
+                }
+            }
+        });
+    };
+    ConnectionManager.prototype.buildHandshakeCallbacks = function (errorCallbacks) {
+        var _this = this;
+        return extend({}, errorCallbacks, {
+            connected: function (handshake) {
+                _this.activityTimeout = Math.min(_this.options.activityTimeout, handshake.activityTimeout, handshake.connection.activityTimeout || Infinity);
+                _this.clearUnavailableTimer();
+                _this.setConnection(handshake.connection);
+                _this.socket_id = _this.connection.id;
+                _this.updateState('connected', { socket_id: _this.socket_id });
+            }
+        });
+    };
+    ConnectionManager.prototype.buildErrorCallbacks = function () {
+        var _this = this;
+        var withErrorEmitted = function (callback) {
+            return function (result) {
+                if (result.error) {
+                    _this.emit('error', { type: 'WebSocketError', error: result.error });
+                }
+                callback(result);
+            };
+        };
+        return {
+            tls_only: withErrorEmitted(function () {
+                _this.usingTLS = true;
+                _this.updateStrategy();
+                _this.retryIn(0);
+            }),
+            refused: withErrorEmitted(function () {
+                _this.disconnect();
+            }),
+            backoff: withErrorEmitted(function () {
+                _this.retryIn(1000);
+            }),
+            retry: withErrorEmitted(function () {
+                _this.retryIn(0);
+            })
+        };
+    };
+    ConnectionManager.prototype.setConnection = function (connection) {
+        this.connection = connection;
+        for (var event in this.connectionCallbacks) {
+            this.connection.bind(event, this.connectionCallbacks[event]);
+        }
+        this.resetActivityCheck();
+    };
+    ConnectionManager.prototype.abandonConnection = function () {
+        if (!this.connection) {
+            return;
+        }
+        this.stopActivityCheck();
+        for (var event in this.connectionCallbacks) {
+            this.connection.unbind(event, this.connectionCallbacks[event]);
+        }
+        var connection = this.connection;
+        this.connection = null;
+        return connection;
+    };
+    ConnectionManager.prototype.updateState = function (newState, data) {
+        var previousState = this.state;
+        this.state = newState;
+        if (previousState !== newState) {
+            var newStateDescription = newState;
+            if (newStateDescription === 'connected') {
+                newStateDescription += ' with new socket ID ' + data.socket_id;
+            }
+            logger.debug('State changed', previousState + ' -> ' + newStateDescription);
+            this.timeline.info({ state: newState, params: data });
+            this.emit('state_change', { previous: previousState, current: newState });
+            this.emit(newState, data);
+        }
+    };
+    ConnectionManager.prototype.shouldRetry = function () {
+        return this.state === 'connecting' || this.state === 'connected';
+    };
+    return ConnectionManager;
+}(dispatcher));
+/* harmony default export */ var connection_manager = (connection_manager_ConnectionManager);
+
+// CONCATENATED MODULE: ./src/core/channels/channels.ts
+
+
+
+
+var channels_Channels = (function () {
+    function Channels() {
+        this.channels = {};
+    }
+    Channels.prototype.add = function (name, pusher) {
+        if (!this.channels[name]) {
+            this.channels[name] = createChannel(name, pusher);
+        }
+        return this.channels[name];
+    };
+    Channels.prototype.all = function () {
+        return values(this.channels);
+    };
+    Channels.prototype.find = function (name) {
+        return this.channels[name];
+    };
+    Channels.prototype.remove = function (name) {
+        var channel = this.channels[name];
+        delete this.channels[name];
+        return channel;
+    };
+    Channels.prototype.disconnect = function () {
+        objectApply(this.channels, function (channel) {
+            channel.disconnect();
+        });
+    };
+    return Channels;
+}());
+/* harmony default export */ var channels = (channels_Channels);
+function createChannel(name, pusher) {
+    if (name.indexOf('private-encrypted-') === 0) {
+        if (pusher.config.nacl) {
+            return factory.createEncryptedChannel(name, pusher, pusher.config.nacl);
+        }
+        var errMsg = 'Tried to subscribe to a private-encrypted- channel but no nacl implementation available';
+        var suffix = url_store.buildLogSuffix('encryptedChannelSupport');
+        throw new UnsupportedFeature(errMsg + ". " + suffix);
+    }
+    else if (name.indexOf('private-') === 0) {
+        return factory.createPrivateChannel(name, pusher);
+    }
+    else if (name.indexOf('presence-') === 0) {
+        return factory.createPresenceChannel(name, pusher);
+    }
+    else {
+        return factory.createChannel(name, pusher);
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/utils/factory.ts
+
+
+
+
+
+
+
+
+
+
+var Factory = {
+    createChannels: function () {
+        return new channels();
+    },
+    createConnectionManager: function (key, options) {
+        return new connection_manager(key, options);
+    },
+    createChannel: function (name, pusher) {
+        return new channels_channel(name, pusher);
+    },
+    createPrivateChannel: function (name, pusher) {
+        return new private_channel(name, pusher);
+    },
+    createPresenceChannel: function (name, pusher) {
+        return new presence_channel(name, pusher);
+    },
+    createEncryptedChannel: function (name, pusher, nacl) {
+        return new encrypted_channel(name, pusher, nacl);
+    },
+    createTimelineSender: function (timeline, options) {
+        return new timeline_sender(timeline, options);
+    },
+    createAuthorizer: function (channel, options) {
+        if (options.authorizer) {
+            return options.authorizer(channel, options);
+        }
+        return new pusher_authorizer(channel, options);
+    },
+    createHandshake: function (transport, callback) {
+        return new connection_handshake(transport, callback);
+    },
+    createAssistantToTheTransportManager: function (manager, transport, options) {
+        return new assistant_to_the_transport_manager(manager, transport, options);
+    }
+};
+/* harmony default export */ var factory = (Factory);
+
+// CONCATENATED MODULE: ./src/core/transports/transport_manager.ts
+
+var transport_manager_TransportManager = (function () {
+    function TransportManager(options) {
+        this.options = options || {};
+        this.livesLeft = this.options.lives || Infinity;
+    }
+    TransportManager.prototype.getAssistant = function (transport) {
+        return factory.createAssistantToTheTransportManager(this, transport, {
+            minPingDelay: this.options.minPingDelay,
+            maxPingDelay: this.options.maxPingDelay
+        });
+    };
+    TransportManager.prototype.isAlive = function () {
+        return this.livesLeft > 0;
+    };
+    TransportManager.prototype.reportDeath = function () {
+        this.livesLeft -= 1;
+    };
+    return TransportManager;
+}());
+/* harmony default export */ var transport_manager = (transport_manager_TransportManager);
+
+// CONCATENATED MODULE: ./src/core/strategies/sequential_strategy.ts
+
+
+
+var sequential_strategy_SequentialStrategy = (function () {
+    function SequentialStrategy(strategies, options) {
+        this.strategies = strategies;
+        this.loop = Boolean(options.loop);
+        this.failFast = Boolean(options.failFast);
+        this.timeout = options.timeout;
+        this.timeoutLimit = options.timeoutLimit;
+    }
+    SequentialStrategy.prototype.isSupported = function () {
+        return any(this.strategies, util.method('isSupported'));
+    };
+    SequentialStrategy.prototype.connect = function (minPriority, callback) {
+        var _this = this;
+        var strategies = this.strategies;
+        var current = 0;
+        var timeout = this.timeout;
+        var runner = null;
+        var tryNextStrategy = function (error, handshake) {
+            if (handshake) {
+                callback(null, handshake);
+            }
+            else {
+                current = current + 1;
+                if (_this.loop) {
+                    current = current % strategies.length;
+                }
+                if (current < strategies.length) {
+                    if (timeout) {
+                        timeout = timeout * 2;
+                        if (_this.timeoutLimit) {
+                            timeout = Math.min(timeout, _this.timeoutLimit);
+                        }
+                    }
+                    runner = _this.tryStrategy(strategies[current], minPriority, { timeout: timeout, failFast: _this.failFast }, tryNextStrategy);
+                }
+                else {
+                    callback(true);
+                }
+            }
+        };
+        runner = this.tryStrategy(strategies[current], minPriority, { timeout: timeout, failFast: this.failFast }, tryNextStrategy);
+        return {
+            abort: function () {
+                runner.abort();
+            },
+            forceMinPriority: function (p) {
+                minPriority = p;
+                if (runner) {
+                    runner.forceMinPriority(p);
+                }
+            }
+        };
+    };
+    SequentialStrategy.prototype.tryStrategy = function (strategy, minPriority, options, callback) {
+        var timer = null;
+        var runner = null;
+        if (options.timeout > 0) {
+            timer = new OneOffTimer(options.timeout, function () {
+                runner.abort();
+                callback(true);
+            });
+        }
+        runner = strategy.connect(minPriority, function (error, handshake) {
+            if (error && timer && timer.isRunning() && !options.failFast) {
+                return;
+            }
+            if (timer) {
+                timer.ensureAborted();
+            }
+            callback(error, handshake);
+        });
+        return {
+            abort: function () {
+                if (timer) {
+                    timer.ensureAborted();
+                }
+                runner.abort();
+            },
+            forceMinPriority: function (p) {
+                runner.forceMinPriority(p);
+            }
+        };
+    };
+    return SequentialStrategy;
+}());
+/* harmony default export */ var sequential_strategy = (sequential_strategy_SequentialStrategy);
+
+// CONCATENATED MODULE: ./src/core/strategies/best_connected_ever_strategy.ts
+
+
+var best_connected_ever_strategy_BestConnectedEverStrategy = (function () {
+    function BestConnectedEverStrategy(strategies) {
+        this.strategies = strategies;
+    }
+    BestConnectedEverStrategy.prototype.isSupported = function () {
+        return any(this.strategies, util.method('isSupported'));
+    };
+    BestConnectedEverStrategy.prototype.connect = function (minPriority, callback) {
+        return connect(this.strategies, minPriority, function (i, runners) {
+            return function (error, handshake) {
+                runners[i].error = error;
+                if (error) {
+                    if (allRunnersFailed(runners)) {
+                        callback(true);
+                    }
+                    return;
+                }
+                apply(runners, function (runner) {
+                    runner.forceMinPriority(handshake.transport.priority);
+                });
+                callback(null, handshake);
+            };
+        });
+    };
+    return BestConnectedEverStrategy;
+}());
+/* harmony default export */ var best_connected_ever_strategy = (best_connected_ever_strategy_BestConnectedEverStrategy);
+function connect(strategies, minPriority, callbackBuilder) {
+    var runners = map(strategies, function (strategy, i, _, rs) {
+        return strategy.connect(minPriority, callbackBuilder(i, rs));
+    });
+    return {
+        abort: function () {
+            apply(runners, abortRunner);
+        },
+        forceMinPriority: function (p) {
+            apply(runners, function (runner) {
+                runner.forceMinPriority(p);
+            });
+        }
+    };
+}
+function allRunnersFailed(runners) {
+    return collections_all(runners, function (runner) {
+        return Boolean(runner.error);
+    });
+}
+function abortRunner(runner) {
+    if (!runner.error && !runner.aborted) {
+        runner.abort();
+        runner.aborted = true;
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/strategies/cached_strategy.ts
+
+
+
+
+var cached_strategy_CachedStrategy = (function () {
+    function CachedStrategy(strategy, transports, options) {
+        this.strategy = strategy;
+        this.transports = transports;
+        this.ttl = options.ttl || 1800 * 1000;
+        this.usingTLS = options.useTLS;
+        this.timeline = options.timeline;
+    }
+    CachedStrategy.prototype.isSupported = function () {
+        return this.strategy.isSupported();
+    };
+    CachedStrategy.prototype.connect = function (minPriority, callback) {
+        var usingTLS = this.usingTLS;
+        var info = fetchTransportCache(usingTLS);
+        var strategies = [this.strategy];
+        if (info && info.timestamp + this.ttl >= util.now()) {
+            var transport = this.transports[info.transport];
+            if (transport) {
+                this.timeline.info({
+                    cached: true,
+                    transport: info.transport,
+                    latency: info.latency
+                });
+                strategies.push(new sequential_strategy([transport], {
+                    timeout: info.latency * 2 + 1000,
+                    failFast: true
+                }));
+            }
+        }
+        var startTimestamp = util.now();
+        var runner = strategies
+            .pop()
+            .connect(minPriority, function cb(error, handshake) {
+            if (error) {
+                flushTransportCache(usingTLS);
+                if (strategies.length > 0) {
+                    startTimestamp = util.now();
+                    runner = strategies.pop().connect(minPriority, cb);
+                }
+                else {
+                    callback(error);
+                }
+            }
+            else {
+                storeTransportCache(usingTLS, handshake.transport.name, util.now() - startTimestamp);
+                callback(null, handshake);
+            }
+        });
+        return {
+            abort: function () {
+                runner.abort();
+            },
+            forceMinPriority: function (p) {
+                minPriority = p;
+                if (runner) {
+                    runner.forceMinPriority(p);
+                }
+            }
+        };
+    };
+    return CachedStrategy;
+}());
+/* harmony default export */ var cached_strategy = (cached_strategy_CachedStrategy);
+function getTransportCacheKey(usingTLS) {
+    return 'pusherTransport' + (usingTLS ? 'TLS' : 'NonTLS');
+}
+function fetchTransportCache(usingTLS) {
+    var storage = runtime.getLocalStorage();
+    if (storage) {
+        try {
+            var serializedCache = storage[getTransportCacheKey(usingTLS)];
+            if (serializedCache) {
+                return JSON.parse(serializedCache);
+            }
+        }
+        catch (e) {
+            flushTransportCache(usingTLS);
+        }
+    }
+    return null;
+}
+function storeTransportCache(usingTLS, transport, latency) {
+    var storage = runtime.getLocalStorage();
+    if (storage) {
+        try {
+            storage[getTransportCacheKey(usingTLS)] = safeJSONStringify({
+                timestamp: util.now(),
+                transport: transport,
+                latency: latency
+            });
+        }
+        catch (e) {
+        }
+    }
+}
+function flushTransportCache(usingTLS) {
+    var storage = runtime.getLocalStorage();
+    if (storage) {
+        try {
+            delete storage[getTransportCacheKey(usingTLS)];
+        }
+        catch (e) {
+        }
+    }
+}
+
+// CONCATENATED MODULE: ./src/core/strategies/delayed_strategy.ts
+
+var delayed_strategy_DelayedStrategy = (function () {
+    function DelayedStrategy(strategy, _a) {
+        var number = _a.delay;
+        this.strategy = strategy;
+        this.options = { delay: number };
+    }
+    DelayedStrategy.prototype.isSupported = function () {
+        return this.strategy.isSupported();
+    };
+    DelayedStrategy.prototype.connect = function (minPriority, callback) {
+        var strategy = this.strategy;
+        var runner;
+        var timer = new OneOffTimer(this.options.delay, function () {
+            runner = strategy.connect(minPriority, callback);
+        });
+        return {
+            abort: function () {
+                timer.ensureAborted();
+                if (runner) {
+                    runner.abort();
+                }
+            },
+            forceMinPriority: function (p) {
+                minPriority = p;
+                if (runner) {
+                    runner.forceMinPriority(p);
+                }
+            }
+        };
+    };
+    return DelayedStrategy;
+}());
+/* harmony default export */ var delayed_strategy = (delayed_strategy_DelayedStrategy);
+
+// CONCATENATED MODULE: ./src/core/strategies/if_strategy.ts
+var IfStrategy = (function () {
+    function IfStrategy(test, trueBranch, falseBranch) {
+        this.test = test;
+        this.trueBranch = trueBranch;
+        this.falseBranch = falseBranch;
+    }
+    IfStrategy.prototype.isSupported = function () {
+        var branch = this.test() ? this.trueBranch : this.falseBranch;
+        return branch.isSupported();
+    };
+    IfStrategy.prototype.connect = function (minPriority, callback) {
+        var branch = this.test() ? this.trueBranch : this.falseBranch;
+        return branch.connect(minPriority, callback);
+    };
+    return IfStrategy;
+}());
+/* harmony default export */ var if_strategy = (IfStrategy);
+
+// CONCATENATED MODULE: ./src/core/strategies/first_connected_strategy.ts
+var FirstConnectedStrategy = (function () {
+    function FirstConnectedStrategy(strategy) {
+        this.strategy = strategy;
+    }
+    FirstConnectedStrategy.prototype.isSupported = function () {
+        return this.strategy.isSupported();
+    };
+    FirstConnectedStrategy.prototype.connect = function (minPriority, callback) {
+        var runner = this.strategy.connect(minPriority, function (error, handshake) {
+            if (handshake) {
+                runner.abort();
+            }
+            callback(error, handshake);
+        });
+        return runner;
+    };
+    return FirstConnectedStrategy;
+}());
+/* harmony default export */ var first_connected_strategy = (FirstConnectedStrategy);
+
+// CONCATENATED MODULE: ./src/runtimes/web/default_strategy.ts
+
+
+
+
+
+
+
+function testSupportsStrategy(strategy) {
+    return function () {
+        return strategy.isSupported();
+    };
+}
+var getDefaultStrategy = function (config, baseOptions, defineTransport) {
+    var definedTransports = {};
+    function defineTransportStrategy(name, type, priority, options, manager) {
+        var transport = defineTransport(config, name, type, priority, options, manager);
+        definedTransports[name] = transport;
+        return transport;
+    }
+    var ws_options = Object.assign({}, baseOptions, {
+        hostNonTLS: config.wsHost + ':' + config.wsPort,
+        hostTLS: config.wsHost + ':' + config.wssPort,
+        httpPath: config.wsPath
+    });
+    var wss_options = Object.assign({}, ws_options, {
+        useTLS: true
+    });
+    var sockjs_options = Object.assign({}, baseOptions, {
+        hostNonTLS: config.httpHost + ':' + config.httpPort,
+        hostTLS: config.httpHost + ':' + config.httpsPort,
+        httpPath: config.httpPath
+    });
+    var timeouts = {
+        loop: true,
+        timeout: 15000,
+        timeoutLimit: 60000
+    };
+    var ws_manager = new transport_manager({
+        lives: 2,
+        minPingDelay: 10000,
+        maxPingDelay: config.activityTimeout
+    });
+    var streaming_manager = new transport_manager({
+        lives: 2,
+        minPingDelay: 10000,
+        maxPingDelay: config.activityTimeout
+    });
+    var ws_transport = defineTransportStrategy('ws', 'ws', 3, ws_options, ws_manager);
+    var wss_transport = defineTransportStrategy('wss', 'ws', 3, wss_options, ws_manager);
+    var sockjs_transport = defineTransportStrategy('sockjs', 'sockjs', 1, sockjs_options);
+    var xhr_streaming_transport = defineTransportStrategy('xhr_streaming', 'xhr_streaming', 1, sockjs_options, streaming_manager);
+    var xdr_streaming_transport = defineTransportStrategy('xdr_streaming', 'xdr_streaming', 1, sockjs_options, streaming_manager);
+    var xhr_polling_transport = defineTransportStrategy('xhr_polling', 'xhr_polling', 1, sockjs_options);
+    var xdr_polling_transport = defineTransportStrategy('xdr_polling', 'xdr_polling', 1, sockjs_options);
+    var ws_loop = new sequential_strategy([ws_transport], timeouts);
+    var wss_loop = new sequential_strategy([wss_transport], timeouts);
+    var sockjs_loop = new sequential_strategy([sockjs_transport], timeouts);
+    var streaming_loop = new sequential_strategy([
+        new if_strategy(testSupportsStrategy(xhr_streaming_transport), xhr_streaming_transport, xdr_streaming_transport)
+    ], timeouts);
+    var polling_loop = new sequential_strategy([
+        new if_strategy(testSupportsStrategy(xhr_polling_transport), xhr_polling_transport, xdr_polling_transport)
+    ], timeouts);
+    var http_loop = new sequential_strategy([
+        new if_strategy(testSupportsStrategy(streaming_loop), new best_connected_ever_strategy([
+            streaming_loop,
+            new delayed_strategy(polling_loop, { delay: 4000 })
+        ]), polling_loop)
+    ], timeouts);
+    var http_fallback_loop = new if_strategy(testSupportsStrategy(http_loop), http_loop, sockjs_loop);
+    var wsStrategy;
+    if (baseOptions.useTLS) {
+        wsStrategy = new best_connected_ever_strategy([
+            ws_loop,
+            new delayed_strategy(http_fallback_loop, { delay: 2000 })
+        ]);
+    }
+    else {
+        wsStrategy = new best_connected_ever_strategy([
+            ws_loop,
+            new delayed_strategy(wss_loop, { delay: 2000 }),
+            new delayed_strategy(http_fallback_loop, { delay: 5000 })
+        ]);
+    }
+    return new cached_strategy(new first_connected_strategy(new if_strategy(testSupportsStrategy(ws_transport), wsStrategy, http_fallback_loop)), definedTransports, {
+        ttl: 1800000,
+        timeline: baseOptions.timeline,
+        useTLS: baseOptions.useTLS
+    });
+};
+/* harmony default export */ var default_strategy = (getDefaultStrategy);
+
+// CONCATENATED MODULE: ./src/runtimes/web/transports/transport_connection_initializer.ts
+
+/* harmony default export */ var transport_connection_initializer = (function () {
+    var self = this;
+    self.timeline.info(self.buildTimelineMessage({
+        transport: self.name + (self.options.useTLS ? 's' : '')
+    }));
+    if (self.hooks.isInitialized()) {
+        self.changeState('initialized');
+    }
+    else if (self.hooks.file) {
+        self.changeState('initializing');
+        Dependencies.load(self.hooks.file, { useTLS: self.options.useTLS }, function (error, callback) {
+            if (self.hooks.isInitialized()) {
+                self.changeState('initialized');
+                callback(true);
+            }
+            else {
+                if (error) {
+                    self.onError(error);
+                }
+                self.onClose();
+                callback(false);
+            }
+        });
+    }
+    else {
+        self.onClose();
+    }
+});
+
+// CONCATENATED MODULE: ./src/runtimes/web/http/http_xdomain_request.ts
+
+var http_xdomain_request_hooks = {
+    getRequest: function (socket) {
+        var xdr = new window.XDomainRequest();
+        xdr.ontimeout = function () {
+            socket.emit('error', new RequestTimedOut());
+            socket.close();
+        };
+        xdr.onerror = function (e) {
+            socket.emit('error', e);
+            socket.close();
+        };
+        xdr.onprogress = function () {
+            if (xdr.responseText && xdr.responseText.length > 0) {
+                socket.onChunk(200, xdr.responseText);
+            }
+        };
+        xdr.onload = function () {
+            if (xdr.responseText && xdr.responseText.length > 0) {
+                socket.onChunk(200, xdr.responseText);
+            }
+            socket.emit('finished', 200);
+            socket.close();
+        };
+        return xdr;
+    },
+    abortRequest: function (xdr) {
+        xdr.ontimeout = xdr.onerror = xdr.onprogress = xdr.onload = null;
+        xdr.abort();
+    }
+};
+/* harmony default export */ var http_xdomain_request = (http_xdomain_request_hooks);
+
+// CONCATENATED MODULE: ./src/core/http/http_request.ts
+var http_request_extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+
+var MAX_BUFFER_LENGTH = 256 * 1024;
+var http_request_HTTPRequest = (function (_super) {
+    http_request_extends(HTTPRequest, _super);
+    function HTTPRequest(hooks, method, url) {
+        var _this = _super.call(this) || this;
+        _this.hooks = hooks;
+        _this.method = method;
+        _this.url = url;
+        return _this;
+    }
+    HTTPRequest.prototype.start = function (payload) {
+        var _this = this;
+        this.position = 0;
+        this.xhr = this.hooks.getRequest(this);
+        this.unloader = function () {
+            _this.close();
+        };
+        runtime.addUnloadListener(this.unloader);
+        this.xhr.open(this.method, this.url, true);
+        if (this.xhr.setRequestHeader) {
+            this.xhr.setRequestHeader('Content-Type', 'application/json');
+        }
+        this.xhr.send(payload);
+    };
+    HTTPRequest.prototype.close = function () {
+        if (this.unloader) {
+            runtime.removeUnloadListener(this.unloader);
+            this.unloader = null;
+        }
+        if (this.xhr) {
+            this.hooks.abortRequest(this.xhr);
+            this.xhr = null;
+        }
+    };
+    HTTPRequest.prototype.onChunk = function (status, data) {
+        while (true) {
+            var chunk = this.advanceBuffer(data);
+            if (chunk) {
+                this.emit('chunk', { status: status, data: chunk });
+            }
+            else {
+                break;
+            }
+        }
+        if (this.isBufferTooLong(data)) {
+            this.emit('buffer_too_long');
+        }
+    };
+    HTTPRequest.prototype.advanceBuffer = function (buffer) {
+        var unreadData = buffer.slice(this.position);
+        var endOfLinePosition = unreadData.indexOf('\n');
+        if (endOfLinePosition !== -1) {
+            this.position += endOfLinePosition + 1;
+            return unreadData.slice(0, endOfLinePosition);
+        }
+        else {
+            return null;
+        }
+    };
+    HTTPRequest.prototype.isBufferTooLong = function (buffer) {
+        return this.position === buffer.length && buffer.length > MAX_BUFFER_LENGTH;
+    };
+    return HTTPRequest;
+}(dispatcher));
+/* harmony default export */ var http_request = (http_request_HTTPRequest);
+
+// CONCATENATED MODULE: ./src/core/http/state.ts
+var State;
+(function (State) {
+    State[State["CONNECTING"] = 0] = "CONNECTING";
+    State[State["OPEN"] = 1] = "OPEN";
+    State[State["CLOSED"] = 3] = "CLOSED";
+})(State || (State = {}));
+/* harmony default export */ var state = (State);
+
+// CONCATENATED MODULE: ./src/core/http/http_socket.ts
+
+
+
+var autoIncrement = 1;
+var http_socket_HTTPSocket = (function () {
+    function HTTPSocket(hooks, url) {
+        this.hooks = hooks;
+        this.session = randomNumber(1000) + '/' + randomString(8);
+        this.location = getLocation(url);
+        this.readyState = state.CONNECTING;
+        this.openStream();
+    }
+    HTTPSocket.prototype.send = function (payload) {
+        return this.sendRaw(JSON.stringify([payload]));
+    };
+    HTTPSocket.prototype.ping = function () {
+        this.hooks.sendHeartbeat(this);
+    };
+    HTTPSocket.prototype.close = function (code, reason) {
+        this.onClose(code, reason, true);
+    };
+    HTTPSocket.prototype.sendRaw = function (payload) {
+        if (this.readyState === state.OPEN) {
+            try {
+                runtime.createSocketRequest('POST', getUniqueURL(getSendURL(this.location, this.session))).start(payload);
+                return true;
+            }
+            catch (e) {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+    };
+    HTTPSocket.prototype.reconnect = function () {
+        this.closeStream();
+        this.openStream();
+    };
+    HTTPSocket.prototype.onClose = function (code, reason, wasClean) {
+        this.closeStream();
+        this.readyState = state.CLOSED;
+        if (this.onclose) {
+            this.onclose({
+                code: code,
+                reason: reason,
+                wasClean: wasClean
+            });
+        }
+    };
+    HTTPSocket.prototype.onChunk = function (chunk) {
+        if (chunk.status !== 200) {
+            return;
+        }
+        if (this.readyState === state.OPEN) {
+            this.onActivity();
+        }
+        var payload;
+        var type = chunk.data.slice(0, 1);
+        switch (type) {
+            case 'o':
+                payload = JSON.parse(chunk.data.slice(1) || '{}');
+                this.onOpen(payload);
+                break;
+            case 'a':
+                payload = JSON.parse(chunk.data.slice(1) || '[]');
+                for (var i = 0; i < payload.length; i++) {
+                    this.onEvent(payload[i]);
+                }
+                break;
+            case 'm':
+                payload = JSON.parse(chunk.data.slice(1) || 'null');
+                this.onEvent(payload);
+                break;
+            case 'h':
+                this.hooks.onHeartbeat(this);
+                break;
+            case 'c':
+                payload = JSON.parse(chunk.data.slice(1) || '[]');
+                this.onClose(payload[0], payload[1], true);
+                break;
+        }
+    };
+    HTTPSocket.prototype.onOpen = function (options) {
+        if (this.readyState === state.CONNECTING) {
+            if (options && options.hostname) {
+                this.location.base = replaceHost(this.location.base, options.hostname);
+            }
+            this.readyState = state.OPEN;
+            if (this.onopen) {
+                this.onopen();
+            }
+        }
+        else {
+            this.onClose(1006, 'Server lost session', true);
+        }
+    };
+    HTTPSocket.prototype.onEvent = function (event) {
+        if (this.readyState === state.OPEN && this.onmessage) {
+            this.onmessage({ data: event });
+        }
+    };
+    HTTPSocket.prototype.onActivity = function () {
+        if (this.onactivity) {
+            this.onactivity();
+        }
+    };
+    HTTPSocket.prototype.onError = function (error) {
+        if (this.onerror) {
+            this.onerror(error);
+        }
+    };
+    HTTPSocket.prototype.openStream = function () {
+        var _this = this;
+        this.stream = runtime.createSocketRequest('POST', getUniqueURL(this.hooks.getReceiveURL(this.location, this.session)));
+        this.stream.bind('chunk', function (chunk) {
+            _this.onChunk(chunk);
+        });
+        this.stream.bind('finished', function (status) {
+            _this.hooks.onFinished(_this, status);
+        });
+        this.stream.bind('buffer_too_long', function () {
+            _this.reconnect();
+        });
+        try {
+            this.stream.start();
+        }
+        catch (error) {
+            util.defer(function () {
+                _this.onError(error);
+                _this.onClose(1006, 'Could not start streaming', false);
+            });
+        }
+    };
+    HTTPSocket.prototype.closeStream = function () {
+        if (this.stream) {
+            this.stream.unbind_all();
+            this.stream.close();
+            this.stream = null;
+        }
+    };
+    return HTTPSocket;
+}());
+function getLocation(url) {
+    var parts = /([^\?]*)\/*(\??.*)/.exec(url);
+    return {
+        base: parts[1],
+        queryString: parts[2]
+    };
+}
+function getSendURL(url, session) {
+    return url.base + '/' + session + '/xhr_send';
+}
+function getUniqueURL(url) {
+    var separator = url.indexOf('?') === -1 ? '?' : '&';
+    return url + separator + 't=' + +new Date() + '&n=' + autoIncrement++;
+}
+function replaceHost(url, hostname) {
+    var urlParts = /(https?:\/\/)([^\/:]+)((\/|:)?.*)/.exec(url);
+    return urlParts[1] + hostname + urlParts[3];
+}
+function randomNumber(max) {
+    return Math.floor(Math.random() * max);
+}
+function randomString(length) {
+    var result = [];
+    for (var i = 0; i < length; i++) {
+        result.push(randomNumber(32).toString(32));
+    }
+    return result.join('');
+}
+/* harmony default export */ var http_socket = (http_socket_HTTPSocket);
+
+// CONCATENATED MODULE: ./src/core/http/http_streaming_socket.ts
+var http_streaming_socket_hooks = {
+    getReceiveURL: function (url, session) {
+        return url.base + '/' + session + '/xhr_streaming' + url.queryString;
+    },
+    onHeartbeat: function (socket) {
+        socket.sendRaw('[]');
+    },
+    sendHeartbeat: function (socket) {
+        socket.sendRaw('[]');
+    },
+    onFinished: function (socket, status) {
+        socket.onClose(1006, 'Connection interrupted (' + status + ')', false);
+    }
+};
+/* harmony default export */ var http_streaming_socket = (http_streaming_socket_hooks);
+
+// CONCATENATED MODULE: ./src/core/http/http_polling_socket.ts
+var http_polling_socket_hooks = {
+    getReceiveURL: function (url, session) {
+        return url.base + '/' + session + '/xhr' + url.queryString;
+    },
+    onHeartbeat: function () {
+    },
+    sendHeartbeat: function (socket) {
+        socket.sendRaw('[]');
+    },
+    onFinished: function (socket, status) {
+        if (status === 200) {
+            socket.reconnect();
+        }
+        else {
+            socket.onClose(1006, 'Connection interrupted (' + status + ')', false);
+        }
+    }
+};
+/* harmony default export */ var http_polling_socket = (http_polling_socket_hooks);
+
+// CONCATENATED MODULE: ./src/runtimes/isomorphic/http/http_xhr_request.ts
+
+var http_xhr_request_hooks = {
+    getRequest: function (socket) {
+        var Constructor = runtime.getXHRAPI();
+        var xhr = new Constructor();
+        xhr.onreadystatechange = xhr.onprogress = function () {
+            switch (xhr.readyState) {
+                case 3:
+                    if (xhr.responseText && xhr.responseText.length > 0) {
+                        socket.onChunk(xhr.status, xhr.responseText);
+                    }
+                    break;
+                case 4:
+                    if (xhr.responseText && xhr.responseText.length > 0) {
+                        socket.onChunk(xhr.status, xhr.responseText);
+                    }
+                    socket.emit('finished', xhr.status);
+                    socket.close();
+                    break;
+            }
+        };
+        return xhr;
+    },
+    abortRequest: function (xhr) {
+        xhr.onreadystatechange = null;
+        xhr.abort();
+    }
+};
+/* harmony default export */ var http_xhr_request = (http_xhr_request_hooks);
+
+// CONCATENATED MODULE: ./src/runtimes/isomorphic/http/http.ts
+
+
+
+
+
+var HTTP = {
+    createStreamingSocket: function (url) {
+        return this.createSocket(http_streaming_socket, url);
+    },
+    createPollingSocket: function (url) {
+        return this.createSocket(http_polling_socket, url);
+    },
+    createSocket: function (hooks, url) {
+        return new http_socket(hooks, url);
+    },
+    createXHR: function (method, url) {
+        return this.createRequest(http_xhr_request, method, url);
+    },
+    createRequest: function (hooks, method, url) {
+        return new http_request(hooks, method, url);
+    }
+};
+/* harmony default export */ var http_http = (HTTP);
+
+// CONCATENATED MODULE: ./src/runtimes/web/http/http.ts
+
+
+http_http.createXDR = function (method, url) {
+    return this.createRequest(http_xdomain_request, method, url);
+};
+/* harmony default export */ var web_http_http = (http_http);
+
+// CONCATENATED MODULE: ./src/runtimes/web/runtime.ts
+
+
+
+
+
+
+
+
+
+
+
+
+var Runtime = {
+    nextAuthCallbackID: 1,
+    auth_callbacks: {},
+    ScriptReceivers: ScriptReceivers,
+    DependenciesReceivers: DependenciesReceivers,
+    getDefaultStrategy: default_strategy,
+    Transports: transports_transports,
+    transportConnectionInitializer: transport_connection_initializer,
+    HTTPFactory: web_http_http,
+    TimelineTransport: jsonp_timeline,
+    getXHRAPI: function () {
+        return window.XMLHttpRequest;
+    },
+    getWebSocketAPI: function () {
+        return window.WebSocket || window.MozWebSocket;
+    },
+    setup: function (PusherClass) {
+        var _this = this;
+        window.Pusher = PusherClass;
+        var initializeOnDocumentBody = function () {
+            _this.onDocumentBody(PusherClass.ready);
+        };
+        if (!window.JSON) {
+            Dependencies.load('json2', {}, initializeOnDocumentBody);
+        }
+        else {
+            initializeOnDocumentBody();
+        }
+    },
+    getDocument: function () {
+        return document;
+    },
+    getProtocol: function () {
+        return this.getDocument().location.protocol;
+    },
+    getAuthorizers: function () {
+        return { ajax: xhr_auth, jsonp: jsonp_auth };
+    },
+    onDocumentBody: function (callback) {
+        var _this = this;
+        if (document.body) {
+            callback();
+        }
+        else {
+            setTimeout(function () {
+                _this.onDocumentBody(callback);
+            }, 0);
+        }
+    },
+    createJSONPRequest: function (url, data) {
+        return new jsonp_request(url, data);
+    },
+    createScriptRequest: function (src) {
+        return new script_request(src);
+    },
+    getLocalStorage: function () {
+        try {
+            return window.localStorage;
+        }
+        catch (e) {
+            return undefined;
+        }
+    },
+    createXHR: function () {
+        if (this.getXHRAPI()) {
+            return this.createXMLHttpRequest();
+        }
+        else {
+            return this.createMicrosoftXHR();
+        }
+    },
+    createXMLHttpRequest: function () {
+        var Constructor = this.getXHRAPI();
+        return new Constructor();
+    },
+    createMicrosoftXHR: function () {
+        return new ActiveXObject('Microsoft.XMLHTTP');
+    },
+    getNetwork: function () {
+        return net_info_Network;
+    },
+    createWebSocket: function (url) {
+        var Constructor = this.getWebSocketAPI();
+        return new Constructor(url);
+    },
+    createSocketRequest: function (method, url) {
+        if (this.isXHRSupported()) {
+            return this.HTTPFactory.createXHR(method, url);
+        }
+        else if (this.isXDRSupported(url.indexOf('https:') === 0)) {
+            return this.HTTPFactory.createXDR(method, url);
+        }
+        else {
+            throw 'Cross-origin HTTP requests are not supported';
+        }
+    },
+    isXHRSupported: function () {
+        var Constructor = this.getXHRAPI();
+        return (Boolean(Constructor) && new Constructor().withCredentials !== undefined);
+    },
+    isXDRSupported: function (useTLS) {
+        var protocol = useTLS ? 'https:' : 'http:';
+        var documentProtocol = this.getProtocol();
+        return (Boolean(window['XDomainRequest']) && documentProtocol === protocol);
+    },
+    addUnloadListener: function (listener) {
+        if (window.addEventListener !== undefined) {
+            window.addEventListener('unload', listener, false);
+        }
+        else if (window.attachEvent !== undefined) {
+            window.attachEvent('onunload', listener);
+        }
+    },
+    removeUnloadListener: function (listener) {
+        if (window.addEventListener !== undefined) {
+            window.removeEventListener('unload', listener, false);
+        }
+        else if (window.detachEvent !== undefined) {
+            window.detachEvent('onunload', listener);
+        }
+    }
+};
+/* harmony default export */ var runtime = (Runtime);
+
+// CONCATENATED MODULE: ./src/core/timeline/level.ts
+var TimelineLevel;
+(function (TimelineLevel) {
+    TimelineLevel[TimelineLevel["ERROR"] = 3] = "ERROR";
+    TimelineLevel[TimelineLevel["INFO"] = 6] = "INFO";
+    TimelineLevel[TimelineLevel["DEBUG"] = 7] = "DEBUG";
+})(TimelineLevel || (TimelineLevel = {}));
+/* harmony default export */ var timeline_level = (TimelineLevel);
+
+// CONCATENATED MODULE: ./src/core/timeline/timeline.ts
+
+
+
+var timeline_Timeline = (function () {
+    function Timeline(key, session, options) {
+        this.key = key;
+        this.session = session;
+        this.events = [];
+        this.options = options || {};
+        this.sent = 0;
+        this.uniqueID = 0;
+    }
+    Timeline.prototype.log = function (level, event) {
+        if (level <= this.options.level) {
+            this.events.push(extend({}, event, { timestamp: util.now() }));
+            if (this.options.limit && this.events.length > this.options.limit) {
+                this.events.shift();
+            }
+        }
+    };
+    Timeline.prototype.error = function (event) {
+        this.log(timeline_level.ERROR, event);
+    };
+    Timeline.prototype.info = function (event) {
+        this.log(timeline_level.INFO, event);
+    };
+    Timeline.prototype.debug = function (event) {
+        this.log(timeline_level.DEBUG, event);
+    };
+    Timeline.prototype.isEmpty = function () {
+        return this.events.length === 0;
+    };
+    Timeline.prototype.send = function (sendfn, callback) {
+        var _this = this;
+        var data = extend({
+            session: this.session,
+            bundle: this.sent + 1,
+            key: this.key,
+            lib: 'js',
+            version: this.options.version,
+            cluster: this.options.cluster,
+            features: this.options.features,
+            timeline: this.events
+        }, this.options.params);
+        this.events = [];
+        sendfn(data, function (error, result) {
+            if (!error) {
+                _this.sent++;
+            }
+            if (callback) {
+                callback(error, result);
+            }
+        });
+        return true;
+    };
+    Timeline.prototype.generateUniqueID = function () {
+        this.uniqueID++;
+        return this.uniqueID;
+    };
+    return Timeline;
+}());
+/* harmony default export */ var timeline_timeline = (timeline_Timeline);
+
+// CONCATENATED MODULE: ./src/core/strategies/transport_strategy.ts
+
+
+
+
+var transport_strategy_TransportStrategy = (function () {
+    function TransportStrategy(name, priority, transport, options) {
+        this.name = name;
+        this.priority = priority;
+        this.transport = transport;
+        this.options = options || {};
+    }
+    TransportStrategy.prototype.isSupported = function () {
+        return this.transport.isSupported({
+            useTLS: this.options.useTLS
+        });
+    };
+    TransportStrategy.prototype.connect = function (minPriority, callback) {
+        var _this = this;
+        if (!this.isSupported()) {
+            return failAttempt(new UnsupportedStrategy(), callback);
+        }
+        else if (this.priority < minPriority) {
+            return failAttempt(new TransportPriorityTooLow(), callback);
+        }
+        var connected = false;
+        var transport = this.transport.createConnection(this.name, this.priority, this.options.key, this.options);
+        var handshake = null;
+        var onInitialized = function () {
+            transport.unbind('initialized', onInitialized);
+            transport.connect();
+        };
+        var onOpen = function () {
+            handshake = factory.createHandshake(transport, function (result) {
+                connected = true;
+                unbindListeners();
+                callback(null, result);
+            });
+        };
+        var onError = function (error) {
+            unbindListeners();
+            callback(error);
+        };
+        var onClosed = function () {
+            unbindListeners();
+            var serializedTransport;
+            serializedTransport = safeJSONStringify(transport);
+            callback(new TransportClosed(serializedTransport));
+        };
+        var unbindListeners = function () {
+            transport.unbind('initialized', onInitialized);
+            transport.unbind('open', onOpen);
+            transport.unbind('error', onError);
+            transport.unbind('closed', onClosed);
+        };
+        transport.bind('initialized', onInitialized);
+        transport.bind('open', onOpen);
+        transport.bind('error', onError);
+        transport.bind('closed', onClosed);
+        transport.initialize();
+        return {
+            abort: function () {
+                if (connected) {
+                    return;
+                }
+                unbindListeners();
+                if (handshake) {
+                    handshake.close();
+                }
+                else {
+                    transport.close();
+                }
+            },
+            forceMinPriority: function (p) {
+                if (connected) {
+                    return;
+                }
+                if (_this.priority < p) {
+                    if (handshake) {
+                        handshake.close();
+                    }
+                    else {
+                        transport.close();
+                    }
+                }
+            }
+        };
+    };
+    return TransportStrategy;
+}());
+/* harmony default export */ var transport_strategy = (transport_strategy_TransportStrategy);
+function failAttempt(error, callback) {
+    util.defer(function () {
+        callback(error);
+    });
+    return {
+        abort: function () { },
+        forceMinPriority: function () { }
+    };
+}
+
+// CONCATENATED MODULE: ./src/core/strategies/strategy_builder.ts
+
+
+
+
+
+var strategy_builder_Transports = runtime.Transports;
+var strategy_builder_defineTransport = function (config, name, type, priority, options, manager) {
+    var transportClass = strategy_builder_Transports[type];
+    if (!transportClass) {
+        throw new UnsupportedTransport(type);
+    }
+    var enabled = (!config.enabledTransports ||
+        arrayIndexOf(config.enabledTransports, name) !== -1) &&
+        (!config.disabledTransports ||
+            arrayIndexOf(config.disabledTransports, name) === -1);
+    var transport;
+    if (enabled) {
+        options = Object.assign({ ignoreNullOrigin: config.ignoreNullOrigin }, options);
+        transport = new transport_strategy(name, priority, manager ? manager.getAssistant(transportClass) : transportClass, options);
+    }
+    else {
+        transport = strategy_builder_UnsupportedStrategy;
+    }
+    return transport;
+};
+var strategy_builder_UnsupportedStrategy = {
+    isSupported: function () {
+        return false;
+    },
+    connect: function (_, callback) {
+        var deferred = util.defer(function () {
+            callback(new UnsupportedStrategy());
+        });
+        return {
+            abort: function () {
+                deferred.ensureAborted();
+            },
+            forceMinPriority: function () { }
+        };
+    }
+};
+
+// CONCATENATED MODULE: ./src/core/config.ts
+
+
+function getConfig(opts) {
+    var config = {
+        activityTimeout: opts.activityTimeout || defaults.activityTimeout,
+        authEndpoint: opts.authEndpoint || defaults.authEndpoint,
+        authTransport: opts.authTransport || defaults.authTransport,
+        cluster: opts.cluster || defaults.cluster,
+        httpPath: opts.httpPath || defaults.httpPath,
+        httpPort: opts.httpPort || defaults.httpPort,
+        httpsPort: opts.httpsPort || defaults.httpsPort,
+        pongTimeout: opts.pongTimeout || defaults.pongTimeout,
+        statsHost: opts.statsHost || defaults.stats_host,
+        unavailableTimeout: opts.unavailableTimeout || defaults.unavailableTimeout,
+        wsPath: opts.wsPath || defaults.wsPath,
+        wsPort: opts.wsPort || defaults.wsPort,
+        wssPort: opts.wssPort || defaults.wssPort,
+        enableStats: getEnableStatsConfig(opts),
+        httpHost: getHttpHost(opts),
+        useTLS: shouldUseTLS(opts),
+        wsHost: getWebsocketHost(opts)
+    };
+    if ('auth' in opts)
+        config.auth = opts.auth;
+    if ('authorizer' in opts)
+        config.authorizer = opts.authorizer;
+    if ('disabledTransports' in opts)
+        config.disabledTransports = opts.disabledTransports;
+    if ('enabledTransports' in opts)
+        config.enabledTransports = opts.enabledTransports;
+    if ('ignoreNullOrigin' in opts)
+        config.ignoreNullOrigin = opts.ignoreNullOrigin;
+    if ('timelineParams' in opts)
+        config.timelineParams = opts.timelineParams;
+    if ('nacl' in opts) {
+        config.nacl = opts.nacl;
+    }
+    return config;
+}
+function getHttpHost(opts) {
+    if (opts.httpHost) {
+        return opts.httpHost;
+    }
+    if (opts.cluster) {
+        return "sockjs-" + opts.cluster + ".pusher.com";
+    }
+    return defaults.httpHost;
+}
+function getWebsocketHost(opts) {
+    if (opts.wsHost) {
+        return opts.wsHost;
+    }
+    if (opts.cluster) {
+        return getWebsocketHostFromCluster(opts.cluster);
+    }
+    return getWebsocketHostFromCluster(defaults.cluster);
+}
+function getWebsocketHostFromCluster(cluster) {
+    return "ws-" + cluster + ".pusher.com";
+}
+function shouldUseTLS(opts) {
+    if (runtime.getProtocol() === 'https:') {
+        return true;
+    }
+    else if (opts.forceTLS === false) {
+        return false;
+    }
+    return true;
+}
+function getEnableStatsConfig(opts) {
+    if ('enableStats' in opts) {
+        return opts.enableStats;
+    }
+    if ('disableStats' in opts) {
+        return !opts.disableStats;
+    }
+    return false;
+}
+
+// CONCATENATED MODULE: ./src/core/pusher.ts
+
+
+
+
+
+
+
+
+
+
+
+
+var pusher_Pusher = (function () {
+    function Pusher(app_key, options) {
+        var _this = this;
+        checkAppKey(app_key);
+        options = options || {};
+        if (!options.cluster && !(options.wsHost || options.httpHost)) {
+            var suffix = url_store.buildLogSuffix('javascriptQuickStart');
+            logger.warn("You should always specify a cluster when connecting. " + suffix);
+        }
+        if ('disableStats' in options) {
+            logger.warn('The disableStats option is deprecated in favor of enableStats');
+        }
+        this.key = app_key;
+        this.config = getConfig(options);
+        this.channels = factory.createChannels();
+        this.global_emitter = new dispatcher();
+        this.sessionID = Math.floor(Math.random() * 1000000000);
+        this.timeline = new timeline_timeline(this.key, this.sessionID, {
+            cluster: this.config.cluster,
+            features: Pusher.getClientFeatures(),
+            params: this.config.timelineParams || {},
+            limit: 50,
+            level: timeline_level.INFO,
+            version: defaults.VERSION
+        });
+        if (this.config.enableStats) {
+            this.timelineSender = factory.createTimelineSender(this.timeline, {
+                host: this.config.statsHost,
+                path: '/timeline/v2/' + runtime.TimelineTransport.name
+            });
+        }
+        var getStrategy = function (options) {
+            return runtime.getDefaultStrategy(_this.config, options, strategy_builder_defineTransport);
+        };
+        this.connection = factory.createConnectionManager(this.key, {
+            getStrategy: getStrategy,
+            timeline: this.timeline,
+            activityTimeout: this.config.activityTimeout,
+            pongTimeout: this.config.pongTimeout,
+            unavailableTimeout: this.config.unavailableTimeout,
+            useTLS: Boolean(this.config.useTLS)
+        });
+        this.connection.bind('connected', function () {
+            _this.subscribeAll();
+            if (_this.timelineSender) {
+                _this.timelineSender.send(_this.connection.isUsingTLS());
+            }
+        });
+        this.connection.bind('message', function (event) {
+            var eventName = event.event;
+            var internal = eventName.indexOf('pusher_internal:') === 0;
+            if (event.channel) {
+                var channel = _this.channel(event.channel);
+                if (channel) {
+                    channel.handleEvent(event);
+                }
+            }
+            if (!internal) {
+                _this.global_emitter.emit(event.event, event.data);
+            }
+        });
+        this.connection.bind('connecting', function () {
+            _this.channels.disconnect();
+        });
+        this.connection.bind('disconnected', function () {
+            _this.channels.disconnect();
+        });
+        this.connection.bind('error', function (err) {
+            logger.warn(err);
+        });
+        Pusher.instances.push(this);
+        this.timeline.info({ instances: Pusher.instances.length });
+        if (Pusher.isReady) {
+            this.connect();
+        }
+    }
+    Pusher.ready = function () {
+        Pusher.isReady = true;
+        for (var i = 0, l = Pusher.instances.length; i < l; i++) {
+            Pusher.instances[i].connect();
+        }
+    };
+    Pusher.getClientFeatures = function () {
+        return keys(filterObject({ ws: runtime.Transports.ws }, function (t) {
+            return t.isSupported({});
+        }));
+    };
+    Pusher.prototype.channel = function (name) {
+        return this.channels.find(name);
+    };
+    Pusher.prototype.allChannels = function () {
+        return this.channels.all();
+    };
+    Pusher.prototype.connect = function () {
+        this.connection.connect();
+        if (this.timelineSender) {
+            if (!this.timelineSenderTimer) {
+                var usingTLS = this.connection.isUsingTLS();
+                var timelineSender = this.timelineSender;
+                this.timelineSenderTimer = new PeriodicTimer(60000, function () {
+                    timelineSender.send(usingTLS);
+                });
+            }
+        }
+    };
+    Pusher.prototype.disconnect = function () {
+        this.connection.disconnect();
+        if (this.timelineSenderTimer) {
+            this.timelineSenderTimer.ensureAborted();
+            this.timelineSenderTimer = null;
+        }
+    };
+    Pusher.prototype.bind = function (event_name, callback, context) {
+        this.global_emitter.bind(event_name, callback, context);
+        return this;
+    };
+    Pusher.prototype.unbind = function (event_name, callback, context) {
+        this.global_emitter.unbind(event_name, callback, context);
+        return this;
+    };
+    Pusher.prototype.bind_global = function (callback) {
+        this.global_emitter.bind_global(callback);
+        return this;
+    };
+    Pusher.prototype.unbind_global = function (callback) {
+        this.global_emitter.unbind_global(callback);
+        return this;
+    };
+    Pusher.prototype.unbind_all = function (callback) {
+        this.global_emitter.unbind_all();
+        return this;
+    };
+    Pusher.prototype.subscribeAll = function () {
+        var channelName;
+        for (channelName in this.channels.channels) {
+            if (this.channels.channels.hasOwnProperty(channelName)) {
+                this.subscribe(channelName);
+            }
+        }
+    };
+    Pusher.prototype.subscribe = function (channel_name) {
+        var channel = this.channels.add(channel_name, this);
+        if (channel.subscriptionPending && channel.subscriptionCancelled) {
+            channel.reinstateSubscription();
+        }
+        else if (!channel.subscriptionPending &&
+            this.connection.state === 'connected') {
+            channel.subscribe();
+        }
+        return channel;
+    };
+    Pusher.prototype.unsubscribe = function (channel_name) {
+        var channel = this.channels.find(channel_name);
+        if (channel && channel.subscriptionPending) {
+            channel.cancelSubscription();
+        }
+        else {
+            channel = this.channels.remove(channel_name);
+            if (channel && this.connection.state === 'connected') {
+                channel.unsubscribe();
+            }
+        }
+    };
+    Pusher.prototype.send_event = function (event_name, data, channel) {
+        return this.connection.send_event(event_name, data, channel);
+    };
+    Pusher.prototype.shouldUseTLS = function () {
+        return this.config.useTLS;
+    };
+    Pusher.instances = [];
+    Pusher.isReady = false;
+    Pusher.logToConsole = false;
+    Pusher.Runtime = runtime;
+    Pusher.ScriptReceivers = runtime.ScriptReceivers;
+    Pusher.DependenciesReceivers = runtime.DependenciesReceivers;
+    Pusher.auth_callbacks = runtime.auth_callbacks;
+    return Pusher;
+}());
+/* harmony default export */ var core_pusher = __webpack_exports__["default"] = (pusher_Pusher);
+function checkAppKey(key) {
+    if (key === null || key === undefined) {
+        throw 'You must pass your app key when you instantiate Pusher.';
+    }
+}
+runtime.setup(pusher_Pusher);
+
+
+/***/ })
+/******/ ]);
+});
+
+/***/ }),
+
 /***/ "./node_modules/setimmediate/setImmediate.js":
 /*!***************************************************!*\
   !*** ./node_modules/setimmediate/setImmediate.js ***!
@@ -37509,10 +50276,10 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e&":
-/*!*******************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e& ***!
-  \*******************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/GamemodeComponent.vue?vue&type=template&id=6acc1de6&":
+/*!********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/GamemodeComponent.vue?vue&type=template&id=6acc1de6& ***!
+  \********************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -37524,30 +50291,171 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "col-md-4" }, [
+    _c(
+      "div",
+      {
+        staticClass: "card",
+        class: ["card", _vm.status === "Online" ? "card-green" : "card-red"],
+        staticStyle: { "min-height": "165px" }
+      },
+      [
+        _c("div", { staticClass: "card-header" }, [_vm._v(_vm._s(_vm.name))]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-body" }, [
+          _c("span", { staticClass: "row" }, [
+            _vm._v("Status : " + _vm._s(_vm.status))
+          ]),
+          _vm._v(" "),
+          _vm.status === "Online"
+            ? _c("span", { staticClass: "row" }, [
+                _vm._v(
+                  "Playing : " +
+                    _vm._s(_vm.players) +
+                    "/" +
+                    _vm._s(_vm.max_players)
+                )
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _c("hr"),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c(
+              "form",
+              {
+                attrs: {
+                  action: "/gamemode/" + _vm.gamemode_id,
+                  method: "post"
+                }
+              },
+              [
+                _c("input", {
+                  attrs: { type: "hidden", name: "_method", value: "GET" }
+                }),
+                _vm._v(" "),
+                _c("input", {
+                  attrs: { type: "hidden", name: "_token" },
+                  domProps: { value: _vm.csrf }
+                }),
+                _vm._v(" "),
+                _vm._m(0)
+              ]
+            ),
+            _vm._v(" "),
+            _vm.can_edit === true
+              ? _c(
+                  "form",
+                  {
+                    attrs: {
+                      action: "/gamemode/" + _vm.gamemode_id + "/edit",
+                      method: "post"
+                    }
+                  },
+                  [
+                    _c("input", {
+                      attrs: { type: "hidden", name: "_method", value: "GET" }
+                    }),
+                    _vm._v(" "),
+                    _c("input", {
+                      attrs: { type: "hidden", name: "_token" },
+                      domProps: { value: _vm.csrf }
+                    }),
+                    _vm._v(" "),
+                    _vm._m(1)
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.can_trash === true
+              ? _c(
+                  "form",
+                  {
+                    attrs: {
+                      action: "/gamemode/" + _vm.gamemode_id,
+                      method: "post"
+                    }
+                  },
+                  [
+                    _c("input", {
+                      attrs: {
+                        type: "hidden",
+                        name: "_method",
+                        value: "DELETE"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("input", {
+                      attrs: { type: "hidden", name: "_token" },
+                      domProps: { value: _vm.csrf }
+                    }),
+                    _vm._v(" "),
+                    _vm._m(2)
+                  ]
+                )
+              : _vm._e()
+          ])
+        ])
+      ]
+    ),
+    _vm._v(" "),
+    new Date(_vm.added_to_server) >=
+    new Date().setMonth(new Date().getMonth() - 1)
+      ? _c(
+          "div",
+          {
+            staticClass: "ribbon-wrapper ribbon-xl",
+            staticStyle: {
+              right: "2px",
+              top: "-2px",
+              width: "192px",
+              height: "190px"
+            }
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "ribbon bg-warning text-lg",
+                staticStyle: { right: "3px" }
+              },
+              [_vm._v("NEW GAME")]
+            )
+          ]
+        )
+      : _vm._e()
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("Example Component")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _vm._v(
-                "\n                    I'm an example component.\n                "
-              )
-            ])
-          ])
-        ])
-      ])
-    ])
+    return _c(
+      "button",
+      { staticClass: "btn btn-app bg-info", attrs: { type: "submit" } },
+      [_c("i", { staticClass: "fa fa-info" }), _vm._v(" More Info")]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      { staticClass: "btn btn-app bg-primary", attrs: { type: "submit" } },
+      [_c("i", { staticClass: "fa fa-edit" }), _vm._v(" Edit")]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      { staticClass: "btn btn-app bg-danger", attrs: { type: "submit" } },
+      [_c("i", { staticClass: "fa fa-trash" }), _vm._v(" Delete")]
+    )
   }
 ]
 render._withStripped = true
@@ -49718,6 +62626,39 @@ module.exports = function(module) {
 
 /***/ }),
 
+/***/ "./resources/js sync recursive \\.vue$/":
+/*!***********************************!*\
+  !*** ./resources/js sync \.vue$/ ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var map = {
+	"./components/GamemodeComponent.vue": "./resources/js/components/GamemodeComponent.vue"
+};
+
+
+function webpackContext(req) {
+	var id = webpackContextResolve(req);
+	return __webpack_require__(id);
+}
+function webpackContextResolve(req) {
+	if(!__webpack_require__.o(map, req)) {
+		var e = new Error("Cannot find module '" + req + "'");
+		e.code = 'MODULE_NOT_FOUND';
+		throw e;
+	}
+	return map[req];
+}
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = "./resources/js sync recursive \\.vue$/";
+
+/***/ }),
+
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
@@ -49740,10 +62681,13 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
  *
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
-// const files = require.context('./', true, /\.vue$/i);
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
+var files = __webpack_require__("./resources/js sync recursive \\.vue$/");
+
+files.keys().map(function (key) {
+  return Vue.component(key.split('/').pop().split('.')[0], files(key)["default"]);
+}); // Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -49760,9 +62704,12 @@ var app = new Vue({
 /*!***********************************!*\
   !*** ./resources/js/bootstrap.js ***!
   \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var laravel_echo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! laravel-echo */ "./node_modules/laravel-echo/dist/echo.js");
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -49773,6 +62720,10 @@ window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 try {
   window.Popper = __webpack_require__(/*! popper.js */ "./node_modules/popper.js/dist/esm/popper.js")["default"];
   window.$ = window.jQuery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+
+  __webpack_require__(/*! overlayscrollbars */ "./node_modules/overlayscrollbars/js/OverlayScrollbars.js");
+
+  __webpack_require__(/*! ../../vendor/almasaeed2010/adminlte/dist/js/adminlte */ "./vendor/almasaeed2010/adminlte/dist/js/adminlte.js");
 
   __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.js");
 } catch (e) {}
@@ -49790,28 +62741,29 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  * for events that are broadcast by Laravel. Echo and event broadcasting
  * allows your team to easily build robust real-time web applications.
  */
-// import Echo from 'laravel-echo';
-// window.Pusher = require('pusher-js');
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//     encrypted: true
-// });
+
+
+window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
+window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
+  broadcaster: 'pusher',
+  key: "88de3161e4406872f02e",
+  cluster: "eu",
+  encrypted: true
+});
 
 /***/ }),
 
-/***/ "./resources/js/components/ExampleComponent.vue":
-/*!******************************************************!*\
-  !*** ./resources/js/components/ExampleComponent.vue ***!
-  \******************************************************/
+/***/ "./resources/js/components/GamemodeComponent.vue":
+/*!*******************************************************!*\
+  !*** ./resources/js/components/GamemodeComponent.vue ***!
+  \*******************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ExampleComponent.vue?vue&type=template&id=299e239e& */ "./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e&");
-/* harmony import */ var _ExampleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ExampleComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _GamemodeComponent_vue_vue_type_template_id_6acc1de6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GamemodeComponent.vue?vue&type=template&id=6acc1de6& */ "./resources/js/components/GamemodeComponent.vue?vue&type=template&id=6acc1de6&");
+/* harmony import */ var _GamemodeComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GamemodeComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/GamemodeComponent.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -49821,9 +62773,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _ExampleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _GamemodeComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _GamemodeComponent_vue_vue_type_template_id_6acc1de6___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _GamemodeComponent_vue_vue_type_template_id_6acc1de6___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -49833,38 +62785,38 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/ExampleComponent.vue"
+component.options.__file = "resources/js/components/GamemodeComponent.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js&":
-/*!*******************************************************************************!*\
-  !*** ./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js& ***!
-  \*******************************************************************************/
+/***/ "./resources/js/components/GamemodeComponent.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/GamemodeComponent.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./ExampleComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GamemodeComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./GamemodeComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/GamemodeComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GamemodeComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e&":
-/*!*************************************************************************************!*\
-  !*** ./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e& ***!
-  \*************************************************************************************/
+/***/ "./resources/js/components/GamemodeComponent.vue?vue&type=template&id=6acc1de6&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/GamemodeComponent.vue?vue&type=template&id=6acc1de6& ***!
+  \**************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./ExampleComponent.vue?vue&type=template&id=299e239e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GamemodeComponent_vue_vue_type_template_id_6acc1de6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./GamemodeComponent.vue?vue&type=template&id=6acc1de6& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/GamemodeComponent.vue?vue&type=template&id=6acc1de6&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GamemodeComponent_vue_vue_type_template_id_6acc1de6___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GamemodeComponent_vue_vue_type_template_id_6acc1de6___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -49878,6 +62830,1924 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ "./vendor/almasaeed2010/adminlte/dist/js/adminlte.js":
+/*!***********************************************************!*\
+  !*** ./vendor/almasaeed2010/adminlte/dist/js/adminlte.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+/*!
+ * AdminLTE v3.0.5 (https://adminlte.io)
+ * Copyright 2014-2020 Colorlib <http://colorlib.com>
+ * Licensed under MIT (https://github.com/ColorlibHQ/AdminLTE/blob/master/LICENSE)
+ */
+(function (global, factory) {
+  ( false ? undefined : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory(exports) :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : (undefined);
+})(this, function (exports) {
+  'use strict';
+  /**
+   * --------------------------------------------
+   * AdminLTE ControlSidebar.js
+   * License MIT
+   * --------------------------------------------
+   */
+
+  var ControlSidebar = function ($) {
+    /**
+     * Constants
+     * ====================================================
+     */
+    var NAME = 'ControlSidebar';
+    var DATA_KEY = 'lte.controlsidebar';
+    var EVENT_KEY = "." + DATA_KEY;
+    var JQUERY_NO_CONFLICT = $.fn[NAME];
+    var Event = {
+      COLLAPSED: "collapsed" + EVENT_KEY,
+      EXPANDED: "expanded" + EVENT_KEY
+    };
+    var Selector = {
+      CONTROL_SIDEBAR: '.control-sidebar',
+      CONTROL_SIDEBAR_CONTENT: '.control-sidebar-content',
+      DATA_TOGGLE: '[data-widget="control-sidebar"]',
+      CONTENT: '.content-wrapper',
+      HEADER: '.main-header',
+      FOOTER: '.main-footer'
+    };
+    var ClassName = {
+      CONTROL_SIDEBAR_ANIMATE: 'control-sidebar-animate',
+      CONTROL_SIDEBAR_OPEN: 'control-sidebar-open',
+      CONTROL_SIDEBAR_SLIDE: 'control-sidebar-slide-open',
+      LAYOUT_FIXED: 'layout-fixed',
+      NAVBAR_FIXED: 'layout-navbar-fixed',
+      NAVBAR_SM_FIXED: 'layout-sm-navbar-fixed',
+      NAVBAR_MD_FIXED: 'layout-md-navbar-fixed',
+      NAVBAR_LG_FIXED: 'layout-lg-navbar-fixed',
+      NAVBAR_XL_FIXED: 'layout-xl-navbar-fixed',
+      FOOTER_FIXED: 'layout-footer-fixed',
+      FOOTER_SM_FIXED: 'layout-sm-footer-fixed',
+      FOOTER_MD_FIXED: 'layout-md-footer-fixed',
+      FOOTER_LG_FIXED: 'layout-lg-footer-fixed',
+      FOOTER_XL_FIXED: 'layout-xl-footer-fixed'
+    };
+    var Default = {
+      controlsidebarSlide: true,
+      scrollbarTheme: 'os-theme-light',
+      scrollbarAutoHide: 'l'
+    };
+    /**
+     * Class Definition
+     * ====================================================
+     */
+
+    var ControlSidebar = /*#__PURE__*/function () {
+      function ControlSidebar(element, config) {
+        this._element = element;
+        this._config = config;
+
+        this._init();
+      } // Public
+
+
+      var _proto = ControlSidebar.prototype;
+
+      _proto.collapse = function collapse() {
+        // Show the control sidebar
+        if (this._config.controlsidebarSlide) {
+          $('html').addClass(ClassName.CONTROL_SIDEBAR_ANIMATE);
+          $('body').removeClass(ClassName.CONTROL_SIDEBAR_SLIDE).delay(300).queue(function () {
+            $(Selector.CONTROL_SIDEBAR).hide();
+            $('html').removeClass(ClassName.CONTROL_SIDEBAR_ANIMATE);
+            $(this).dequeue();
+          });
+        } else {
+          $('body').removeClass(ClassName.CONTROL_SIDEBAR_OPEN);
+        }
+
+        var collapsedEvent = $.Event(Event.COLLAPSED);
+        $(this._element).trigger(collapsedEvent);
+      };
+
+      _proto.show = function show() {
+        // Collapse the control sidebar
+        if (this._config.controlsidebarSlide) {
+          $('html').addClass(ClassName.CONTROL_SIDEBAR_ANIMATE);
+          $(Selector.CONTROL_SIDEBAR).show().delay(10).queue(function () {
+            $('body').addClass(ClassName.CONTROL_SIDEBAR_SLIDE).delay(300).queue(function () {
+              $('html').removeClass(ClassName.CONTROL_SIDEBAR_ANIMATE);
+              $(this).dequeue();
+            });
+            $(this).dequeue();
+          });
+        } else {
+          $('body').addClass(ClassName.CONTROL_SIDEBAR_OPEN);
+        }
+
+        var expandedEvent = $.Event(Event.EXPANDED);
+        $(this._element).trigger(expandedEvent);
+      };
+
+      _proto.toggle = function toggle() {
+        var shouldClose = $('body').hasClass(ClassName.CONTROL_SIDEBAR_OPEN) || $('body').hasClass(ClassName.CONTROL_SIDEBAR_SLIDE);
+
+        if (shouldClose) {
+          // Close the control sidebar
+          this.collapse();
+        } else {
+          // Open the control sidebar
+          this.show();
+        }
+      } // Private
+      ;
+
+      _proto._init = function _init() {
+        var _this = this;
+
+        this._fixHeight();
+
+        this._fixScrollHeight();
+
+        $(window).resize(function () {
+          _this._fixHeight();
+
+          _this._fixScrollHeight();
+        });
+        $(window).scroll(function () {
+          if ($('body').hasClass(ClassName.CONTROL_SIDEBAR_OPEN) || $('body').hasClass(ClassName.CONTROL_SIDEBAR_SLIDE)) {
+            _this._fixScrollHeight();
+          }
+        });
+      };
+
+      _proto._fixScrollHeight = function _fixScrollHeight() {
+        var heights = {
+          scroll: $(document).height(),
+          window: $(window).height(),
+          header: $(Selector.HEADER).outerHeight(),
+          footer: $(Selector.FOOTER).outerHeight()
+        };
+        var positions = {
+          bottom: Math.abs(heights.window + $(window).scrollTop() - heights.scroll),
+          top: $(window).scrollTop()
+        };
+        var navbarFixed = false;
+        var footerFixed = false;
+
+        if ($('body').hasClass(ClassName.LAYOUT_FIXED)) {
+          if ($('body').hasClass(ClassName.NAVBAR_FIXED) || $('body').hasClass(ClassName.NAVBAR_SM_FIXED) || $('body').hasClass(ClassName.NAVBAR_MD_FIXED) || $('body').hasClass(ClassName.NAVBAR_LG_FIXED) || $('body').hasClass(ClassName.NAVBAR_XL_FIXED)) {
+            if ($(Selector.HEADER).css("position") === "fixed") {
+              navbarFixed = true;
+            }
+          }
+
+          if ($('body').hasClass(ClassName.FOOTER_FIXED) || $('body').hasClass(ClassName.FOOTER_SM_FIXED) || $('body').hasClass(ClassName.FOOTER_MD_FIXED) || $('body').hasClass(ClassName.FOOTER_LG_FIXED) || $('body').hasClass(ClassName.FOOTER_XL_FIXED)) {
+            if ($(Selector.FOOTER).css("position") === "fixed") {
+              footerFixed = true;
+            }
+          }
+
+          if (positions.top === 0 && positions.bottom === 0) {
+            $(Selector.CONTROL_SIDEBAR).css('bottom', heights.footer);
+            $(Selector.CONTROL_SIDEBAR).css('top', heights.header);
+            $(Selector.CONTROL_SIDEBAR + ', ' + Selector.CONTROL_SIDEBAR + ' ' + Selector.CONTROL_SIDEBAR_CONTENT).css('height', heights.window - (heights.header + heights.footer));
+          } else if (positions.bottom <= heights.footer) {
+            if (footerFixed === false) {
+              $(Selector.CONTROL_SIDEBAR).css('bottom', heights.footer - positions.bottom);
+              $(Selector.CONTROL_SIDEBAR + ', ' + Selector.CONTROL_SIDEBAR + ' ' + Selector.CONTROL_SIDEBAR_CONTENT).css('height', heights.window - (heights.footer - positions.bottom));
+            } else {
+              $(Selector.CONTROL_SIDEBAR).css('bottom', heights.footer);
+            }
+          } else if (positions.top <= heights.header) {
+            if (navbarFixed === false) {
+              $(Selector.CONTROL_SIDEBAR).css('top', heights.header - positions.top);
+              $(Selector.CONTROL_SIDEBAR + ', ' + Selector.CONTROL_SIDEBAR + ' ' + Selector.CONTROL_SIDEBAR_CONTENT).css('height', heights.window - (heights.header - positions.top));
+            } else {
+              $(Selector.CONTROL_SIDEBAR).css('top', heights.header);
+            }
+          } else {
+            if (navbarFixed === false) {
+              $(Selector.CONTROL_SIDEBAR).css('top', 0);
+              $(Selector.CONTROL_SIDEBAR + ', ' + Selector.CONTROL_SIDEBAR + ' ' + Selector.CONTROL_SIDEBAR_CONTENT).css('height', heights.window);
+            } else {
+              $(Selector.CONTROL_SIDEBAR).css('top', heights.header);
+            }
+          }
+        }
+      };
+
+      _proto._fixHeight = function _fixHeight() {
+        var heights = {
+          window: $(window).height(),
+          header: $(Selector.HEADER).outerHeight(),
+          footer: $(Selector.FOOTER).outerHeight()
+        };
+
+        if ($('body').hasClass(ClassName.LAYOUT_FIXED)) {
+          var sidebarHeight = heights.window - heights.header;
+
+          if ($('body').hasClass(ClassName.FOOTER_FIXED) || $('body').hasClass(ClassName.FOOTER_SM_FIXED) || $('body').hasClass(ClassName.FOOTER_MD_FIXED) || $('body').hasClass(ClassName.FOOTER_LG_FIXED) || $('body').hasClass(ClassName.FOOTER_XL_FIXED)) {
+            if ($(Selector.FOOTER).css("position") === "fixed") {
+              sidebarHeight = heights.window - heights.header - heights.footer;
+            }
+          }
+
+          $(Selector.CONTROL_SIDEBAR + ' ' + Selector.CONTROL_SIDEBAR_CONTENT).css('height', sidebarHeight);
+
+          if (typeof $.fn.overlayScrollbars !== 'undefined') {
+            $(Selector.CONTROL_SIDEBAR + ' ' + Selector.CONTROL_SIDEBAR_CONTENT).overlayScrollbars({
+              className: this._config.scrollbarTheme,
+              sizeAutoCapable: true,
+              scrollbars: {
+                autoHide: this._config.scrollbarAutoHide,
+                clickScrolling: true
+              }
+            });
+          }
+        }
+      } // Static
+      ;
+
+      ControlSidebar._jQueryInterface = function _jQueryInterface(operation) {
+        return this.each(function () {
+          var data = $(this).data(DATA_KEY);
+
+          var _options = $.extend({}, Default, $(this).data());
+
+          if (!data) {
+            data = new ControlSidebar(this, _options);
+            $(this).data(DATA_KEY, data);
+          }
+
+          if (data[operation] === 'undefined') {
+            throw new Error(operation + " is not a function");
+          }
+
+          data[operation]();
+        });
+      };
+
+      return ControlSidebar;
+    }();
+    /**
+     *
+     * Data Api implementation
+     * ====================================================
+     */
+
+
+    $(document).on('click', Selector.DATA_TOGGLE, function (event) {
+      event.preventDefault();
+
+      ControlSidebar._jQueryInterface.call($(this), 'toggle');
+    });
+    /**
+     * jQuery API
+     * ====================================================
+     */
+
+    $.fn[NAME] = ControlSidebar._jQueryInterface;
+    $.fn[NAME].Constructor = ControlSidebar;
+
+    $.fn[NAME].noConflict = function () {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return ControlSidebar._jQueryInterface;
+    };
+
+    return ControlSidebar;
+  }(jQuery);
+  /**
+   * --------------------------------------------
+   * AdminLTE Layout.js
+   * License MIT
+   * --------------------------------------------
+   */
+
+
+  var Layout = function ($) {
+    /**
+     * Constants
+     * ====================================================
+     */
+    var NAME = 'Layout';
+    var DATA_KEY = 'lte.layout';
+    var JQUERY_NO_CONFLICT = $.fn[NAME];
+    var Selector = {
+      HEADER: '.main-header',
+      MAIN_SIDEBAR: '.main-sidebar',
+      SIDEBAR: '.main-sidebar .sidebar',
+      CONTENT: '.content-wrapper',
+      BRAND: '.brand-link',
+      CONTENT_HEADER: '.content-header',
+      WRAPPER: '.wrapper',
+      CONTROL_SIDEBAR: '.control-sidebar',
+      CONTROL_SIDEBAR_CONTENT: '.control-sidebar-content',
+      CONTROL_SIDEBAR_BTN: '[data-widget="control-sidebar"]',
+      LAYOUT_FIXED: '.layout-fixed',
+      FOOTER: '.main-footer',
+      PUSHMENU_BTN: '[data-widget="pushmenu"]',
+      LOGIN_BOX: '.login-box',
+      REGISTER_BOX: '.register-box'
+    };
+    var ClassName = {
+      HOLD: 'hold-transition',
+      SIDEBAR: 'main-sidebar',
+      CONTENT_FIXED: 'content-fixed',
+      SIDEBAR_FOCUSED: 'sidebar-focused',
+      LAYOUT_FIXED: 'layout-fixed',
+      NAVBAR_FIXED: 'layout-navbar-fixed',
+      FOOTER_FIXED: 'layout-footer-fixed',
+      LOGIN_PAGE: 'login-page',
+      REGISTER_PAGE: 'register-page',
+      CONTROL_SIDEBAR_SLIDE_OPEN: 'control-sidebar-slide-open',
+      CONTROL_SIDEBAR_OPEN: 'control-sidebar-open'
+    };
+    var Default = {
+      scrollbarTheme: 'os-theme-light',
+      scrollbarAutoHide: 'l',
+      panelAutoHeight: true,
+      loginRegisterAutoHeight: true
+    };
+    /**
+     * Class Definition
+     * ====================================================
+     */
+
+    var Layout = /*#__PURE__*/function () {
+      function Layout(element, config) {
+        this._config = config;
+        this._element = element;
+
+        this._init();
+      } // Public
+
+
+      var _proto = Layout.prototype;
+
+      _proto.fixLayoutHeight = function fixLayoutHeight(extra) {
+        if (extra === void 0) {
+          extra = null;
+        }
+
+        var control_sidebar = 0;
+
+        if ($('body').hasClass(ClassName.CONTROL_SIDEBAR_SLIDE_OPEN) || $('body').hasClass(ClassName.CONTROL_SIDEBAR_OPEN) || extra == 'control_sidebar') {
+          control_sidebar = $(Selector.CONTROL_SIDEBAR_CONTENT).height();
+        }
+
+        var heights = {
+          window: $(window).height(),
+          header: $(Selector.HEADER).length !== 0 ? $(Selector.HEADER).outerHeight() : 0,
+          footer: $(Selector.FOOTER).length !== 0 ? $(Selector.FOOTER).outerHeight() : 0,
+          sidebar: $(Selector.SIDEBAR).length !== 0 ? $(Selector.SIDEBAR).height() : 0,
+          control_sidebar: control_sidebar
+        };
+
+        var max = this._max(heights);
+
+        var offset = this._config.panelAutoHeight;
+
+        if (offset === true) {
+          offset = 0;
+        }
+
+        if (offset !== false) {
+          if (max == heights.control_sidebar) {
+            $(Selector.CONTENT).css('min-height', max + offset);
+          } else if (max == heights.window) {
+            $(Selector.CONTENT).css('min-height', max + offset - heights.header - heights.footer);
+          } else {
+            $(Selector.CONTENT).css('min-height', max + offset - heights.header);
+          }
+
+          if (this._isFooterFixed()) {
+            $(Selector.CONTENT).css('min-height', parseFloat($(Selector.CONTENT).css('min-height')) + heights.footer);
+          }
+        }
+
+        if ($('body').hasClass(ClassName.LAYOUT_FIXED)) {
+          if (offset !== false) {
+            $(Selector.CONTENT).css('min-height', max + offset - heights.header - heights.footer);
+          }
+
+          if (typeof $.fn.overlayScrollbars !== 'undefined') {
+            $(Selector.SIDEBAR).overlayScrollbars({
+              className: this._config.scrollbarTheme,
+              sizeAutoCapable: true,
+              scrollbars: {
+                autoHide: this._config.scrollbarAutoHide,
+                clickScrolling: true
+              }
+            });
+          }
+        }
+      };
+
+      _proto.fixLoginRegisterHeight = function fixLoginRegisterHeight() {
+        if ($(Selector.LOGIN_BOX + ', ' + Selector.REGISTER_BOX).length === 0) {
+          $('body, html').css('height', 'auto');
+        } else if ($(Selector.LOGIN_BOX + ', ' + Selector.REGISTER_BOX).length !== 0) {
+          var box_height = $(Selector.LOGIN_BOX + ', ' + Selector.REGISTER_BOX).height();
+
+          if ($('body').css('min-height') !== box_height) {
+            $('body').css('min-height', box_height);
+          }
+        }
+      } // Private
+      ;
+
+      _proto._init = function _init() {
+        var _this = this; // Activate layout height watcher
+
+
+        this.fixLayoutHeight();
+
+        if (this._config.loginRegisterAutoHeight === true) {
+          this.fixLoginRegisterHeight();
+        } else if (Number.isInteger(this._config.loginRegisterAutoHeight)) {
+          setInterval(this.fixLoginRegisterHeight, this._config.loginRegisterAutoHeight);
+        }
+
+        $(Selector.SIDEBAR).on('collapsed.lte.treeview expanded.lte.treeview', function () {
+          _this.fixLayoutHeight();
+        });
+        $(Selector.PUSHMENU_BTN).on('collapsed.lte.pushmenu shown.lte.pushmenu', function () {
+          _this.fixLayoutHeight();
+        });
+        $(Selector.CONTROL_SIDEBAR_BTN).on('collapsed.lte.controlsidebar', function () {
+          _this.fixLayoutHeight();
+        }).on('expanded.lte.controlsidebar', function () {
+          _this.fixLayoutHeight('control_sidebar');
+        });
+        $(window).resize(function () {
+          _this.fixLayoutHeight();
+        });
+        setTimeout(function () {
+          $('body.hold-transition').removeClass('hold-transition');
+        }, 50);
+      };
+
+      _proto._max = function _max(numbers) {
+        // Calculate the maximum number in a list
+        var max = 0;
+        Object.keys(numbers).forEach(function (key) {
+          if (numbers[key] > max) {
+            max = numbers[key];
+          }
+        });
+        return max;
+      };
+
+      _proto._isFooterFixed = function _isFooterFixed() {
+        return $('.main-footer').css('position') === 'fixed';
+      } // Static
+      ;
+
+      Layout._jQueryInterface = function _jQueryInterface(config) {
+        if (config === void 0) {
+          config = '';
+        }
+
+        return this.each(function () {
+          var data = $(this).data(DATA_KEY);
+
+          var _options = $.extend({}, Default, $(this).data());
+
+          if (!data) {
+            data = new Layout($(this), _options);
+            $(this).data(DATA_KEY, data);
+          }
+
+          if (config === 'init' || config === '') {
+            data['_init']();
+          } else if (config === 'fixLayoutHeight' || config === 'fixLoginRegisterHeight') {
+            data[config]();
+          }
+        });
+      };
+
+      return Layout;
+    }();
+    /**
+     * Data API
+     * ====================================================
+     */
+
+
+    $(window).on('load', function () {
+      Layout._jQueryInterface.call($('body'));
+    });
+    $(Selector.SIDEBAR + ' a').on('focusin', function () {
+      $(Selector.MAIN_SIDEBAR).addClass(ClassName.SIDEBAR_FOCUSED);
+    });
+    $(Selector.SIDEBAR + ' a').on('focusout', function () {
+      $(Selector.MAIN_SIDEBAR).removeClass(ClassName.SIDEBAR_FOCUSED);
+    });
+    /**
+     * jQuery API
+     * ====================================================
+     */
+
+    $.fn[NAME] = Layout._jQueryInterface;
+    $.fn[NAME].Constructor = Layout;
+
+    $.fn[NAME].noConflict = function () {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Layout._jQueryInterface;
+    };
+
+    return Layout;
+  }(jQuery);
+  /**
+   * --------------------------------------------
+   * AdminLTE PushMenu.js
+   * License MIT
+   * --------------------------------------------
+   */
+
+
+  var PushMenu = function ($) {
+    /**
+     * Constants
+     * ====================================================
+     */
+    var NAME = 'PushMenu';
+    var DATA_KEY = 'lte.pushmenu';
+    var EVENT_KEY = "." + DATA_KEY;
+    var JQUERY_NO_CONFLICT = $.fn[NAME];
+    var Event = {
+      COLLAPSED: "collapsed" + EVENT_KEY,
+      SHOWN: "shown" + EVENT_KEY
+    };
+    var Default = {
+      autoCollapseSize: 992,
+      enableRemember: false,
+      noTransitionAfterReload: true
+    };
+    var Selector = {
+      TOGGLE_BUTTON: '[data-widget="pushmenu"]',
+      SIDEBAR_MINI: '.sidebar-mini',
+      SIDEBAR_COLLAPSED: '.sidebar-collapse',
+      BODY: 'body',
+      OVERLAY: '#sidebar-overlay',
+      WRAPPER: '.wrapper'
+    };
+    var ClassName = {
+      COLLAPSED: 'sidebar-collapse',
+      OPEN: 'sidebar-open',
+      CLOSED: 'sidebar-closed'
+    };
+    /**
+     * Class Definition
+     * ====================================================
+     */
+
+    var PushMenu = /*#__PURE__*/function () {
+      function PushMenu(element, options) {
+        this._element = element;
+        this._options = $.extend({}, Default, options);
+
+        if (!$(Selector.OVERLAY).length) {
+          this._addOverlay();
+        }
+
+        this._init();
+      } // Public
+
+
+      var _proto = PushMenu.prototype;
+
+      _proto.expand = function expand() {
+        if (this._options.autoCollapseSize) {
+          if ($(window).width() <= this._options.autoCollapseSize) {
+            $(Selector.BODY).addClass(ClassName.OPEN);
+          }
+        }
+
+        $(Selector.BODY).removeClass(ClassName.COLLAPSED).removeClass(ClassName.CLOSED);
+
+        if (this._options.enableRemember) {
+          localStorage.setItem("remember" + EVENT_KEY, ClassName.OPEN);
+        }
+
+        var shownEvent = $.Event(Event.SHOWN);
+        $(this._element).trigger(shownEvent);
+      };
+
+      _proto.collapse = function collapse() {
+        if (this._options.autoCollapseSize) {
+          if ($(window).width() <= this._options.autoCollapseSize) {
+            $(Selector.BODY).removeClass(ClassName.OPEN).addClass(ClassName.CLOSED);
+          }
+        }
+
+        $(Selector.BODY).addClass(ClassName.COLLAPSED);
+
+        if (this._options.enableRemember) {
+          localStorage.setItem("remember" + EVENT_KEY, ClassName.COLLAPSED);
+        }
+
+        var collapsedEvent = $.Event(Event.COLLAPSED);
+        $(this._element).trigger(collapsedEvent);
+      };
+
+      _proto.toggle = function toggle() {
+        if (!$(Selector.BODY).hasClass(ClassName.COLLAPSED)) {
+          this.collapse();
+        } else {
+          this.expand();
+        }
+      };
+
+      _proto.autoCollapse = function autoCollapse(resize) {
+        if (resize === void 0) {
+          resize = false;
+        }
+
+        if (this._options.autoCollapseSize) {
+          if ($(window).width() <= this._options.autoCollapseSize) {
+            if (!$(Selector.BODY).hasClass(ClassName.OPEN)) {
+              this.collapse();
+            }
+          } else if (resize == true) {
+            if ($(Selector.BODY).hasClass(ClassName.OPEN)) {
+              $(Selector.BODY).removeClass(ClassName.OPEN);
+            } else if ($(Selector.BODY).hasClass(ClassName.CLOSED)) {
+              this.expand();
+            }
+          }
+        }
+      };
+
+      _proto.remember = function remember() {
+        if (this._options.enableRemember) {
+          var toggleState = localStorage.getItem("remember" + EVENT_KEY);
+
+          if (toggleState == ClassName.COLLAPSED) {
+            if (this._options.noTransitionAfterReload) {
+              $("body").addClass('hold-transition').addClass(ClassName.COLLAPSED).delay(50).queue(function () {
+                $(this).removeClass('hold-transition');
+                $(this).dequeue();
+              });
+            } else {
+              $("body").addClass(ClassName.COLLAPSED);
+            }
+          } else {
+            if (this._options.noTransitionAfterReload) {
+              $("body").addClass('hold-transition').removeClass(ClassName.COLLAPSED).delay(50).queue(function () {
+                $(this).removeClass('hold-transition');
+                $(this).dequeue();
+              });
+            } else {
+              $("body").removeClass(ClassName.COLLAPSED);
+            }
+          }
+        }
+      } // Private
+      ;
+
+      _proto._init = function _init() {
+        var _this = this;
+
+        this.remember();
+        this.autoCollapse();
+        $(window).resize(function () {
+          _this.autoCollapse(true);
+        });
+      };
+
+      _proto._addOverlay = function _addOverlay() {
+        var _this2 = this;
+
+        var overlay = $('<div />', {
+          id: 'sidebar-overlay'
+        });
+        overlay.on('click', function () {
+          _this2.collapse();
+        });
+        $(Selector.WRAPPER).append(overlay);
+      } // Static
+      ;
+
+      PushMenu._jQueryInterface = function _jQueryInterface(operation) {
+        return this.each(function () {
+          var data = $(this).data(DATA_KEY);
+
+          var _options = $.extend({}, Default, $(this).data());
+
+          if (!data) {
+            data = new PushMenu(this, _options);
+            $(this).data(DATA_KEY, data);
+          }
+
+          if (typeof operation === 'string' && operation.match(/collapse|expand|toggle/)) {
+            data[operation]();
+          }
+        });
+      };
+
+      return PushMenu;
+    }();
+    /**
+     * Data API
+     * ====================================================
+     */
+
+
+    $(document).on('click', Selector.TOGGLE_BUTTON, function (event) {
+      event.preventDefault();
+      var button = event.currentTarget;
+
+      if ($(button).data('widget') !== 'pushmenu') {
+        button = $(button).closest(Selector.TOGGLE_BUTTON);
+      }
+
+      PushMenu._jQueryInterface.call($(button), 'toggle');
+    });
+    $(window).on('load', function () {
+      PushMenu._jQueryInterface.call($(Selector.TOGGLE_BUTTON));
+    });
+    /**
+     * jQuery API
+     * ====================================================
+     */
+
+    $.fn[NAME] = PushMenu._jQueryInterface;
+    $.fn[NAME].Constructor = PushMenu;
+
+    $.fn[NAME].noConflict = function () {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return PushMenu._jQueryInterface;
+    };
+
+    return PushMenu;
+  }(jQuery);
+  /**
+   * --------------------------------------------
+   * AdminLTE Treeview.js
+   * License MIT
+   * --------------------------------------------
+   */
+
+
+  var Treeview = function ($) {
+    /**
+     * Constants
+     * ====================================================
+     */
+    var NAME = 'Treeview';
+    var DATA_KEY = 'lte.treeview';
+    var EVENT_KEY = "." + DATA_KEY;
+    var JQUERY_NO_CONFLICT = $.fn[NAME];
+    var Event = {
+      SELECTED: "selected" + EVENT_KEY,
+      EXPANDED: "expanded" + EVENT_KEY,
+      COLLAPSED: "collapsed" + EVENT_KEY,
+      LOAD_DATA_API: "load" + EVENT_KEY
+    };
+    var Selector = {
+      LI: '.nav-item',
+      LINK: '.nav-link',
+      TREEVIEW_MENU: '.nav-treeview',
+      OPEN: '.menu-open',
+      DATA_WIDGET: '[data-widget="treeview"]'
+    };
+    var ClassName = {
+      LI: 'nav-item',
+      LINK: 'nav-link',
+      TREEVIEW_MENU: 'nav-treeview',
+      OPEN: 'menu-open',
+      SIDEBAR_COLLAPSED: 'sidebar-collapse'
+    };
+    var Default = {
+      trigger: Selector.DATA_WIDGET + " " + Selector.LINK,
+      animationSpeed: 300,
+      accordion: true,
+      expandSidebar: false,
+      sidebarButtonSelector: '[data-widget="pushmenu"]'
+    };
+    /**
+     * Class Definition
+     * ====================================================
+     */
+
+    var Treeview = /*#__PURE__*/function () {
+      function Treeview(element, config) {
+        this._config = config;
+        this._element = element;
+      } // Public
+
+
+      var _proto = Treeview.prototype;
+
+      _proto.init = function init() {
+        this._setupListeners();
+      };
+
+      _proto.expand = function expand(treeviewMenu, parentLi) {
+        var _this = this;
+
+        var expandedEvent = $.Event(Event.EXPANDED);
+
+        if (this._config.accordion) {
+          var openMenuLi = parentLi.siblings(Selector.OPEN).first();
+          var openTreeview = openMenuLi.find(Selector.TREEVIEW_MENU).first();
+          this.collapse(openTreeview, openMenuLi);
+        }
+
+        treeviewMenu.stop().slideDown(this._config.animationSpeed, function () {
+          parentLi.addClass(ClassName.OPEN);
+          $(_this._element).trigger(expandedEvent);
+        });
+
+        if (this._config.expandSidebar) {
+          this._expandSidebar();
+        }
+      };
+
+      _proto.collapse = function collapse(treeviewMenu, parentLi) {
+        var _this2 = this;
+
+        var collapsedEvent = $.Event(Event.COLLAPSED);
+        treeviewMenu.stop().slideUp(this._config.animationSpeed, function () {
+          parentLi.removeClass(ClassName.OPEN);
+          $(_this2._element).trigger(collapsedEvent);
+          treeviewMenu.find(Selector.OPEN + " > " + Selector.TREEVIEW_MENU).slideUp();
+          treeviewMenu.find(Selector.OPEN).removeClass(ClassName.OPEN);
+        });
+      };
+
+      _proto.toggle = function toggle(event) {
+        var $relativeTarget = $(event.currentTarget);
+        var $parent = $relativeTarget.parent();
+        var treeviewMenu = $parent.find('> ' + Selector.TREEVIEW_MENU);
+
+        if (!treeviewMenu.is(Selector.TREEVIEW_MENU)) {
+          if (!$parent.is(Selector.LI)) {
+            treeviewMenu = $parent.parent().find('> ' + Selector.TREEVIEW_MENU);
+          }
+
+          if (!treeviewMenu.is(Selector.TREEVIEW_MENU)) {
+            return;
+          }
+        }
+
+        event.preventDefault();
+        var parentLi = $relativeTarget.parents(Selector.LI).first();
+        var isOpen = parentLi.hasClass(ClassName.OPEN);
+
+        if (isOpen) {
+          this.collapse($(treeviewMenu), parentLi);
+        } else {
+          this.expand($(treeviewMenu), parentLi);
+        }
+      } // Private
+      ;
+
+      _proto._setupListeners = function _setupListeners() {
+        var _this3 = this;
+
+        $(document).on('click', this._config.trigger, function (event) {
+          _this3.toggle(event);
+        });
+      };
+
+      _proto._expandSidebar = function _expandSidebar() {
+        if ($('body').hasClass(ClassName.SIDEBAR_COLLAPSED)) {
+          $(this._config.sidebarButtonSelector).PushMenu('expand');
+        }
+      } // Static
+      ;
+
+      Treeview._jQueryInterface = function _jQueryInterface(config) {
+        return this.each(function () {
+          var data = $(this).data(DATA_KEY);
+
+          var _options = $.extend({}, Default, $(this).data());
+
+          if (!data) {
+            data = new Treeview($(this), _options);
+            $(this).data(DATA_KEY, data);
+          }
+
+          if (config === 'init') {
+            data[config]();
+          }
+        });
+      };
+
+      return Treeview;
+    }();
+    /**
+     * Data API
+     * ====================================================
+     */
+
+
+    $(window).on(Event.LOAD_DATA_API, function () {
+      $(Selector.DATA_WIDGET).each(function () {
+        Treeview._jQueryInterface.call($(this), 'init');
+      });
+    });
+    /**
+     * jQuery API
+     * ====================================================
+     */
+
+    $.fn[NAME] = Treeview._jQueryInterface;
+    $.fn[NAME].Constructor = Treeview;
+
+    $.fn[NAME].noConflict = function () {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Treeview._jQueryInterface;
+    };
+
+    return Treeview;
+  }(jQuery);
+  /**
+   * --------------------------------------------
+   * AdminLTE DirectChat.js
+   * License MIT
+   * --------------------------------------------
+   */
+
+
+  var DirectChat = function ($) {
+    /**
+     * Constants
+     * ====================================================
+     */
+    var NAME = 'DirectChat';
+    var DATA_KEY = 'lte.directchat';
+    var JQUERY_NO_CONFLICT = $.fn[NAME];
+    var Event = {
+      TOGGLED: "toggled{EVENT_KEY}"
+    };
+    var Selector = {
+      DATA_TOGGLE: '[data-widget="chat-pane-toggle"]',
+      DIRECT_CHAT: '.direct-chat'
+    };
+    var ClassName = {
+      DIRECT_CHAT_OPEN: 'direct-chat-contacts-open'
+    };
+    /**
+     * Class Definition
+     * ====================================================
+     */
+
+    var DirectChat = /*#__PURE__*/function () {
+      function DirectChat(element, config) {
+        this._element = element;
+      }
+
+      var _proto = DirectChat.prototype;
+
+      _proto.toggle = function toggle() {
+        $(this._element).parents(Selector.DIRECT_CHAT).first().toggleClass(ClassName.DIRECT_CHAT_OPEN);
+        var toggledEvent = $.Event(Event.TOGGLED);
+        $(this._element).trigger(toggledEvent);
+      } // Static
+      ;
+
+      DirectChat._jQueryInterface = function _jQueryInterface(config) {
+        return this.each(function () {
+          var data = $(this).data(DATA_KEY);
+
+          if (!data) {
+            data = new DirectChat($(this));
+            $(this).data(DATA_KEY, data);
+          }
+
+          data[config]();
+        });
+      };
+
+      return DirectChat;
+    }();
+    /**
+     *
+     * Data Api implementation
+     * ====================================================
+     */
+
+
+    $(document).on('click', Selector.DATA_TOGGLE, function (event) {
+      if (event) event.preventDefault();
+
+      DirectChat._jQueryInterface.call($(this), 'toggle');
+    });
+    /**
+     * jQuery API
+     * ====================================================
+     */
+
+    $.fn[NAME] = DirectChat._jQueryInterface;
+    $.fn[NAME].Constructor = DirectChat;
+
+    $.fn[NAME].noConflict = function () {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return DirectChat._jQueryInterface;
+    };
+
+    return DirectChat;
+  }(jQuery);
+  /**
+   * --------------------------------------------
+   * AdminLTE TodoList.js
+   * License MIT
+   * --------------------------------------------
+   */
+
+
+  var TodoList = function ($) {
+    /**
+     * Constants
+     * ====================================================
+     */
+    var NAME = 'TodoList';
+    var DATA_KEY = 'lte.todolist';
+    var JQUERY_NO_CONFLICT = $.fn[NAME];
+    var Selector = {
+      DATA_TOGGLE: '[data-widget="todo-list"]'
+    };
+    var ClassName = {
+      TODO_LIST_DONE: 'done'
+    };
+    var Default = {
+      onCheck: function onCheck(item) {
+        return item;
+      },
+      onUnCheck: function onUnCheck(item) {
+        return item;
+      }
+    };
+    /**
+     * Class Definition
+     * ====================================================
+     */
+
+    var TodoList = /*#__PURE__*/function () {
+      function TodoList(element, config) {
+        this._config = config;
+        this._element = element;
+
+        this._init();
+      } // Public
+
+
+      var _proto = TodoList.prototype;
+
+      _proto.toggle = function toggle(item) {
+        item.parents('li').toggleClass(ClassName.TODO_LIST_DONE);
+
+        if (!$(item).prop('checked')) {
+          this.unCheck($(item));
+          return;
+        }
+
+        this.check(item);
+      };
+
+      _proto.check = function check(item) {
+        this._config.onCheck.call(item);
+      };
+
+      _proto.unCheck = function unCheck(item) {
+        this._config.onUnCheck.call(item);
+      } // Private
+      ;
+
+      _proto._init = function _init() {
+        var that = this;
+        $(Selector.DATA_TOGGLE).find('input:checkbox:checked').parents('li').toggleClass(ClassName.TODO_LIST_DONE);
+        $(Selector.DATA_TOGGLE).on('change', 'input:checkbox', function (event) {
+          that.toggle($(event.target));
+        });
+      } // Static
+      ;
+
+      TodoList._jQueryInterface = function _jQueryInterface(config) {
+        return this.each(function () {
+          var data = $(this).data(DATA_KEY);
+
+          var _options = $.extend({}, Default, $(this).data());
+
+          if (!data) {
+            data = new TodoList($(this), _options);
+            $(this).data(DATA_KEY, data);
+          }
+
+          if (config === 'init') {
+            data[config]();
+          }
+        });
+      };
+
+      return TodoList;
+    }();
+    /**
+     * Data API
+     * ====================================================
+     */
+
+
+    $(window).on('load', function () {
+      TodoList._jQueryInterface.call($(Selector.DATA_TOGGLE));
+    });
+    /**
+     * jQuery API
+     * ====================================================
+     */
+
+    $.fn[NAME] = TodoList._jQueryInterface;
+    $.fn[NAME].Constructor = TodoList;
+
+    $.fn[NAME].noConflict = function () {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return TodoList._jQueryInterface;
+    };
+
+    return TodoList;
+  }(jQuery);
+  /**
+   * --------------------------------------------
+   * AdminLTE CardWidget.js
+   * License MIT
+   * --------------------------------------------
+   */
+
+
+  var CardWidget = function ($) {
+    /**
+     * Constants
+     * ====================================================
+     */
+    var NAME = 'CardWidget';
+    var DATA_KEY = 'lte.cardwidget';
+    var EVENT_KEY = "." + DATA_KEY;
+    var JQUERY_NO_CONFLICT = $.fn[NAME];
+    var Event = {
+      EXPANDED: "expanded" + EVENT_KEY,
+      COLLAPSED: "collapsed" + EVENT_KEY,
+      MAXIMIZED: "maximized" + EVENT_KEY,
+      MINIMIZED: "minimized" + EVENT_KEY,
+      REMOVED: "removed" + EVENT_KEY
+    };
+    var ClassName = {
+      CARD: 'card',
+      COLLAPSED: 'collapsed-card',
+      COLLAPSING: 'collapsing-card',
+      EXPANDING: 'expanding-card',
+      WAS_COLLAPSED: 'was-collapsed',
+      MAXIMIZED: 'maximized-card'
+    };
+    var Selector = {
+      DATA_REMOVE: '[data-card-widget="remove"]',
+      DATA_COLLAPSE: '[data-card-widget="collapse"]',
+      DATA_MAXIMIZE: '[data-card-widget="maximize"]',
+      CARD: "." + ClassName.CARD,
+      CARD_HEADER: '.card-header',
+      CARD_BODY: '.card-body',
+      CARD_FOOTER: '.card-footer',
+      COLLAPSED: "." + ClassName.COLLAPSED
+    };
+    var Default = {
+      animationSpeed: 'normal',
+      collapseTrigger: Selector.DATA_COLLAPSE,
+      removeTrigger: Selector.DATA_REMOVE,
+      maximizeTrigger: Selector.DATA_MAXIMIZE,
+      collapseIcon: 'fa-minus',
+      expandIcon: 'fa-plus',
+      maximizeIcon: 'fa-expand',
+      minimizeIcon: 'fa-compress'
+    };
+
+    var CardWidget = /*#__PURE__*/function () {
+      function CardWidget(element, settings) {
+        this._element = element;
+        this._parent = element.parents(Selector.CARD).first();
+
+        if (element.hasClass(ClassName.CARD)) {
+          this._parent = element;
+        }
+
+        this._settings = $.extend({}, Default, settings);
+      }
+
+      var _proto = CardWidget.prototype;
+
+      _proto.collapse = function collapse() {
+        var _this = this;
+
+        this._parent.addClass(ClassName.COLLAPSING).children(Selector.CARD_BODY + ", " + Selector.CARD_FOOTER).slideUp(this._settings.animationSpeed, function () {
+          _this._parent.addClass(ClassName.COLLAPSED).removeClass(ClassName.COLLAPSING);
+        });
+
+        this._parent.find('> ' + Selector.CARD_HEADER + ' ' + this._settings.collapseTrigger + ' .' + this._settings.collapseIcon).addClass(this._settings.expandIcon).removeClass(this._settings.collapseIcon);
+
+        var collapsed = $.Event(Event.COLLAPSED);
+
+        this._element.trigger(collapsed, this._parent);
+      };
+
+      _proto.expand = function expand() {
+        var _this2 = this;
+
+        this._parent.addClass(ClassName.EXPANDING).children(Selector.CARD_BODY + ", " + Selector.CARD_FOOTER).slideDown(this._settings.animationSpeed, function () {
+          _this2._parent.removeClass(ClassName.COLLAPSED).removeClass(ClassName.EXPANDING);
+        });
+
+        this._parent.find('> ' + Selector.CARD_HEADER + ' ' + this._settings.collapseTrigger + ' .' + this._settings.expandIcon).addClass(this._settings.collapseIcon).removeClass(this._settings.expandIcon);
+
+        var expanded = $.Event(Event.EXPANDED);
+
+        this._element.trigger(expanded, this._parent);
+      };
+
+      _proto.remove = function remove() {
+        this._parent.slideUp();
+
+        var removed = $.Event(Event.REMOVED);
+
+        this._element.trigger(removed, this._parent);
+      };
+
+      _proto.toggle = function toggle() {
+        if (this._parent.hasClass(ClassName.COLLAPSED)) {
+          this.expand();
+          return;
+        }
+
+        this.collapse();
+      };
+
+      _proto.maximize = function maximize() {
+        this._parent.find(this._settings.maximizeTrigger + ' .' + this._settings.maximizeIcon).addClass(this._settings.minimizeIcon).removeClass(this._settings.maximizeIcon);
+
+        this._parent.css({
+          'height': this._parent.height(),
+          'width': this._parent.width(),
+          'transition': 'all .15s'
+        }).delay(150).queue(function () {
+          $(this).addClass(ClassName.MAXIMIZED);
+          $('html').addClass(ClassName.MAXIMIZED);
+
+          if ($(this).hasClass(ClassName.COLLAPSED)) {
+            $(this).addClass(ClassName.WAS_COLLAPSED);
+          }
+
+          $(this).dequeue();
+        });
+
+        var maximized = $.Event(Event.MAXIMIZED);
+
+        this._element.trigger(maximized, this._parent);
+      };
+
+      _proto.minimize = function minimize() {
+        this._parent.find(this._settings.maximizeTrigger + ' .' + this._settings.minimizeIcon).addClass(this._settings.maximizeIcon).removeClass(this._settings.minimizeIcon);
+
+        this._parent.css('cssText', 'height:' + this._parent[0].style.height + ' !important;' + 'width:' + this._parent[0].style.width + ' !important; transition: all .15s;').delay(10).queue(function () {
+          $(this).removeClass(ClassName.MAXIMIZED);
+          $('html').removeClass(ClassName.MAXIMIZED);
+          $(this).css({
+            'height': 'inherit',
+            'width': 'inherit'
+          });
+
+          if ($(this).hasClass(ClassName.WAS_COLLAPSED)) {
+            $(this).removeClass(ClassName.WAS_COLLAPSED);
+          }
+
+          $(this).dequeue();
+        });
+
+        var MINIMIZED = $.Event(Event.MINIMIZED);
+
+        this._element.trigger(MINIMIZED, this._parent);
+      };
+
+      _proto.toggleMaximize = function toggleMaximize() {
+        if (this._parent.hasClass(ClassName.MAXIMIZED)) {
+          this.minimize();
+          return;
+        }
+
+        this.maximize();
+      } // Private
+      ;
+
+      _proto._init = function _init(card) {
+        var _this3 = this;
+
+        this._parent = card;
+        $(this).find(this._settings.collapseTrigger).click(function () {
+          _this3.toggle();
+        });
+        $(this).find(this._settings.maximizeTrigger).click(function () {
+          _this3.toggleMaximize();
+        });
+        $(this).find(this._settings.removeTrigger).click(function () {
+          _this3.remove();
+        });
+      } // Static
+      ;
+
+      CardWidget._jQueryInterface = function _jQueryInterface(config) {
+        var data = $(this).data(DATA_KEY);
+
+        var _options = $.extend({}, Default, $(this).data());
+
+        if (!data) {
+          data = new CardWidget($(this), _options);
+          $(this).data(DATA_KEY, typeof config === 'string' ? data : config);
+        }
+
+        if (typeof config === 'string' && config.match(/collapse|expand|remove|toggle|maximize|minimize|toggleMaximize/)) {
+          data[config]();
+        } else if (_typeof(config) === 'object') {
+          data._init($(this));
+        }
+      };
+
+      return CardWidget;
+    }();
+    /**
+     * Data API
+     * ====================================================
+     */
+
+
+    $(document).on('click', Selector.DATA_COLLAPSE, function (event) {
+      if (event) {
+        event.preventDefault();
+      }
+
+      CardWidget._jQueryInterface.call($(this), 'toggle');
+    });
+    $(document).on('click', Selector.DATA_REMOVE, function (event) {
+      if (event) {
+        event.preventDefault();
+      }
+
+      CardWidget._jQueryInterface.call($(this), 'remove');
+    });
+    $(document).on('click', Selector.DATA_MAXIMIZE, function (event) {
+      if (event) {
+        event.preventDefault();
+      }
+
+      CardWidget._jQueryInterface.call($(this), 'toggleMaximize');
+    });
+    /**
+     * jQuery API
+     * ====================================================
+     */
+
+    $.fn[NAME] = CardWidget._jQueryInterface;
+    $.fn[NAME].Constructor = CardWidget;
+
+    $.fn[NAME].noConflict = function () {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return CardWidget._jQueryInterface;
+    };
+
+    return CardWidget;
+  }(jQuery);
+  /**
+   * --------------------------------------------
+   * AdminLTE CardRefresh.js
+   * License MIT
+   * --------------------------------------------
+   */
+
+
+  var CardRefresh = function ($) {
+    /**
+     * Constants
+     * ====================================================
+     */
+    var NAME = 'CardRefresh';
+    var DATA_KEY = 'lte.cardrefresh';
+    var EVENT_KEY = "." + DATA_KEY;
+    var JQUERY_NO_CONFLICT = $.fn[NAME];
+    var Event = {
+      LOADED: "loaded" + EVENT_KEY,
+      OVERLAY_ADDED: "overlay.added" + EVENT_KEY,
+      OVERLAY_REMOVED: "overlay.removed" + EVENT_KEY
+    };
+    var ClassName = {
+      CARD: 'card'
+    };
+    var Selector = {
+      CARD: "." + ClassName.CARD,
+      DATA_REFRESH: '[data-card-widget="card-refresh"]'
+    };
+    var Default = {
+      source: '',
+      sourceSelector: '',
+      params: {},
+      trigger: Selector.DATA_REFRESH,
+      content: '.card-body',
+      loadInContent: true,
+      loadOnInit: true,
+      responseType: '',
+      overlayTemplate: '<div class="overlay"><i class="fas fa-2x fa-sync-alt fa-spin"></i></div>',
+      onLoadStart: function onLoadStart() {},
+      onLoadDone: function onLoadDone(response) {
+        return response;
+      }
+    };
+
+    var CardRefresh = /*#__PURE__*/function () {
+      function CardRefresh(element, settings) {
+        this._element = element;
+        this._parent = element.parents(Selector.CARD).first();
+        this._settings = $.extend({}, Default, settings);
+        this._overlay = $(this._settings.overlayTemplate);
+
+        if (element.hasClass(ClassName.CARD)) {
+          this._parent = element;
+        }
+
+        if (this._settings.source === '') {
+          throw new Error('Source url was not defined. Please specify a url in your CardRefresh source option.');
+        }
+      }
+
+      var _proto = CardRefresh.prototype;
+
+      _proto.load = function load() {
+        this._addOverlay();
+
+        this._settings.onLoadStart.call($(this));
+
+        $.get(this._settings.source, this._settings.params, function (response) {
+          if (this._settings.loadInContent) {
+            if (this._settings.sourceSelector != '') {
+              response = $(response).find(this._settings.sourceSelector).html();
+            }
+
+            this._parent.find(this._settings.content).html(response);
+          }
+
+          this._settings.onLoadDone.call($(this), response);
+
+          this._removeOverlay();
+        }.bind(this), this._settings.responseType !== '' && this._settings.responseType);
+        var loadedEvent = $.Event(Event.LOADED);
+        $(this._element).trigger(loadedEvent);
+      };
+
+      _proto._addOverlay = function _addOverlay() {
+        this._parent.append(this._overlay);
+
+        var overlayAddedEvent = $.Event(Event.OVERLAY_ADDED);
+        $(this._element).trigger(overlayAddedEvent);
+      };
+
+      _proto._removeOverlay = function _removeOverlay() {
+        this._parent.find(this._overlay).remove();
+
+        var overlayRemovedEvent = $.Event(Event.OVERLAY_REMOVED);
+        $(this._element).trigger(overlayRemovedEvent);
+      }; // Private
+
+
+      _proto._init = function _init(card) {
+        var _this = this;
+
+        $(this).find(this._settings.trigger).on('click', function () {
+          _this.load();
+        });
+
+        if (this._settings.loadOnInit) {
+          this.load();
+        }
+      } // Static
+      ;
+
+      CardRefresh._jQueryInterface = function _jQueryInterface(config) {
+        var data = $(this).data(DATA_KEY);
+
+        var _options = $.extend({}, Default, $(this).data());
+
+        if (!data) {
+          data = new CardRefresh($(this), _options);
+          $(this).data(DATA_KEY, typeof config === 'string' ? data : config);
+        }
+
+        if (typeof config === 'string' && config.match(/load/)) {
+          data[config]();
+        } else {
+          data._init($(this));
+        }
+      };
+
+      return CardRefresh;
+    }();
+    /**
+     * Data API
+     * ====================================================
+     */
+
+
+    $(document).on('click', Selector.DATA_REFRESH, function (event) {
+      if (event) {
+        event.preventDefault();
+      }
+
+      CardRefresh._jQueryInterface.call($(this), 'load');
+    });
+    $(document).ready(function () {
+      $(Selector.DATA_REFRESH).each(function () {
+        CardRefresh._jQueryInterface.call($(this));
+      });
+    });
+    /**
+     * jQuery API
+     * ====================================================
+     */
+
+    $.fn[NAME] = CardRefresh._jQueryInterface;
+    $.fn[NAME].Constructor = CardRefresh;
+
+    $.fn[NAME].noConflict = function () {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return CardRefresh._jQueryInterface;
+    };
+
+    return CardRefresh;
+  }(jQuery);
+  /**
+   * --------------------------------------------
+   * AdminLTE Dropdown.js
+   * License MIT
+   * --------------------------------------------
+   */
+
+
+  var Dropdown = function ($) {
+    /**
+     * Constants
+     * ====================================================
+     */
+    var NAME = 'Dropdown';
+    var DATA_KEY = 'lte.dropdown';
+    var JQUERY_NO_CONFLICT = $.fn[NAME];
+    var Selector = {
+      NAVBAR: '.navbar',
+      DROPDOWN_MENU: '.dropdown-menu',
+      DROPDOWN_MENU_ACTIVE: '.dropdown-menu.show',
+      DROPDOWN_TOGGLE: '[data-toggle="dropdown"]'
+    };
+    var ClassName = {
+      DROPDOWN_HOVER: 'dropdown-hover',
+      DROPDOWN_RIGHT: 'dropdown-menu-right'
+    };
+    var Default = {};
+    /**
+     * Class Definition
+     * ====================================================
+     */
+
+    var Dropdown = /*#__PURE__*/function () {
+      function Dropdown(element, config) {
+        this._config = config;
+        this._element = element;
+      } // Public
+
+
+      var _proto = Dropdown.prototype;
+
+      _proto.toggleSubmenu = function toggleSubmenu() {
+        this._element.siblings().show().toggleClass("show");
+
+        if (!this._element.next().hasClass('show')) {
+          this._element.parents('.dropdown-menu').first().find('.show').removeClass("show").hide();
+        }
+
+        this._element.parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function (e) {
+          $('.dropdown-submenu .show').removeClass("show").hide();
+        });
+      };
+
+      _proto.fixPosition = function fixPosition() {
+        var elm = $(Selector.DROPDOWN_MENU_ACTIVE);
+
+        if (elm.length !== 0) {
+          if (elm.hasClass(ClassName.DROPDOWN_RIGHT)) {
+            elm.css('left', 'inherit');
+            elm.css('right', 0);
+          } else {
+            elm.css('left', 0);
+            elm.css('right', 'inherit');
+          }
+
+          var offset = elm.offset();
+          var width = elm.width();
+          var windowWidth = $(window).width();
+          var visiblePart = windowWidth - offset.left;
+
+          if (offset.left < 0) {
+            elm.css('left', 'inherit');
+            elm.css('right', offset.left - 5);
+          } else {
+            if (visiblePart < width) {
+              elm.css('left', 'inherit');
+              elm.css('right', 0);
+            }
+          }
+        }
+      } // Static
+      ;
+
+      Dropdown._jQueryInterface = function _jQueryInterface(config) {
+        return this.each(function () {
+          var data = $(this).data(DATA_KEY);
+
+          var _config = $.extend({}, Default, $(this).data());
+
+          if (!data) {
+            data = new Dropdown($(this), _config);
+            $(this).data(DATA_KEY, data);
+          }
+
+          if (config === 'toggleSubmenu' || config == 'fixPosition') {
+            data[config]();
+          }
+        });
+      };
+
+      return Dropdown;
+    }();
+    /**
+     * Data API
+     * ====================================================
+     */
+
+
+    $(Selector.DROPDOWN_MENU + ' ' + Selector.DROPDOWN_TOGGLE).on("click", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      Dropdown._jQueryInterface.call($(this), 'toggleSubmenu');
+    });
+    $(Selector.NAVBAR + ' ' + Selector.DROPDOWN_TOGGLE).on("click", function (event) {
+      event.preventDefault();
+      setTimeout(function () {
+        Dropdown._jQueryInterface.call($(this), 'fixPosition');
+      }, 1);
+    });
+    /**
+     * jQuery API
+     * ====================================================
+     */
+
+    $.fn[NAME] = Dropdown._jQueryInterface;
+    $.fn[NAME].Constructor = Dropdown;
+
+    $.fn[NAME].noConflict = function () {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Dropdown._jQueryInterface;
+    };
+
+    return Dropdown;
+  }(jQuery);
+  /**
+   * --------------------------------------------
+   * AdminLTE Toasts.js
+   * License MIT
+   * --------------------------------------------
+   */
+
+
+  var Toasts = function ($) {
+    /**
+     * Constants
+     * ====================================================
+     */
+    var NAME = 'Toasts';
+    var DATA_KEY = 'lte.toasts';
+    var EVENT_KEY = "." + DATA_KEY;
+    var JQUERY_NO_CONFLICT = $.fn[NAME];
+    var Event = {
+      INIT: "init" + EVENT_KEY,
+      CREATED: "created" + EVENT_KEY,
+      REMOVED: "removed" + EVENT_KEY
+    };
+    var Selector = {
+      BODY: 'toast-body',
+      CONTAINER_TOP_RIGHT: '#toastsContainerTopRight',
+      CONTAINER_TOP_LEFT: '#toastsContainerTopLeft',
+      CONTAINER_BOTTOM_RIGHT: '#toastsContainerBottomRight',
+      CONTAINER_BOTTOM_LEFT: '#toastsContainerBottomLeft'
+    };
+    var ClassName = {
+      TOP_RIGHT: 'toasts-top-right',
+      TOP_LEFT: 'toasts-top-left',
+      BOTTOM_RIGHT: 'toasts-bottom-right',
+      BOTTOM_LEFT: 'toasts-bottom-left',
+      FADE: 'fade'
+    };
+    var Position = {
+      TOP_RIGHT: 'topRight',
+      TOP_LEFT: 'topLeft',
+      BOTTOM_RIGHT: 'bottomRight',
+      BOTTOM_LEFT: 'bottomLeft'
+    };
+    var Default = {
+      position: Position.TOP_RIGHT,
+      fixed: true,
+      autohide: false,
+      autoremove: true,
+      delay: 1000,
+      fade: true,
+      icon: null,
+      image: null,
+      imageAlt: null,
+      imageHeight: '25px',
+      title: null,
+      subtitle: null,
+      close: true,
+      body: null,
+      "class": null
+    };
+    /**
+     * Class Definition
+     * ====================================================
+     */
+
+    var Toasts = /*#__PURE__*/function () {
+      function Toasts(element, config) {
+        this._config = config;
+
+        this._prepareContainer();
+
+        var initEvent = $.Event(Event.INIT);
+        $('body').trigger(initEvent);
+      } // Public
+
+
+      var _proto = Toasts.prototype;
+
+      _proto.create = function create() {
+        var toast = $('<div class="toast" role="alert" aria-live="assertive" aria-atomic="true"/>');
+        toast.data('autohide', this._config.autohide);
+        toast.data('animation', this._config.fade);
+
+        if (this._config["class"]) {
+          toast.addClass(this._config["class"]);
+        }
+
+        if (this._config.delay && this._config.delay != 500) {
+          toast.data('delay', this._config.delay);
+        }
+
+        var toast_header = $('<div class="toast-header">');
+
+        if (this._config.image != null) {
+          var toast_image = $('<img />').addClass('rounded mr-2').attr('src', this._config.image).attr('alt', this._config.imageAlt);
+
+          if (this._config.imageHeight != null) {
+            toast_image.height(this._config.imageHeight).width('auto');
+          }
+
+          toast_header.append(toast_image);
+        }
+
+        if (this._config.icon != null) {
+          toast_header.append($('<i />').addClass('mr-2').addClass(this._config.icon));
+        }
+
+        if (this._config.title != null) {
+          toast_header.append($('<strong />').addClass('mr-auto').html(this._config.title));
+        }
+
+        if (this._config.subtitle != null) {
+          toast_header.append($('<small />').html(this._config.subtitle));
+        }
+
+        if (this._config.close == true) {
+          var toast_close = $('<button data-dismiss="toast" />').attr('type', 'button').addClass('ml-2 mb-1 close').attr('aria-label', 'Close').append('<span aria-hidden="true">&times;</span>');
+
+          if (this._config.title == null) {
+            toast_close.toggleClass('ml-2 ml-auto');
+          }
+
+          toast_header.append(toast_close);
+        }
+
+        toast.append(toast_header);
+
+        if (this._config.body != null) {
+          toast.append($('<div class="toast-body" />').html(this._config.body));
+        }
+
+        $(this._getContainerId()).prepend(toast);
+        var createdEvent = $.Event(Event.CREATED);
+        $('body').trigger(createdEvent);
+        toast.toast('show');
+
+        if (this._config.autoremove) {
+          toast.on('hidden.bs.toast', function () {
+            $(this).delay(200).remove();
+            var removedEvent = $.Event(Event.REMOVED);
+            $('body').trigger(removedEvent);
+          });
+        }
+      } // Static
+      ;
+
+      _proto._getContainerId = function _getContainerId() {
+        if (this._config.position == Position.TOP_RIGHT) {
+          return Selector.CONTAINER_TOP_RIGHT;
+        } else if (this._config.position == Position.TOP_LEFT) {
+          return Selector.CONTAINER_TOP_LEFT;
+        } else if (this._config.position == Position.BOTTOM_RIGHT) {
+          return Selector.CONTAINER_BOTTOM_RIGHT;
+        } else if (this._config.position == Position.BOTTOM_LEFT) {
+          return Selector.CONTAINER_BOTTOM_LEFT;
+        }
+      };
+
+      _proto._prepareContainer = function _prepareContainer() {
+        if ($(this._getContainerId()).length === 0) {
+          var container = $('<div />').attr('id', this._getContainerId().replace('#', ''));
+
+          if (this._config.position == Position.TOP_RIGHT) {
+            container.addClass(ClassName.TOP_RIGHT);
+          } else if (this._config.position == Position.TOP_LEFT) {
+            container.addClass(ClassName.TOP_LEFT);
+          } else if (this._config.position == Position.BOTTOM_RIGHT) {
+            container.addClass(ClassName.BOTTOM_RIGHT);
+          } else if (this._config.position == Position.BOTTOM_LEFT) {
+            container.addClass(ClassName.BOTTOM_LEFT);
+          }
+
+          $('body').append(container);
+        }
+
+        if (this._config.fixed) {
+          $(this._getContainerId()).addClass('fixed');
+        } else {
+          $(this._getContainerId()).removeClass('fixed');
+        }
+      } // Static
+      ;
+
+      Toasts._jQueryInterface = function _jQueryInterface(option, config) {
+        return this.each(function () {
+          var _options = $.extend({}, Default, config);
+
+          var toast = new Toasts($(this), _options);
+
+          if (option === 'create') {
+            toast[option]();
+          }
+        });
+      };
+
+      return Toasts;
+    }();
+    /**
+     * jQuery API
+     * ====================================================
+     */
+
+
+    $.fn[NAME] = Toasts._jQueryInterface;
+    $.fn[NAME].Constructor = Toasts;
+
+    $.fn[NAME].noConflict = function () {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Toasts._jQueryInterface;
+    };
+
+    return Toasts;
+  }(jQuery);
+
+  exports.CardRefresh = CardRefresh;
+  exports.CardWidget = CardWidget;
+  exports.ControlSidebar = ControlSidebar;
+  exports.DirectChat = DirectChat;
+  exports.Dropdown = Dropdown;
+  exports.Layout = Layout;
+  exports.PushMenu = PushMenu;
+  exports.Toasts = Toasts;
+  exports.TodoList = TodoList;
+  exports.Treeview = Treeview;
+  Object.defineProperty(exports, '__esModule', {
+    value: true
+  });
+});
 
 /***/ }),
 

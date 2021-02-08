@@ -11,6 +11,8 @@
 |
 */
 
+use App\Events\GamemodeStatusChanged;
+
 Auth::routes();
 
 Route::middleware(['auth'])->group( function () {
@@ -22,5 +24,9 @@ Route::middleware(['auth'])->group( function () {
 
 Route::fallback(function () {
     return Redirect::to('/');
+});
+
+Route::get('/gmc', function (){
+   event(new GamemodeStatusChanged);
 });
 
